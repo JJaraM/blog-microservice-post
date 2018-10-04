@@ -1,12 +1,12 @@
+server:
+  port: ${PORT:5001} 
+
 spring:
   application:
     name: blog-microservice
   data:
     mongodb:
       uri: ${MONGODB_URI}
-
-server:
-  port: 8762
 
 eureka:
   instance:
