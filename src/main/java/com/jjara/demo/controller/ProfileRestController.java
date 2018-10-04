@@ -29,6 +29,7 @@ class ProfileRestController {
 	}
 
 	@GetMapping
+	@CrossOrigin(origins = "*")
 	public Publisher<Post> getAll() {
 		return this.profileRepository.all();
 	}
