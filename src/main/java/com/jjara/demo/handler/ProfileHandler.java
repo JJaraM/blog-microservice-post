@@ -5,10 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-
 import com.jjara.demo.Post;
 import com.jjara.demo.service.ProfileService;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.net.URI;
