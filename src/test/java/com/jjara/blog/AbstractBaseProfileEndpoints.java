@@ -10,8 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.jjara.demo.Post;
-import com.jjara.demo.repository.ProfileRepository;
+import com.jjara.demo.repository.PostRepository;
+import com.jjara.post.pojo.Post;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,7 +26,7 @@ public abstract class AbstractBaseProfileEndpoints {
 	private final WebTestClient client;
 
 	@MockBean
-	private ProfileRepository repository;
+	private PostRepository repository;
 
 	public AbstractBaseProfileEndpoints(WebTestClient client) {
 		this.client = client;

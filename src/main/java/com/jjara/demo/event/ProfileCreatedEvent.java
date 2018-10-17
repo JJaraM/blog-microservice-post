@@ -2,7 +2,7 @@ package com.jjara.demo.event;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.jjara.demo.Post;
+import com.jjara.post.pojo.Post;
 
 public class ProfileCreatedEvent extends ApplicationEvent {
 

@@ -5,40 +5,48 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import com.jjara.demo.Post;
-import com.jjara.demo.service.ProfileService;
+
+import com.jjara.demo.ResponseHandler;
+import com.jjara.demo.service.PostService;
+import com.jjara.post.pojo.Post;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.net.URI;
 
 @Component
-public class ProfileHandler {
+public class PostHandler {
 
-	private final ProfileService profileService;
+	private final PostService service;
 
-	public ProfileHandler(ProfileService profileService) {
-		this.profileService = profileService;
+	public PostHandler(PostService profileService) {
+		this.service = profileService;
 	}
 
-	public Mono<ServerResponse> getById(ServerRequest r) {
-		return defaultReadResponse(this.profileService.get(id(r)));
+	public Mono<ServerResponse> getById(ServerRequest serverRequest) {		
+		return ResponseHandler.okNoContent(service.get(id(serverRequest)));
 	}
 
 	public Mono<ServerResponse> all(ServerRequest r) {
-		return defaultReadResponse(this.profileService.all());
+		return ResponseHandler.okNoContent(service.getAllPostLiveInfo());
 	}
 
 	public Mono<ServerResponse> deleteById(ServerRequest r) {
-		return defaultReadResponse(this.profileService.delete(id(r)));
+		return ResponseHandler.okNoContent(service.delete(id(r)));
 	}
 
-	public Mono<ServerResponse> updateById(ServerRequest r) {
-		Flux<Post> id = r.bodyToFlux(Post.class).flatMap(p -> this.profileService.update(id(r), ""));
+	public Mono<ServerResponse> updateById(ServerRequest serverRequest) {
+		final Flux<Post> id = serverRequest.bodyToFlux(Post.class).flatMap(p -> 
+			this.service.update(id(serverRequest), 
+					p.getTitle(), p.getDraftTitle(),
+					p.getContent(), p.getDraftContent(),
+					p.getImage(), p.getDraftImage()));
 		return defaultReadResponse(id);
 	}
 
 	public Mono<ServerResponse> create(ServerRequest request) {
-		Flux<Post> flux = request.bodyToFlux(Post.class).flatMap(data -> this.profileService.create(data.getTitle(), data.getContent(), data.getImage()));
+		Flux<Post> flux = request.bodyToFlux(Post.class)
+				.flatMap(data -> this.service.create(data.getTitle(), data.getContent(), data.getImage()));
 		return defaultWriteResponse(flux);
 	}
 
@@ -54,4 +62,6 @@ public class ProfileHandler {
 	private static String id(ServerRequest r) {
 		return r.pathVariable("id");
 	}
+	
+	
 }

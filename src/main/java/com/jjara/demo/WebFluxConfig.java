@@ -12,7 +12,6 @@ public class WebFluxConfig {
 	@Bean
 	public WebFluxConfigurer corsConfigurer() {
 		return new WebFluxConfigurerComposite() {
-
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
