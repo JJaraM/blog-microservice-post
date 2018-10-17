@@ -28,12 +28,14 @@ public class PostHandler {
 	}
 
 	public Mono<ServerResponse> all(ServerRequest r) {
-		return ResponseHandler.okNoContent(service.getAllPostLiveInfo());
+		return defaultReadResponseList(service.findAll());
 	}
 
 	public Mono<ServerResponse> deleteById(ServerRequest r) {
 		return ResponseHandler.okNoContent(service.delete(id(r)));
 	}
+	
+	
 
 	public Mono<ServerResponse> updateById(ServerRequest serverRequest) {
 		final Flux<Post> id = serverRequest.bodyToFlux(Post.class).flatMap(p -> 
@@ -56,6 +58,12 @@ public class PostHandler {
 	}
 
 	private static Mono<ServerResponse> defaultReadResponse(Publisher<Post> profiles) {
+		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(profiles, Post.class);
+	}
+	
+	private static Mono<ServerResponse> defaultReadResponseList(Publisher<Post> profiles) {
+		Flux.from(profiles).flatMap(ResponseHandler::ok).switchIfEmpty(ResponseHandler.noContent());
+		
 		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(profiles, Post.class);
 	}
 

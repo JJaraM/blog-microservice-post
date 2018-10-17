@@ -25,13 +25,8 @@ public class PostService {
 		this.repository = profileRepository;
 	}
 
-	public Flux<Post> getAllPostLiveInfo() {
-		return this.repository.findAll().flatMap(post -> {
-			post.setDraftContent(null);
-			post.setDraftImage(null);
-			post.setDraftTitle(null);
-			return Mono.just(post);
-		});
+	public Flux<Post> findAll() {
+		return this.repository.findAll();
 	}
 
 	public Mono<Post> get(String id) {

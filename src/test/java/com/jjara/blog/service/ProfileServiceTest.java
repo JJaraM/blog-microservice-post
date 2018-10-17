@@ -39,7 +39,7 @@ public class ProfileServiceTest {
     public void getAll() {
         Flux<Post> saved = repository.saveAll(Flux.just(new Post(), new Post(), new Post()));
 
-        Flux<Post> composite = service.getAllPostLiveInfo().thenMany(saved);
+        Flux<Post> composite = service.findAll().thenMany(saved);
 
         Predicate<Post> match = profile -> saved.any(saveItem -> saveItem.equals(profile)).block();
 
