@@ -67,8 +67,8 @@ public class PostHandler {
 		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(profiles, Post.class);
 	}
 
-	private static String id(ServerRequest r) {
-		return r.pathVariable("id");
+	private static Long id(ServerRequest r) {
+		return Long.valueOf(r.pathVariable("id"));
 	}
 	
 	

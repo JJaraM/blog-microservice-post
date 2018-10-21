@@ -56,7 +56,7 @@ public class ProfileServiceTest {
         Mono<Post> profileMono = this.service.create("", "", "");
         StepVerifier
             .create(profileMono)
-            .expectNextMatches(saved -> StringUtils.hasText(saved.getId()))
+            .expectNextMatches(saved -> StringUtils.hasText(""+saved.getId()))
             .verifyComplete();
     }
 
@@ -91,7 +91,7 @@ public class ProfileServiceTest {
             .flatMap(saved -> this.service.get(saved.getId()));
         StepVerifier
             .create(deleted)
-            .expectNextMatches(profile -> StringUtils.hasText(profile.getId()) && test.equalsIgnoreCase(""))
+            .expectNextMatches(profile -> StringUtils.hasText(""+profile.getId()) && test.equalsIgnoreCase(""))
             .verifyComplete();
     }
 }

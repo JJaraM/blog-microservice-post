@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import com.jjara.demo.event.ProfileCreatedEvent;
 import com.jjara.demo.repository.PostRepository;
+import com.jjara.demo.repository.SequenceRepository;
 import com.jjara.post.pojo.Post;
 
 @Log4j2
@@ -19,21 +20,23 @@ public class PostService {
 
 	private final ApplicationEventPublisher publisher;
 	private final PostRepository repository;
+	private final SequenceRepository sequenceRepository;
 
-	public PostService(ApplicationEventPublisher publisher, PostRepository profileRepository) {
+	public PostService(ApplicationEventPublisher publisher, PostRepository profileRepository, SequenceRepository sequenceRepository) {
 		this.publisher = publisher;
 		this.repository = profileRepository;
+		this.sequenceRepository = sequenceRepository;
 	}
 
 	public Flux<Post> findAll() {
 		return this.repository.findAll();
 	}
 
-	public Mono<Post> get(String id) {
+	public Mono<Post> get(long id) {
 		return this.repository.findById(id);
 	}
 
-	public Mono<Post> update(String id, 
+	public Mono<Post> update(long id, 
 			String title, String draftTitle,
 			String content, String draftContent,
 			String image, String draftImage) {
@@ -49,12 +52,13 @@ public class PostService {
 		}).flatMap(this.repository::save);
 	}
 
-	public Mono<Post> delete(String id) {
+	public Mono<Post> delete(long id) {
 		return this.repository.findById(id).flatMap(p -> this.repository.deleteById(p.getId()).thenReturn(p));
 	}
 
 	public Mono<Post> create(String title, String content, String image) {
 		final Post post = new Post();
+		post.setId(sequenceRepository.getNextSequenceId());
 		post.setTitle(title);
 		post.setContent(content);
 		post.setImage(image);

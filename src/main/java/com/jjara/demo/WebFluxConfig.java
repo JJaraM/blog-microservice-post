@@ -28,7 +28,6 @@ public class WebFluxConfig {
 	CorsWebFilter corsFilter() {
 		CorsConfiguration config = new CorsConfiguration();
 	    config.setAllowCredentials(true);
-	    //config.addAllowedOrigin("http://domain1.com");
 	    config.addAllowedHeader("*");
 	    config.addAllowedMethod("*");
 	    config.addAllowedOrigin("*");
