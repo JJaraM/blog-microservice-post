@@ -13,8 +13,7 @@ import com.jjara.post.pojo.Sequence;
 @Repository
 public class SequenceRepository {
 
-	@Autowired
-	private MongoOperations mongoOperation;
+	@Autowired private MongoOperations mongoOperation;
 	
 	private final String KEY = "post";
 

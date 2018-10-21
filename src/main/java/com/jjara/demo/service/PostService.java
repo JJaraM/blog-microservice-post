@@ -3,12 +3,13 @@ package com.jjara.demo.service;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Date;
-
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import com.jjara.demo.event.ProfileCreatedEvent;
 import com.jjara.demo.repository.PostRepository;
 import com.jjara.demo.repository.SequenceRepository;
@@ -28,8 +29,14 @@ public class PostService {
 		this.sequenceRepository = sequenceRepository;
 	}
 
-	public Flux<Post> findAll() {
-		return this.repository.findAll();
+	public Flux<Post> findAll(final int page, final int size) {
+		Flux<Post> result = null;
+		if (size > 0) {
+			result = this.repository.findAll(PageRequest.of(page, size, new Sort(Direction.DESC, "id")));
+		} else {
+			result = repository.findAll();
+		}
+		return result;
 	}
 
 	public Mono<Post> get(long id) {
