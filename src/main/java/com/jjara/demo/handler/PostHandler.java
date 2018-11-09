@@ -41,13 +41,13 @@ public class PostHandler {
 			this.service.update(id(serverRequest), 
 					p.getTitle(), p.getDraftTitle(),
 					p.getContent(), p.getDraftContent(),
-					p.getImage(), p.getDraftImage()));
+					p.getImage(), p.getDraftImage(), p.getTags()));
 		return defaultReadResponse(id);
 	}
 
 	public Mono<ServerResponse> create(ServerRequest request) {
 		Flux<Post> flux = request.bodyToFlux(Post.class)
-				.flatMap(data -> this.service.create(data.getTitle(), data.getContent(), data.getImage()));
+				.flatMap(data -> this.service.create(data.getTitle(), data.getContent(), data.getImage(), data.getTags()));
 		return defaultWriteResponse(flux);
 	}
 

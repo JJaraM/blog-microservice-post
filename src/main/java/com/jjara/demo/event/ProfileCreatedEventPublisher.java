@@ -11,8 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 @Component
-public class ProfileCreatedEventPublisher
-		implements ApplicationListener<ProfileCreatedEvent>, Consumer<FluxSink<ProfileCreatedEvent>> {
+public class ProfileCreatedEventPublisher implements ApplicationListener<ProfileCreatedEvent>, Consumer<FluxSink<ProfileCreatedEvent>> {
 
 	private final Executor executor;
 	private final BlockingQueue<ProfileCreatedEvent> queue = new LinkedBlockingQueue<>();

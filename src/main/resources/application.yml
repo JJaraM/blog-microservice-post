@@ -7,6 +7,9 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URI}
+    redis:
+      uri: ${REDIS_URI}
+      channel-tag: ${REDIS_CHANNEL_TAG}
 
 eureka:
   instance:

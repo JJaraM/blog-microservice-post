@@ -1,6 +1,7 @@
 package com.jjara.post.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,6 +22,7 @@ public class Post {
 	private String draftImage;
 	private Date createDate;
 	private Date updateDate;
+	private List<Long> tags;
 
 	public long getId() {
 		return id;
@@ -92,6 +94,14 @@ public class Post {
 
 	public void setDraftTitle(String draftTitle) {
 		this.draftTitle = draftTitle;
+	}
+
+	public List<Long> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Long> tags) {
+		this.tags = tags;
 	}
 
 }
