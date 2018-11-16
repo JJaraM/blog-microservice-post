@@ -26,13 +26,13 @@ public class PostService {
 	private final TagPublisher publisher;
 	private final PostRepository repository;
 	private final SequenceRepository sequenceRepository;
-	private final RedisPublish lettuceConfig;
+	private final RedisPublish tagPublisher;
 
 	public PostService(TagPublisher publisher, PostRepository profileRepository, SequenceRepository sequenceRepository, RedisPublish lettuceConfig) {
 		this.publisher = publisher;
 		this.repository = profileRepository;
 		this.sequenceRepository = sequenceRepository;
-		this.lettuceConfig = lettuceConfig;
+		this.tagPublisher = lettuceConfig;
 		
 	}
 
@@ -64,7 +64,9 @@ public class PostService {
 			p.setUpdateDate(new Date());
 			p.setTags(tags);
 			return p;
-		}).flatMap(this.repository::save);
+		}).flatMap(this.repository::save).doOnSuccess(post -> 
+			this.tagPublisher.publish(post.getId(), post.getTags())
+		);
 	}
 
 	public Mono<Post> delete(long id) {
@@ -80,7 +82,7 @@ public class PostService {
 		post.setCreateDate(new Date());
 		post.setTags(tags);
 		return this.repository.save(post).doOnSuccess(profile -> 
-			this.lettuceConfig.publish(post.getId(), post.getTags())
+			this.tagPublisher.publish(post.getId(), post.getTags())
 		);
 	}
 }
