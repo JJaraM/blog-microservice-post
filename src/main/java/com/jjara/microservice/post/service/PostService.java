@@ -1,4 +1,4 @@
-package com.jjara.demo.service;
+package com.jjara.microservice.post.service;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import com.jjara.demo.RedisPublish;
-import com.jjara.demo.TagPublisher;
-import com.jjara.demo.repository.PostRepository;
-import com.jjara.demo.repository.SequenceRepository;
-import com.jjara.post.pojo.Post;
+import com.jjara.microservice.post.RedisPublish;
+import com.jjara.microservice.post.TagPublisher;
+import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.repository.PostRepository;
+import com.jjara.microservice.post.repository.SequenceRepository;
 
 @Log4j2
 @Service

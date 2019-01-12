@@ -1,4 +1,4 @@
-package com.jjara.demo;
+package com.jjara.microservice.post;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

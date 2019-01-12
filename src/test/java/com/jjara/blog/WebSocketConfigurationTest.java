@@ -14,7 +14,7 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
 import org.springframework.web.reactive.socket.client.WebSocketClient;
 
-import com.jjara.post.pojo.Post;
+import com.jjara.microservice.post.pojo.Post;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

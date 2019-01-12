@@ -1,4 +1,4 @@
-package com.jjara.demo;
+package com.jjara.microservice.post;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;

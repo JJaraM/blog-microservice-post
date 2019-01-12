@@ -1,9 +1,9 @@
-package com.jjara.demo;
+package com.jjara.microservice.post;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jjara.demo.event.ProfileCreatedEvent;
-import com.jjara.demo.event.ProfileCreatedEventPublisher;
+import com.jjara.microservice.post.subscription.ProfileCreatedEvent;
+import com.jjara.microservice.post.subscription.ProfileCreatedEventPublisher;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;

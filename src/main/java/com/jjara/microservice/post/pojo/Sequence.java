@@ -1,4 +1,4 @@
-package com.jjara.post.pojo;
+package com.jjara.microservice.post.pojo;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

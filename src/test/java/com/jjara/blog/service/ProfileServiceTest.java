@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.StringUtils;
 
-import com.jjara.demo.repository.PostRepository;
-import com.jjara.demo.service.PostService;
-import com.jjara.post.pojo.Post;
+import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.repository.PostRepository;
+import com.jjara.microservice.post.service.PostService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

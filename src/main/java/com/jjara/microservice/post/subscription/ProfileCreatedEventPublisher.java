@@ -1,4 +1,4 @@
-package com.jjara.demo.event;
+package com.jjara.microservice.post.subscription;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;

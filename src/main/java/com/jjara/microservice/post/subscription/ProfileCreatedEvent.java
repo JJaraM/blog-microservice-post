@@ -1,8 +1,8 @@
-package com.jjara.demo.event;
+package com.jjara.microservice.post.subscription;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.jjara.post.pojo.Post;
+import com.jjara.microservice.post.pojo.Post;
 
 public class ProfileCreatedEvent extends ApplicationEvent {
 

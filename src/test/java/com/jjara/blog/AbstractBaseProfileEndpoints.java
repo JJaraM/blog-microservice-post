@@ -10,8 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.jjara.demo.repository.PostRepository;
-import com.jjara.post.pojo.Post;
+import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.repository.PostRepository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

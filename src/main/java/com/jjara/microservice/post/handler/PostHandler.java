@@ -1,4 +1,4 @@
-package com.jjara.demo.handler;
+package com.jjara.microservice.post.handler;
 
 import org.reactivestreams.Publisher;
 import org.springframework.http.MediaType;
@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import com.jjara.demo.ResponseHandler;
-import com.jjara.demo.service.PostService;
-import com.jjara.post.pojo.Post;
+import com.jjara.microservice.post.ResponseHandler;
+import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.service.PostService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

@@ -1,4 +1,4 @@
-package com.jjara.demo;
+package com.jjara.microservice.post;
 
 import org.reactivestreams.Publisher;
 import org.springframework.core.ParameterizedTypeReference;
