@@ -28,8 +28,7 @@ public class PostHandler {
 	}
 
 	public Mono<ServerResponse> all(ServerRequest r) {
-	
-		return defaultReadResponseList(service.findAll(page(r), size(r)));
+		return defaultReadResponseList(service.findAll(page(r), size(r), tag(r)));
 	}
 
 	public Mono<ServerResponse> deleteById(ServerRequest r) {
@@ -70,24 +69,26 @@ public class PostHandler {
 	}
 	
 	private static Integer page(ServerRequest r) {
-		Integer value = null;
-		try {
-			value = Integer.valueOf(r.pathVariable("page"));
-		} catch (IllegalArgumentException e) {
-			value = 0;
-		}
-		return value;
+		return serverRequestProperty(r, "page");
 	}
 	
 	private static Integer size(ServerRequest r) {
+		return serverRequestProperty(r, "size");
+	}
+	
+	private static Integer tag(ServerRequest r) {
+		return serverRequestProperty(r, "tag");
+	}
+	
+	
+	private static Integer serverRequestProperty(final ServerRequest r, final String property) {
 		Integer value = null;
 		try {
-			value = Integer.valueOf(r.pathVariable("size"));
+			value = Integer.valueOf(r.pathVariable(property));
 		} catch (IllegalArgumentException e) {
 			value = 0;
 		}
 		return value;
 	}
-	
 	
 }

@@ -1,10 +1,8 @@
 package com.jjara.microservice.post.service;
 
 import lombok.extern.log4j.Log4j2;
-
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -12,9 +10,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import com.jjara.microservice.post.RedisPublish;
-import com.jjara.microservice.post.TagPublisher;
 import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
@@ -23,22 +19,15 @@ import com.jjara.microservice.post.repository.SequenceRepository;
 @Service
 public class PostService {
 
-	private final TagPublisher publisher;
-	private final PostRepository repository;
-	private final SequenceRepository sequenceRepository;
-	private final RedisPublish tagPublisher;
-
-	public PostService(TagPublisher publisher, PostRepository profileRepository, SequenceRepository sequenceRepository, RedisPublish lettuceConfig) {
-		this.publisher = publisher;
-		this.repository = profileRepository;
-		this.sequenceRepository = sequenceRepository;
-		this.tagPublisher = lettuceConfig;
-		
-	}
-
-	public Flux<Post> findAll(final int page, final int size) {
+	@Autowired private PostRepository repository;
+	@Autowired private SequenceRepository sequenceRepository;
+	@Autowired private RedisPublish tagPublisher;
+	
+	public Flux<Post> findAll(final int page, final int size, int tag) {
 		Flux<Post> result = null;
-		if (size > 0) {
+		if (tag > 0) {
+			result = repository.findAllByTag(PageRequest.of(page, size, new Sort(Direction.DESC, "id")), tag);
+		} else if (size > 0) {
 			result = this.repository.findAll(PageRequest.of(page, size, new Sort(Direction.DESC, "id")));
 		} else {
 			result = repository.findAll();

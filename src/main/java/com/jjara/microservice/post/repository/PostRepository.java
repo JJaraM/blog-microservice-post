@@ -12,5 +12,8 @@ public interface PostRepository extends ReactiveMongoRepository<Post, Long> {
 		
 	@Query("{ id: { $exists: true }}")
 	public Flux<Post> findAll(Pageable page);
+
+	@Query("{ tags: { $in: [?0] }}")
+	public Flux<Post> findAllByTag(Pageable page, int tag);
 	
 }
