@@ -42,7 +42,7 @@ public class PostService {
 	public Mono<Post> update(long id, 
 			String title, String draftTitle,
 			String content, String draftContent,
-			String image, String draftImage, List<Long> tags) {
+			String image, String draftImage, List<Long> tags, String description) {
 		return this.repository.findById(id).map(p -> {
 			p.setContent(content);
 			p.setDraftContent(draftContent);
@@ -52,6 +52,7 @@ public class PostService {
 			p.setDraftImage(draftImage);
 			p.setUpdateDate(new Date());
 			p.setTags(tags);
+			p.setDescription(description);
 			return p;
 		}).flatMap(this.repository::save).doOnSuccess(post -> 
 			this.tagPublisher.publish(post.getId(), post.getTags())
@@ -62,7 +63,7 @@ public class PostService {
 		return this.repository.findById(id).flatMap(p -> this.repository.deleteById(p.getId()).thenReturn(p));
 	}
 
-	public Mono<Post> create(String title, String content, String image, List<Long> tags) {
+	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description) {
 		final Post post = new Post();
 		post.setId(sequenceRepository.getNextSequenceId());
 		post.setTitle(title);
@@ -70,6 +71,7 @@ public class PostService {
 		post.setImage(image);
 		post.setCreateDate(new Date());
 		post.setTags(tags);
+		post.setDescription(description);
 		return this.repository.save(post).doOnSuccess(profile -> 
 			this.tagPublisher.publish(post.getId(), post.getTags())
 		);

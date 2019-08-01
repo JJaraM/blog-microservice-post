@@ -23,6 +23,7 @@ public class Post {
 	private Date createDate;
 	private Date updateDate;
 	private List<Long> tags;
+	private String description;
 
 	public long getId() {
 		return id;
@@ -104,4 +105,11 @@ public class Post {
 		this.tags = tags;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }
