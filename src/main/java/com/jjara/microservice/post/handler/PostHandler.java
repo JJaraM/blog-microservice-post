@@ -40,7 +40,7 @@ public class PostHandler {
 			this.service.update(id(serverRequest), 
 					p.getTitle(), p.getDraftTitle(),
 					p.getContent(), p.getDraftContent(),
-					p.getImage(), p.getDraftImage(), p.getTags(), p.getDescription()));
+					p.getImage(), p.getDraftImage(), p.getTags(), p.getDescription(), p.getDraftDescription()));
 		return defaultReadResponse(id);
 	}
 
