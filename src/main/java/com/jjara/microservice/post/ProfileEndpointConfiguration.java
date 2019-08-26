@@ -23,6 +23,7 @@ class ProfileEndpointConfiguration {
 				.andRoute(i(GET("/post/{id}")), handler::getById)
 				.andRoute(i(DELETE("/post/{id}")), handler::deleteById)
 				.andRoute(i(POST("/post")), handler::create)
+				.andRoute(i(PUT("/post/view/{id}")), handler::increaseViews)
 				.andRoute(i(PUT("/post/{id}")), handler::updateById);
 	}
 

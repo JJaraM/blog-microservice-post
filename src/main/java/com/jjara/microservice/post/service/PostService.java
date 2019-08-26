@@ -59,6 +59,13 @@ public class PostService {
 			this.tagPublisher.publish(post.getId(), post.getTags())
 		);
 	}
+	
+	public Mono<Post> increaseViews(long id, long views) {
+		return this.repository.findById(id).map(p -> {
+			p.setViews(views);
+			return p;
+		});
+	}
 
 	public Mono<Post> delete(long id) {
 		return this.repository.findById(id).flatMap(p -> this.repository.deleteById(p.getId()).thenReturn(p));

@@ -14,6 +14,7 @@ public class Post {
 
 	@Id
 	private long id;
+	private long views;
 	private String title;
 	private String draftTitle;
 	private String content;
@@ -122,4 +123,13 @@ public class Post {
 		this.draftDescription = draftDescription;
 	}
 
+	public long getViews() {
+		return views;
+	}
+
+	public void setViews(long views) {
+		this.views = views;
+	}
+
+	
 }

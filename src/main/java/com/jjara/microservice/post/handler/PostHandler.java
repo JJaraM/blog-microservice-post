@@ -43,6 +43,13 @@ public class PostHandler {
 					p.getImage(), p.getDraftImage(), p.getTags(), p.getDescription(), p.getDraftDescription()));
 		return defaultReadResponse(id);
 	}
+	
+	public Mono<ServerResponse> increaseViews(ServerRequest serverRequest) {
+		final Flux<Post> id = serverRequest.bodyToFlux(Post.class).flatMap(p -> 
+		this.service.increaseViews(id(serverRequest), 
+				p.getViews()));
+		return defaultReadResponse(id);
+	}
 
 	public Mono<ServerResponse> create(ServerRequest request) {
 		Mono<Post> flux = request.bodyToMono(Post.class)
