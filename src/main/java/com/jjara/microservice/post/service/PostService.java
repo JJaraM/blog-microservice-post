@@ -42,7 +42,7 @@ public class PostService {
 	public Mono<Post> update(long id, 
 			String title, String draftTitle,
 			String content, String draftContent,
-			String image, String draftImage, List<Long> tags, String description, String draftDescription, int views) {
+			String image, String draftImage, List<Long> tags, String description, String draftDescription, long views) {
 		return this.repository.findById(id).map(p -> {
 			p.setContent(content);
 			p.setDraftContent(draftContent);
