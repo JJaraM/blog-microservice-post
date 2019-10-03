@@ -36,7 +36,10 @@ public class PostService {
 	}
 
 	public Mono<Post> get(long id) {
-		return this.repository.findById(id);
+		return this.repository.findById(id).map(post -> {
+			post.setViews(post.getViews() + 1);
+			return post;
+		}).flatMap(repository::save);
 	}
 
 	public Mono<Post> update(long id, 
