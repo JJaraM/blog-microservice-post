@@ -31,8 +31,8 @@ public class PostHandler {
 		return defaultReadResponseList(service.findAll(page(r), size(r), tag(r)));
 	}
 	
-	public Mono<ServerResponse> findMostPopular(ServerRequest request) {
-		return defaultReadResponseList(service.findMostPopular(page(request), size(request), tag(request)));
+	public Mono<ServerResponse> findMostPopular(ServerRequest r) {
+		return defaultReadResponseList(service.findMostPopular(page(r), size(r), tag(r)));
 	}
 
 	public Mono<ServerResponse> deleteById(ServerRequest r) {
