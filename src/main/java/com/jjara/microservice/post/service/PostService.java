@@ -34,6 +34,17 @@ public class PostService {
 		}
 		return result;
 	}
+	
+	public Flux<Post> findMostPopular(final int page, final int size, int tag) {
+		Flux<Post> result = null;
+		final PageRequest pageRquest = PageRequest.of(page, size, new Sort(Direction.DESC, "views"));
+		if (tag > 0) {
+			result = repository.findMostPopular(pageRquest, tag);
+		} else {
+			result = repository.findMostPopular(pageRquest);
+		}
+		return result;
+	}
 
 	public Mono<Post> get(long id) {
 		return this.repository.findById(id).map(post -> {

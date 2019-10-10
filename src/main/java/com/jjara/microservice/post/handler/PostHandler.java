@@ -30,6 +30,10 @@ public class PostHandler {
 	public Mono<ServerResponse> all(ServerRequest r) {
 		return defaultReadResponseList(service.findAll(page(r), size(r), tag(r)));
 	}
+	
+	public Mono<ServerResponse> findMostPopular(ServerRequest request) {
+		return defaultReadResponseList(service.findMostPopular(page(request), size(request), tag(request)));
+	}
 
 	public Mono<ServerResponse> deleteById(ServerRequest r) {
 		return ResponseHandler.okNoContent(service.delete(id(r)));

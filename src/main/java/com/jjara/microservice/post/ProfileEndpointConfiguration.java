@@ -17,6 +17,7 @@ class ProfileEndpointConfiguration {
 	@Bean
 	protected RouterFunction<ServerResponse> routes(final PostHandler handler) {
 		return route(GET("/post/{page}/{size}/{tag}"), handler::all)
+				.andRoute(GET("/post/mostPopular/{page}/{size}/{tag}"), handler::findMostPopular)
 				.andRoute(GET("/post/{id}"), handler::getById)
 				.andRoute(DELETE("/post/{id}"), handler::deleteById)
 				.andRoute(POST("/post"), handler::create)
