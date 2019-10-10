@@ -37,11 +37,11 @@ public class PostService {
 	
 	public Flux<Post> findMostPopular(final int page, final int size, int tag) {
 		Flux<Post> result = null;
-		final PageRequest pageRquest = PageRequest.of(page, size, new Sort(Direction.DESC, "views"));
+		var pageRquest = PageRequest.of(page, size, new Sort(Direction.DESC, "views"));
 		if (tag > 0) {
-			result = repository.findMostPopular(pageRquest, tag);
+			result = repository.findMostPopularByTag(pageRquest, tag);
 		} else {
-			result = repository.findMostPopular(pageRquest);
+			result = repository.findAll(pageRquest);
 		}
 		return result;
 	}

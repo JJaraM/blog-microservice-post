@@ -17,8 +17,7 @@ public interface PostRepository extends ReactiveMongoRepository<Post, Long> {
 	public Flux<Post> findAllByTag(Pageable page, int tag);
 	
 	@Query("{ tags: { $in: [?0] }}")
-	public Flux<Post> findMostPopular(Pageable page, int tag);
+	public Flux<Post> findMostPopularByTag(Pageable page, int tag);
 	
-	public Flux<Post> findMostPopular(Pageable page);
 	
 }
