@@ -15,12 +15,10 @@ public class SequenceRepository {
 
 	@Autowired private MongoOperations mongoOperation;
 	
-	private final String KEY = "post";
-
-	public long getNextSequenceId() {
+	public long getNextSequenceId(final String key) {
 
 		// get sequence id
-		Query query = new Query(Criteria.where("_id").is(KEY));
+		Query query = new Query(Criteria.where("_id").is(key));
 
 		// increase sequence id by 1
 		Update update = new Update();

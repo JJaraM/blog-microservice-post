@@ -23,6 +23,9 @@ public class PostService {
 	@Autowired private SequenceRepository sequenceRepository;
 	@Autowired private RedisPublish tagPublisher;
 	
+
+	private final static String KEY = "post";
+	
 	public Flux<Post> findAll(final int page, final int size, int tag) {
 		Flux<Post> result = null;
 		if (tag > 0) {
@@ -88,7 +91,7 @@ public class PostService {
 
 	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description) {
 		final Post post = new Post();
-		post.setId(sequenceRepository.getNextSequenceId());
+		post.setId(sequenceRepository.getNextSequenceId(KEY));
 		post.setTitle(title);
 		post.setContent(content);
 		post.setImage(image);
