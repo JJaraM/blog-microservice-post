@@ -14,7 +14,16 @@ public class Testimonial {
 	private String text;
 	private Date date;
 	private String title;
+	private String img;
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -46,5 +55,15 @@ public class Testimonial {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+	
+	
 
 }
