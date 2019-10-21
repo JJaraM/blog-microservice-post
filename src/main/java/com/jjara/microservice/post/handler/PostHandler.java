@@ -34,6 +34,10 @@ public class PostHandler {
 	public Mono<ServerResponse> findMostPopular(ServerRequest r) {
 		return defaultReadResponseList(service.findMostPopular(page(r), size(r), tag(r)));
 	}
+	
+	public Mono<ServerResponse> findByTitle(ServerRequest r) {
+		return defaultReadResponseList(service.findByTitle(page(r), size(r), title(r)));
+	}
 
 	public Mono<ServerResponse> deleteById(ServerRequest r) {
 		return ResponseHandler.okNoContent(service.delete(id(r)));
@@ -91,6 +95,10 @@ public class PostHandler {
 		return serverRequestProperty(r, "tag");
 	}
 	
+	private static String title(ServerRequest r) {
+		return serverRequestStringProperty(r, "title");
+	}
+	
 	
 	private static Integer serverRequestProperty(final ServerRequest r, final String property) {
 		Integer value = null;
@@ -102,4 +110,13 @@ public class PostHandler {
 		return value;
 	}
 	
+	private static String serverRequestStringProperty(final ServerRequest r, final String property) {
+		String value = null;
+		try {
+			value = r.pathVariable(property);
+		} catch (IllegalArgumentException e) {
+			
+		}
+		return value;
+	}
 }

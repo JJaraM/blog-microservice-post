@@ -3,6 +3,8 @@ package com.jjara.microservice.post.service;
 import lombok.extern.log4j.Log4j2;
 import java.util.Date;
 import java.util.List;
+
+import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,6 +38,10 @@ public class PostService {
 			result = repository.findAll();
 		}
 		return result;
+	}
+	
+	public Flux<Post> findByTitle(final int page, final int size, String title) {
+		return repository.findByTitle(PageRequest.of(page, size, new Sort(Direction.DESC, "id")), title);
 	}
 	
 	public Flux<Post> findMostPopular(final int page, final int size, int tag) {
@@ -102,4 +108,6 @@ public class PostService {
 			this.tagPublisher.publish(post.getId(), post.getTags())
 		);
 	}
+
+	
 }

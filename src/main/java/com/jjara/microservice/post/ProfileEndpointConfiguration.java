@@ -20,9 +20,12 @@ class ProfileEndpointConfiguration {
 	protected RouterFunction<ServerResponse> routes(final PostHandler handler, final TestimonialHandler testimonials) {
 		return route(GET("/post/{page}/{size}/{tag}"), handler::all)
 				.andRoute(GET("/post/mostPopular/{page}/{size}/{tag}"), handler::findMostPopular)
-				.andRoute(GET("/post/{id}"), handler::getById).andRoute(DELETE("/post/{id}"), handler::deleteById)
-				.andRoute(POST("/post"), handler::create).andRoute(PUT("/post/view/{id}"), handler::increaseViews)
+				.andRoute(GET("/post/{id}"), handler::getById)
+				.andRoute(DELETE("/post/{id}"), handler::deleteById)
+				.andRoute(POST("/post"), handler::create)
+				.andRoute(PUT("/post/view/{id}"), handler::increaseViews)
 				.andRoute(PUT("/post/{id}"), handler::updateById)
+				.andRoute(GET("/post/byTitle/{page}/{size}/{title}"), handler::findByTitle)
 				.andRoute(GET("/testimonial/{page}/{size}"), testimonials::findAll);
 	}
 
