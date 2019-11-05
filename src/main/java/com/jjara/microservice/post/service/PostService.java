@@ -65,7 +65,7 @@ public class PostService {
 	public Mono<Post> update(long id, 
 			String title, String draftTitle,
 			String content, String draftContent,
-			String image, String draftImage, List<Long> tags, String description, String draftDescription, long views) {
+			String image, String draftImage, List<Long> tags, String description, String draftDescription, long views, String link) {
 		return this.repository.findById(id).map(p -> {
 			p.setContent(content);
 			p.setDraftContent(draftContent);
@@ -78,6 +78,7 @@ public class PostService {
 			p.setDescription(description);
 			p.setDraftDescription(draftDescription);
 			p.setViews(views);
+			p.setLink(link);
 			return p;
 		}).flatMap(this.repository::save).doOnSuccess(post -> 
 			this.tagPublisher.publish(post.getId(), post.getTags())
