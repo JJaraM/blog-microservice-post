@@ -95,7 +95,7 @@ public class PostService {
 		return this.repository.findById(id).flatMap(p -> this.repository.deleteById(p.getId()).thenReturn(p));
 	}
 
-	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description) {
+	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description, String link) {
 		final Post post = new Post();
 		post.setId(sequenceRepository.getNextSequenceId(KEY));
 		post.setTitle(title);
@@ -104,6 +104,7 @@ public class PostService {
 		post.setCreateDate(new Date());
 		post.setTags(tags);
 		post.setDescription(description);
+		post.setLink(link);
 		return this.repository.save(post).doOnSuccess(profile -> 
 			this.tagPublisher.publish(post.getId(), post.getTags())
 		);

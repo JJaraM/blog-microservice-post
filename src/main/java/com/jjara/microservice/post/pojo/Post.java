@@ -26,7 +26,8 @@ public class Post {
 	private List<Long> tags;
 	private String description;
 	private String draftDescription;
-
+	private String link;
+	
 	public long getId() {
 		return id;
 	}
@@ -131,5 +132,12 @@ public class Post {
 		this.views = views;
 	}
 
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
 	
 }

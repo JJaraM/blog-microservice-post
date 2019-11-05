@@ -61,7 +61,8 @@ public class PostHandler {
 
 	public Mono<ServerResponse> create(ServerRequest request) {
 		Mono<Post> flux = request.bodyToMono(Post.class)
-				.flatMap(data -> this.service.create(data.getTitle(), data.getContent(), data.getImage(), data.getTags(), data.getDescription()));
+				.flatMap(data -> this.service.create(data.getTitle(), data.getContent(), data.getImage(), 
+						data.getTags(), data.getDescription(), data.getLink()));
 		return defaultReadResponse(flux);
 	}
 
