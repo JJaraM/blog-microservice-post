@@ -4,9 +4,9 @@ import lombok.extern.log4j.Log4j2;
 import java.util.Date;
 import java.util.List;
 
-import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -24,42 +24,41 @@ public class PostService {
 	@Autowired private PostRepository repository;
 	@Autowired private SequenceRepository sequenceRepository;
 	@Autowired private RedisPublish tagPublisher;
-	
 
 	private final static String KEY = "post";
+	private final static Sort DESC_ID_SORT = Sort.by(Direction.DESC, "id");
 	
-	public Flux<Post> findAll(final int page, final int size, int tag) {
-		Flux<Post> result = null;
-		if (tag > 0) {
-			result = repository.findAllByTag(PageRequest.of(page, size, new Sort(Direction.DESC, "id")), tag);
-		} else if (size > 0) {
-			result = this.repository.findAll(PageRequest.of(page, size, new Sort(Direction.DESC, "id")));
-		} else {
-			result = repository.findAll();
-		}
-		return result;
+	public Flux<Post> findAll(final int page, final int size) {
+		final Pageable pageable = getPageable(page, size);
+		return repository.findAll(pageable);
 	}
-	
+
+	public Flux<Post> findByTag(final int page, final int size, int tag) {
+		final Pageable pageable = getPageable(page, size);
+		return repository.findAllByTag(pageable, tag);
+	}
+
 	public Flux<Post> findByTitle(final int page, final int size, String title) {
-		return repository.findByTitle(PageRequest.of(page, size, new Sort(Direction.DESC, "id")), title);
+		return repository.findByTitle(getPageable(page, size), title);
+	}
+
+	private Pageable getPageable(final int page, final int size) {
+		return PageRequest.of(page, size, DESC_ID_SORT);
 	}
 	
 	public Flux<Post> findMostPopular(final int page, final int size, int tag) {
-		Flux<Post> result = null;
-		var pageRquest = PageRequest.of(page, size, new Sort(Direction.DESC, "views"));
+		Flux<Post> result;
+		final var request = PageRequest.of(page, size, Sort.by(Direction.DESC, "views"));
 		if (tag > 0) {
-			result = repository.findMostPopularByTag(pageRquest, tag);
+			result = repository.findMostPopularByTag(request, tag);
 		} else {
-			result = repository.findAll(pageRquest);
+			result = repository.findAll(request);
 		}
 		return result;
 	}
 
 	public Mono<Post> find(long id) {
-		return this.repository.findById(id).map(post -> {
-			post.setViews(post.getViews() + 1);
-			return post;
-		}).flatMap(repository::save);
+		return repository.findById(id);
 	}
 
 	public Mono<Post> update(long id, 

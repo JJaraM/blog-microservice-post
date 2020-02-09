@@ -9,7 +9,6 @@ import reactor.core.publisher.Mono;
 /**
  * Catch all HTTP responses and add some configuration
  * for all responses.
- *
  */
 @Component
 public class ResponseFilter implements WebFilter {

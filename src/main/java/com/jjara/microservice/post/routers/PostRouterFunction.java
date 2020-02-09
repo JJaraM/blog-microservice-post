@@ -1,11 +1,10 @@
-package com.jjara.microservice.post;
+package com.jjara.microservice.post.routers;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.handler.PostHandler;
-import com.jjara.microservice.post.handler.TestimonialHandler;
 import javax.annotation.Resource;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
@@ -20,10 +19,9 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
  * @since 02-02-2020
  */
 @Configuration
-class RouterFunctionConfiguration {
+public class PostRouterFunction {
 
 	@Resource private PostHandler post;
-	@Resource private TestimonialHandler testimonial;
 
 	/**
 	 * Method that is executed by spring and is catch it when there is an http server request and then decides
@@ -36,12 +34,12 @@ class RouterFunctionConfiguration {
 	 * @return the method that needs to me invoked when the request match
 	 */
 	@Bean
-	protected RouterFunction<ServerResponse> routes() {
-		return route(GET("/post/{page}/{size}/{tag}"), post::findAll)
+	protected RouterFunction<ServerResponse> postRoutes() {
+		return route(GET("/post/{page}/{size}"), post::findAll)
+				.andRoute(GET("/post/{page}/{size}/{tag}"), post::findByTag)
 				.andRoute(GET("/post/mostPopular/{page}/{size}/{tag}"), post::findMostPopular)
-				.andRoute(GET("/post/{id}"), post::getById)
+				.andRoute(GET("/post/{id}"), post::findById)
 				.andRoute(GET("/post/byTitle/{page}/{size}/{title}"), post::findByTitle)
-				.andRoute(GET("/testimonial/{page}/{size}"), testimonial::findAll)
 				.andRoute(POST("/post"), post::create)
 				.andRoute(PUT("/post/view/{id}"), post::increaseViews)
 				.andRoute(PUT("/post/{id}"), post::updateById)

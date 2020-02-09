@@ -16,6 +16,6 @@ public class TestimonialService {
 	@Autowired private TestimonialRepository repository;
 	
 	public Flux<Testimonial> findAll(final int page, final int size) {
-		return repository.findAll(PageRequest.of(page, size, new Sort(Direction.DESC, "date")));
+		return repository.findAll(PageRequest.of(page, size, Sort.by(Direction.DESC, "date")));
 	}
 }

@@ -27,10 +27,25 @@ public class PostHandler {
 	 * @param serverRequest to make the search
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
-	public Mono<ServerResponse> getById(final ServerRequest serverRequest) {
+	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
 		return okNoContent(
 			service.find(
 				handlerParameter.id(serverRequest)
+			)
+		);
+	}
+
+	/**
+	 * Find all posts the total of results that wants to retrieve according with the <code>size</code> and <code>page</code>
+	 *
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> findAll(final ServerRequest serverRequest) {
+		return okNoContent(
+			service.findAll(
+				handlerParameter.page(serverRequest),
+				handlerParameter.size(serverRequest)
 			)
 		);
 	}
@@ -42,13 +57,13 @@ public class PostHandler {
 	 * @param serverRequest to make the search
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
-	public Mono<ServerResponse> findAll(final ServerRequest serverRequest) {
+	public Mono<ServerResponse> findByTag(final ServerRequest serverRequest) {
 		return okNoContent(
-			service.findAll(
-				handlerParameter.page(serverRequest),
-				handlerParameter.size(serverRequest),
-				handlerParameter.tag(serverRequest)
-			)
+				service.findByTag(
+						handlerParameter.page(serverRequest),
+						handlerParameter.size(serverRequest),
+						handlerParameter.tag(serverRequest)
+				)
 		);
 	}
 
