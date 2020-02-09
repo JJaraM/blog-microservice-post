@@ -11,16 +11,14 @@ import reactor.core.publisher.Flux;
 public interface PostRepository extends ReactiveMongoRepository<Post, Long> {
 		
 	@Query("{ id: { $exists: true }}")
-	public Flux<Post> findAll(Pageable page);
+	Flux<Post> findAll(Pageable page);
 
 	@Query("{ tags: { $in: [?0] }}")
-	public Flux<Post> findAllByTag(Pageable page, int tag);
+	Flux<Post> findAllByTag(Pageable page, int tag);
 	
 	@Query("{ tags: { $in: [?0] }}")
-	public Flux<Post> findMostPopularByTag(Pageable page, int tag);
+	Flux<Post> findMostPopularByTag(Pageable page, int tag);
 	
 	@Query("{'title': {$regex : ?0, $options: 'i'}}")
-	public Flux<Post> findByTitle(final Pageable page,final String title);
-	
-	
+	Flux<Post> findByTitle(final Pageable page,final String title);
 }

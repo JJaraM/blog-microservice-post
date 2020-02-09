@@ -1,49 +1,39 @@
 package com.jjara.microservice.post.handler;
 
-import org.reactivestreams.Publisher;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import com.jjara.microservice.post.api.HandlerParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-
-import com.jjara.microservice.post.ResponseHandler;
-import com.jjara.microservice.post.pojo.Testimonial;
 import com.jjara.microservice.post.service.TestimonialService;
-
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
+
+import static com.jjara.microservice.post.ResponseHandler.okNoContent;
+
+/**
+ * Handler used to process all requests related with a testimonial
+ */
 @Component
 public class TestimonialHandler {
 	
-	@Autowired private TestimonialService service;
-	
-	public Mono<ServerResponse> findAll(ServerRequest r) {
-		return defaultReadResponseList(service.findAll(page(r), size(r)));
+	@Resource private TestimonialService service;
+	@Resource private HandlerParameter<ServerRequest> handlerParameter;
+
+	/**
+	 * Find all testimonial and specify the size of the result using the <code>page</code> and <code>size</code>.
+	 *
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> findAll(ServerRequest serverRequest) {
+		return okNoContent(
+				service.findAll(
+						handlerParameter.page(serverRequest),
+						handlerParameter.size(serverRequest)
+				)
+		);
 	}
-	
-	private static Mono<ServerResponse> defaultReadResponseList(Publisher<Testimonial> profiles) {
-		Flux.from(profiles).flatMap(ResponseHandler::ok).switchIfEmpty(ResponseHandler.noContent());
-		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(profiles, Testimonial.class);
-	}
-	
-	private static Integer page(ServerRequest r) {
-		return serverRequestProperty(r, "page");
-	}
-	
-	private static Integer size(ServerRequest r) {
-		return serverRequestProperty(r, "size");
-	}
-	
-	private static Integer serverRequestProperty(final ServerRequest r, final String property) {
-		Integer value = null;
-		try {
-			value = Integer.valueOf(r.pathVariable(property));
-		} catch (IllegalArgumentException e) {
-			value = 0;
-		}
-		return value;
-	}
+
 
 }

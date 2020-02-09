@@ -9,5 +9,5 @@ import reactor.core.publisher.Flux;
 public interface TestimonialRepository extends ReactiveMongoRepository<Testimonial, Long> {
 
 	@Query("{ id: { $exists: true }}")
-	public Flux<Testimonial> findAll(Pageable page);
+	Flux<Testimonial> findAll(Pageable page);
 }

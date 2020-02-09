@@ -55,7 +55,7 @@ public class PostService {
 		return result;
 	}
 
-	public Mono<Post> get(long id) {
+	public Mono<Post> find(long id) {
 		return this.repository.findById(id).map(post -> {
 			post.setViews(post.getViews() + 1);
 			return post;

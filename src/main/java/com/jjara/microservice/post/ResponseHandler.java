@@ -4,6 +4,7 @@ import org.reactivestreams.Publisher;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class ResponseHandler {
@@ -18,8 +19,10 @@ public class ResponseHandler {
 	}
 
 	public static <T> Mono<ServerResponse> okNoContent(Publisher<T> profiles) {
-		return Mono.from(profiles).flatMap(ResponseHandler::ok).switchIfEmpty(noContent());
-
+		Flux.from(profiles).flatMap(ResponseHandler::ok).switchIfEmpty(ResponseHandler.noContent());
+		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(profiles, new ParameterizedTypeReference<T>(){});
 	}
+
+
 
 }

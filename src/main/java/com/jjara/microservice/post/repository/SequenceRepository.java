@@ -1,6 +1,5 @@
 package com.jjara.microservice.post.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -10,10 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import com.jjara.microservice.post.pojo.Sequence;
 
+import javax.annotation.Resource;
+
 @Repository
 public class SequenceRepository {
 
-	@Autowired private MongoOperations mongoOperation;
+	@Resource private MongoOperations operation;
 	
 	public long getNextSequenceId(final String key) {
 
@@ -29,7 +30,7 @@ public class SequenceRepository {
 		options.returnNew(true);
 
 		// this is the magic happened.
-		Sequence seqId = mongoOperation.findAndModify(query, update, options, Sequence.class);
+		Sequence seqId = operation.findAndModify(query, update, options, Sequence.class);
 
 		return seqId.getSeq();
 
