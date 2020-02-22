@@ -1,6 +1,6 @@
 # blog-ws
 
-[![Coverage Status](https://coveralls.io/repos/github/JJaraM/blog-microservice-post/badge.svg?branch=master)](https://coveralls.io/github/JJaraM/blog-microservice-post?branch=master)
+[![codecov](https://codecov.io/gh/JJaraM/blog-microservice-post/branch/master/graph/badge.svg)](https://codecov.io/gh/JJaraM/blog-microservice-post)
 [![Build Status](https://travis-ci.org/JJaraM/blog-microservice-post.svg?branch=master)](https://travis-ci.org/JJaraM/blog-microservice-post)
 
 # Installation Steps:
