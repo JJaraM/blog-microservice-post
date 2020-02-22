@@ -1,5 +1,5 @@
 {
   "name": "WS Post",
   "description": "Web Service that makes possible to make CRUD operations for posts.",
-  "addons": [ "heroku-redis", "mlab-mongoDB" ]
+  "addons": [ "heroku-redis", "mongolab" ]
 }
