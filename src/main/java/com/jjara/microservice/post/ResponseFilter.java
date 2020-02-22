@@ -22,6 +22,7 @@ public class ResponseFilter implements WebFilter {
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
 		exchange.getResponse().getHeaders().add("Cache-Control", "no-cache, no-store, must-revalidate");
+
 		return chain.filter(exchange);
 	}
 

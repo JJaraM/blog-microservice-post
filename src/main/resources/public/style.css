@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700|Work+Sans:300,400,500,600,700,800,900');
+
+html, body {
+    font-family: 'Ubuntu', sans-serif;
+    height: 100%;
+    background: rgba(22,22,22,1);
+    font-size: 14px;
+    font-weight: 400;
+    color: #a5a5a5;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer_center {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 60px 20px 20px 20px;
+    width: inherit;
+}
+
+.footer-logo-box {
+    position: relative;
+    padding: 60px 0 46px 0;
+    text-align: center;
+    border: 1px solid #303030;
+    width: 100%;
+}
+
+a, a:hover, a:visited, a:active, a:link {
+    text-decoration: none;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-shadow: rgba(0,0,0,.01) 0 0 1px;
+    text-shadow: rgba(0,0,0,.01) 0 0 1px;
+    background: transparent;
+}
+
+.footer_logo a {
+
+    font-size: 40px;
+    font-weight: 700;
+    color: #FFF;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    line-height: 0.75;
+}
+
+.footer_social {
+    margin-top: 34px;
+}
+
+.footer_social ul li:not(:last-child) {
+    margin-right: 21px;
+}
+
+.footer_social ul {
+    padding: initial;
+}
+.footer_social ul li {
+    display: inline-block;
+
+}
+
+.footer_social a {
+    border: 1px solid #303030;
+    padding: 10px 10px 10px 10px;
+    font-size: 15px;
+}
+
+.footer_social ul li i {
+    color: #8f8f8f;
+}
+
+.description {
+    padding-top: 15px;
+}
+
+.technologies {
+    font-size: 10px;
+}
