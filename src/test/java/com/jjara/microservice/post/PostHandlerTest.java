@@ -41,7 +41,7 @@ public class PostHandlerTest {
     }
 
     @Test
-    public void getById() {
+    public void findById() {
         final Post mockInstance = new Post();
         mockInstance.setId(1L);
         mockInstance.setTitle("1L Title");
@@ -55,5 +55,4 @@ public class PostHandlerTest {
             Assertions.assertThat(mockInstance.getTitle()).isEqualTo(post.getTitle());
         });
     }
-
 }

@@ -1,5 +1,7 @@
 # blog-ws
 
+[![Coverage Status](https://coveralls.io/repos/github/JJaraM/blog-microservice-post/badge.svg?branch=master)](https://coveralls.io/github/JJaraM/blog-microservice-post?branch=master)
+
 # Installation Steps:
 
 1. Clone the repository.

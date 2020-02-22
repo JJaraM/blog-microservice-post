@@ -7,10 +7,9 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.service.PostService;
 import reactor.core.publisher.Mono;
-
 import javax.annotation.Resource;
-
 import static com.jjara.microservice.post.ResponseHandler.okNoContent;
+
 
 /**
  * Handler used to process all requests related with a post service.
