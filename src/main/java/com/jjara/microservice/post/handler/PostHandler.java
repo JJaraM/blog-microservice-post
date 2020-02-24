@@ -117,12 +117,14 @@ public class PostHandler {
 	public Mono<ServerResponse> updateById(final ServerRequest serverRequest) {
 		final var id = serverRequest.bodyToFlux(Post.class).flatMap(p ->
 			service.update(
-					handlerParameter.id(serverRequest),
-					p.getTitle(), p.getDraftTitle(),
-					p.getContent(), p.getDraftContent(),
-					p.getImage(), p.getDraftImage(), p.getTags(), p.getDescription(),
-					p.getDraftDescription(), p.getViews(),
-					p.getLink()));
+				handlerParameter.id(serverRequest),
+				p.getTitle(), p.getDraftTitle(),
+				p.getContent(), p.getDraftContent(),
+				p.getImage(), p.getDraftImage(), p.getTags(), p.getDescription(),
+				p.getDraftDescription(), p.getViews(),
+				p.getLink()
+			)
+		);
 		return okNoContent(id);
 	}
 
@@ -132,12 +134,13 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> increaseViews(final ServerRequest serverRequest) {
-		final var id = serverRequest.bodyToFlux(Post.class).flatMap(p ->
-			service.increaseViews(
-				handlerParameter.id(serverRequest),
-				p.getViews())
-			);
-		return okNoContent(id);
+		return okNoContent(
+			serverRequest.bodyToFlux(Post.class).flatMap(p ->
+				service.increaseViews(
+					handlerParameter.id(serverRequest), p.getViews()
+				)
+			)
+		);
 	}
 
 	/**
@@ -146,15 +149,15 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> create(final ServerRequest serverRequest) {
-		var flux = serverRequest.bodyToMono(Post.class).flatMap(data ->
-			service.create(
-					data.getTitle(),
-					data.getContent(), data.getImage(),
-					data.getTags(), data.getDescription(),
-					data.getLink()
-			)
-		);
-		return okNoContent(flux);
+		return okNoContent(
+				serverRequest.bodyToMono(Post.class).flatMap(data ->
+					service.create(
+							data.getTitle(),
+							data.getContent(), data.getImage(),
+							data.getTags(), data.getDescription(),
+							data.getLink()
+				)
+		));
 	}
 
 

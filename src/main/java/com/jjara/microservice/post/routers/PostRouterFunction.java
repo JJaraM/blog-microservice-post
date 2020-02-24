@@ -2,16 +2,23 @@ package com.jjara.microservice.post.routers;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.handler.PostHandler;
-import javax.annotation.Resource;
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
-import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
-import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
+import java.io.Serializable;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.Method;
+import java.net.URISyntaxException;
+import java.util.function.Consumer;
+
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 /**
  * Class that takes all server request and decides the correct handler to dispatch the requests.
  *
@@ -35,14 +42,15 @@ public class PostRouterFunction {
 	 */
 	@Bean
 	protected RouterFunction<ServerResponse> postRoutes() {
-		return route(GET("/post/{page}/{size}"), post::findAll)
+		return route(GET("/post/{id}"), post::findById)
 				.andRoute(GET("/post/{page}/{size}/{tag}"), post::findByTag)
 				.andRoute(GET("/post/mostPopular/{page}/{size}/{tag}"), post::findMostPopular)
-				.andRoute(GET("/post/{id}"), post::findById)
+				.andRoute(GET("/post/{page}/{size}"), post::findAll)
 				.andRoute(GET("/post/byTitle/{page}/{size}/{title}"), post::findByTitle)
-				.andRoute(POST("/post"), post::create)
+				.andRoute(POST("/post").and(accept(APPLICATION_JSON)), post::create)
 				.andRoute(PUT("/post/view/{id}"), post::increaseViews)
 				.andRoute(PUT("/post/{id}"), post::updateById)
 				.andRoute(DELETE("/post/{id}"), post::deleteById);
 	}
+
 }

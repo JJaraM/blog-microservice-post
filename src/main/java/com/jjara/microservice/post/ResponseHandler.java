@@ -19,6 +19,9 @@ public class ResponseHandler {
     }
 
     public static <T> Mono<ServerResponse> okNoContent(Publisher<T> profiles) {
+        if (profiles == null) {
+            return ServerResponse.noContent().build();
+        }
         Flux.from(profiles).flatMap(ResponseHandler::ok).switchIfEmpty(ResponseHandler.noContent());
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(profiles, new ParameterizedTypeReference<T>(){});
     }
