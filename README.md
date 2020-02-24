@@ -11,7 +11,7 @@
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 # Configuration
-TO make possible to run the application you will need to configure the following environment properties:
+To run the application you will need to configure the following environment properties:
 
 * MONGODB_URI
 * REDIS_URI
