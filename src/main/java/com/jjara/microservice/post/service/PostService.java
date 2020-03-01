@@ -29,13 +29,17 @@ public class PostService {
 	private final static Sort DESC_ID_SORT = Sort.by(Direction.DESC, "id");
 	
 	public Flux<Post> findAll(final int page, final int size) {
-		final Pageable pageable = getPageable(page, size);
+		final var pageable = getPageable(page, size);
 		return repository.findAll(pageable);
 	}
 
+	private Flux<Post> findByTag(final Pageable pageable, int tag) {
+		return repository.findByTags(pageable, tag);
+	}
+
 	public Flux<Post> findByTag(final int page, final int size, int tag) {
-		final Pageable pageable = getPageable(page, size);
-		return repository.findAllByTag(pageable, tag);
+		final var pageable = getPageable(page, size);
+		return findByTag(pageable, tag);
 	}
 
 	public Flux<Post> findByTitle(final int page, final int size, String title) {
@@ -48,11 +52,11 @@ public class PostService {
 	
 	public Flux<Post> findMostPopular(final int page, final int size, int tag) {
 		Flux<Post> result;
-		final var request = PageRequest.of(page, size, Sort.by(Direction.DESC, "views"));
 		if (tag > 0) {
-			result = repository.findMostPopularByTag(request, tag);
+			final var request = PageRequest.of(page, size, Sort.by(Direction.DESC, "views"));
+			result = findByTag(request, page);
 		} else {
-			result = repository.findAll(request);
+			result = findAll(page, size);
 		}
 		return result;
 	}
