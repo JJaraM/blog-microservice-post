@@ -13,7 +13,9 @@ jdk:
 deploy:
   provider: heroku
   api_key:
-    secure: 66IZ+ZpzYHQqfUcp0vkjdwB2yg3xwP1c6vfacjSdZnTS5JZphyG7ivxOuNURpSefDPYAWVblSUT46cSKHpPDiSk44uELirSrYXhXn/5fqVmEIYXmUhUZKcy+WUiBZWOaZmQBlgYVWGAUS5C6F7uYQbk40/YJ+V2VhTNDTXWqWIxPOqWv8WmSqkduWWZcWthczZ7sJ5mHMo5U4WuHjqwF1xqZ97q8gXWXbqpK3rpsaHOfNEDqS6vxNZmgiy/7bDvI3D0ewNwwzRgnkHFGnfvhfnCM1HeTZgV6+DuE9NYQC6LmZT8H2mSae0TpQhO2Q+rRUpGT86AxMyjAqXD+gOBp+q/EilDu8XtRssQOPd4d5s2M3DEklnPyjY7AswB6OMLQHse+PCtGmo1kIDd53XAztQMqt2wszKlXNRZ2/raOAfbVVnkyOr07ROtQih6a7mgN6FXQ8x4WaHXOEO7Jt7rnDDRYAUrShLNHI4fruZ1gcDbjbJmcx/KOveem5aIhuEogA9sIXUYXzjjHS49PlAzNzW1Swla54l/CqeGupNBQf/LQ/ygniTPbb0AgnOuwE09TzUXVaSISKj0GBtZQcZV/IaEtiU8wTYWzikuaO6JWciXIyFdbZhRqr9CUxuVDpoGHp6jpXTb6K8YSF/t0M1J/BQfXRj/wWoEBoCQWq1tP3Bw=
+    secure: $HEROKU_AUTH_TOKEN
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+    
