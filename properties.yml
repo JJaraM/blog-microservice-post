@@ -1,0 +1,4 @@
+MONGODB_URI: mongodb://heroku_rsg0klm3:hhn8u57igl66qfh4dv93sm6fmc@ds033135.mlab.com:33135/heroku_rsg0klm3
+REDIS_CHANNEL_TAG: channel_tag;REDIS_URI=redis://h:p30265bf32c2a98f5d3e24cd1176a807a9979660244128f150926a817c1ed205e@ec2-3-226-204-177.compute-1.amazonaws.com:29619
+REDIS_URL: redis//h:p30265bf32c2a98f5d3e24cd1176a807a9979660244128f150926a817c1ed205e@ec2-3-226-204-177.compute-1.amazonaws.com:29619
+MONGODB_NAME: heroku_rsg0klm3

@@ -8,14 +8,12 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import javax.annotation.Resource;
-
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 @Configuration
 public class TestimonialRouterFunction {
 
-    @Resource
-    private TestimonialHandler handler;
+    @Resource private TestimonialHandler handler;
 
     /**
      * Maps the http request with the corresponding handler method, in this way we can configure the accept media type easily in the router configuration.
