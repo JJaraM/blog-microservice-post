@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 
-import static com.jjara.microservice.post.ResponseHandler.okNoContent;
+import static com.jjara.microservice.post.handler.ResponseHandler.okNoContent;
 
 /**
  * Handler used to process all requests related with a testimonial

@@ -1,4 +1,4 @@
-package com.jjara.microservice.post;
+package com.jjara.microservice.post.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,10 +7,10 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @Configuration
-public class CorsWebFilterConfig {
+public class CorsWebFilterConfiguration {
 	
 	@Bean
-	protected CorsWebFilter corsWebFilter() {
+	CorsWebFilter corsWebFilter() {
 		CorsConfiguration config = new CorsConfiguration();
 	    config.setAllowCredentials(true);
 	    config.addAllowedHeader("*");

@@ -9,12 +9,14 @@
 	<name>Microservice Post</name>
 	<description>Microservice used to Post CRUD Operations</description>
 	<url>http://jonathanjaramorales.herokuapp.com</url>
+
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
 			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 		</license>
 	</licenses>
+
 	<developers>
 		<developer>
 			<name>Jonathan Jara Morales</name>
@@ -23,15 +25,10 @@
 			<organizationUrl>http://jonathanjaramorales.herokuapp.com</organizationUrl>
 		</developer>
 	</developers>
+
 	<scm>
 		<url>https://github.com/JJaraM/blog-microservice-post</url>
 	</scm>
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.4.RELEASE</version>
-	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,7 +36,24 @@
 		<java.version>13</java.version>
 		<io.springfox.version>3.0.0-SNAPSHOT</io.springfox.version>
 		<start-class>com.jjara.microservice.post.Application</start-class>
+		<lettuce-core.version>5.2.1.RELEASE</lettuce-core.version>
+		<byte-buddy.version>1.10.7</byte-buddy.version>
+
+		<spring-cloud-dependencies.version>Finchley.RELEASE</spring-cloud-dependencies.version>
+
+		<!-- Plugin Versions -->
+		<maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
+		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+		<maven-install-plugin.version>3.0.0-M1</maven-install-plugin.version>
+		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
 	</properties>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.4.RELEASE</version>
+	</parent>
 
 	<repositories>
 		<repository>
@@ -55,9 +69,7 @@
 		</repository>
 	</repositories>
 
-
 	<dependencies>
-
 		<!-- Spring Fox Dependencies -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -75,16 +87,11 @@
 			<version>${io.springfox.version}</version>
 		</dependency>
 
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+		<!-- Redis, Jedis, Lettuce for subscriptions -->
 		<dependency>
 			<groupId>io.lettuce</groupId>
 			<artifactId>lettuce-core</artifactId>
-			<version>5.2.1.RELEASE</version>
+			<version>${lettuce-core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
@@ -94,29 +101,36 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+
+		<!-- Mongo -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Spring Web Flux -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+		<!-- Spring Dev Tools -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Unit Test -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -147,20 +161,14 @@
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy</artifactId>
-			<version>1.10.7</version>
+			<version>${byte-buddy.version}</version>
 		</dependency>
 
+		<!-- Eureka Client -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-plugin</artifactId>
-			<version>3.0.0-M4</version>
-		</dependency>
-
 	</dependencies>
 
 	<!-- Spring Cloud dependencies -->
@@ -169,7 +177,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Finchley.RELEASE</version>
+				<version>${spring-cloud-dependencies.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -184,24 +192,25 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
-					<version>3.0.0-M1</version>
+					<version>${maven-surefire-plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 
 		<plugins>
 
-
+			<!-- To build the application -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
-				<version>3.0.0-M1</version>
+				<version>${maven-install-plugin.version}</version>
 			</plugin>
 
+			<!-- To compile the application -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
@@ -212,7 +221,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
+				<version>${jacoco-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -229,14 +238,16 @@
 				</executions>
 			</plugin>
 
+			<!-- Spring boot plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
+			<!-- To copy the assets -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>${maven-resources-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -256,7 +267,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>

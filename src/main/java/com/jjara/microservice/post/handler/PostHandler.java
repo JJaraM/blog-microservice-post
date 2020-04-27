@@ -8,7 +8,7 @@ import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.service.PostService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
-import static com.jjara.microservice.post.ResponseHandler.okNoContent;
+import static com.jjara.microservice.post.handler.ResponseHandler.okNoContent;
 
 
 /**

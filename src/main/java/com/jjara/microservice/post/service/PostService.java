@@ -1,6 +1,5 @@
 package com.jjara.microservice.post.service;
 
-import lombok.extern.log4j.Log4j2;
 import java.util.Date;
 import java.util.List;
 
@@ -12,18 +11,17 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import com.jjara.microservice.post.RedisPublish;
+import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
 
-@Log4j2
 @Service
 public class PostService {
 
 	@Autowired private PostRepository repository;
 	@Autowired private SequenceRepository sequenceRepository;
-	@Autowired private RedisPublish tagPublisher;
+	@Autowired private RedisPublishTag tagPublisher;
 
 	private final static String KEY = "post";
 	private final static Sort DESC_ID_SORT = Sort.by(Direction.DESC, "id");

@@ -1,4 +1,4 @@
-package com.jjara.microservice.post;
+package com.jjara.microservice.post.publish;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisClient;
 
 @Component
-public class RedisPublish {
+public class RedisPublishTag {
 
 	@Value("${spring.data.redis.uri}") private String uri;
 	@Value("${spring.data.redis.channel-tag}") private String channelTag;
@@ -39,21 +39,6 @@ public class RedisPublish {
 		protected long postId;
 		protected List<Long> tags;
 
-		public long getPostId() {
-			return postId;
-		}
-
-		public void setPostId(long postId) {
-			this.postId = postId;
-		}
-
-		public List<Long> getTags() {
-			return tags;
-		}
-
-		public void setTags(List<Long> tags) {
-			this.tags = tags;
-		}
 
 	}
 }

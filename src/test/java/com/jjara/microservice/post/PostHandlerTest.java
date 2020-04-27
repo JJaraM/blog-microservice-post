@@ -3,6 +3,7 @@ package com.jjara.microservice.post;
 import com.jjara.microservice.post.handler.PostHandler;
 import com.jjara.microservice.post.implementation.DefaultHandlerParameter;
 import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
 import com.jjara.microservice.post.routers.PostRouterFunction;
@@ -11,7 +12,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
@@ -38,7 +38,7 @@ public class PostHandlerTest {
     @Resource private WebTestClient webClient;
     @MockBean private PostRepository repository;
     @MockBean private SequenceRepository sequenceRepository;
-    @MockBean private RedisPublish redisPublish;
+    @MockBean private RedisPublishTag redisPublishTag;
 
     @Before
     public void setUp() {
