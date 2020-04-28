@@ -38,3 +38,5 @@ This is a web service that is used to feed my personal web site, and it's showin
 * Eureka Service Discovery
 * Reactive API
 * MongoDB
+
+# Verify
