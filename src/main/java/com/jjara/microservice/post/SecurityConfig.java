@@ -20,7 +20,7 @@ public class SecurityConfig {
         http.cors()
             .and()
                 .authorizeExchange()
-                    .pathMatchers(HttpMethod.GET, "/post/**")
+                    .pathMatchers(HttpMethod.POST, "/post/**")
                         .hasAuthority("SCOPE_read")
                     .pathMatchers(HttpMethod.GET, "/testimonial/**", "/", "/resources/**", "/**")
                         .permitAll()
