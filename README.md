@@ -15,6 +15,28 @@ To run the application you will need to configure the following environment prop
 * REDIS_URI
 * REDIS_CHANNEL_TAG
 * MONGODB_NAME
+* AUTHORIZATION_SERVER
+
+# How to run in Postman?
+To run an example of the api you need to enter to postman and run the following operation as ``GET``
+
+``
+https://blog-microservice-api-gateway.herokuapp.com/post/0/10/0
+``
+
+Then go to ``Authorization`` tab and select ``OAuth2.0`` as the type, next to there is a button called ``Get New Access Token`` enter the following data.
+
+```
+Token Name: Blog Token name (optional)
+Gran Type: Password Credentials
+Access Token URL: https://blog-microservice-oauth-server.herokuapp.com/auth/realms/blog/protocol/openid-connect/token
+Username: mike@other.com
+Password: pass
+Client ID: newClient
+Client Secret: newClientSecret
+Scope: read
+Client Authentication: Send as Basic Auth header
+```
 
 # How to run in Docker?
 To run in docker you need to run the following commands:
@@ -28,6 +50,7 @@ MONGODB_URI:
 REDIS_CHANNEL_TAG:
 REDIS_URL:
 MONGODB_NAME: 
+AUTHORIZATION_SERVER:
 ```
 
 # About 
@@ -39,4 +62,3 @@ This is a web service that is used to feed my personal web site, and it's showin
 * Reactive API
 * MongoDB
 
-# Verify
