@@ -10,12 +10,12 @@ spring:
     redis:
       uri: ${REDIS_URI}
       channel-tag: ${REDIS_CHANNEL_TAG}
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${AUTHORIZATION_SERVER}/auth/realms/blog
-          jwk-set-uri: ${AUTHORIZATION_SERVER}/auth/realms/blog/protocol/openid-connect/certs
+ # security:
+ #   oauth2:
+ #     resourceserver:
+ #       jwt:
+ #         issuer-uri: ${AUTHORIZATION_SERVER}/auth/realms/blog
+ #         jwk-set-uri: ${AUTHORIZATION_SERVER}/auth/realms/blog/protocol/openid-connect/certs
 
 eureka:
   instance:

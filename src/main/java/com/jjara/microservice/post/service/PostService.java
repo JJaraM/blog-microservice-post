@@ -25,7 +25,7 @@ public class PostService {
 
 	private final static String KEY = "post";
 	private final static Sort DESC_ID_SORT = Sort.by(Direction.DESC, "id");
-	
+
 	public Flux<Post> findAll(final int page, final int size) {
 		final var pageable = getPageable(page, size);
 		return repository.findAll(pageable);

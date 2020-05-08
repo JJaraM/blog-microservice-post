@@ -1,5 +1,6 @@
 package com.jjara.microservice.post.publish;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,25 @@ public class RedisPublishTag {
 		
 	}
 	
-	public static final class SubscriberMessage {
+	public static final class SubscriberMessage implements Serializable {
 		
 		protected long postId;
 		protected List<Long> tags;
 
+		public long getPostId() {
+			return postId;
+		}
 
+		public void setPostId(long postId) {
+			this.postId = postId;
+		}
+
+		public List<Long> getTags() {
+			return tags;
+		}
+
+		public void setTags(List<Long> tags) {
+			this.tags = tags;
+		}
 	}
 }

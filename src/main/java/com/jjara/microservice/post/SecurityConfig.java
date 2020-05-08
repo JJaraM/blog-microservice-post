@@ -1,12 +1,12 @@
 package com.jjara.microservice.post;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.server.SecurityWebFilterChain;
+//import org.springframework.http.HttpMethod;
+//import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+//import org.springframework.security.config.web.server.ServerHttpSecurity;
+//import org.springframework.security.web.server.SecurityWebFilterChain;
 
-@EnableWebFluxSecurity
+//@EnableWebFluxSecurity
 public class SecurityConfig {
 
     /**
@@ -15,8 +15,8 @@ public class SecurityConfig {
      * @param http
      * @return
      */
-    @Bean
-    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    //@Bean
+    /*SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http.cors()
             .and()
                 .authorizeExchange()
@@ -35,4 +35,5 @@ public class SecurityConfig {
                     .jwt();
         return http.build();
     }
+    */
 }
