@@ -129,6 +129,51 @@ public class PostHandler {
 	}
 
 	/**
+	 * Update the post title using the <code>id</code>
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> updateTitleById(final ServerRequest serverRequest) {
+		final var id = serverRequest.bodyToFlux(Post.class).flatMap(p ->
+				service.updateTitle(
+						handlerParameter.id(serverRequest),
+						p.getTitle()
+				)
+		);
+		return okNoContent(id);
+	}
+
+	/**
+	 * Update the post content using the <code>id</code>
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> updateContentById(final ServerRequest serverRequest) {
+		final var id = serverRequest.bodyToFlux(Post.class).flatMap(p ->
+				service.updateContent(
+						handlerParameter.id(serverRequest),
+						p.getContent()
+				)
+		);
+		return okNoContent(id);
+	}
+
+	/**
+	 * Update the post content using the <code>id</code>
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> updateImageById(final ServerRequest serverRequest) {
+		final var id = serverRequest.bodyToFlux(Post.class).flatMap(p ->
+				service.updateContent(
+						handlerParameter.id(serverRequest),
+						p.getImage()
+				)
+		);
+		return okNoContent(id);
+	}
+
+	/**
 	 * Increment the count of views of a post using the <code>id</code>
 	 * @param serverRequest to make the search
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response

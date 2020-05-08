@@ -87,6 +87,39 @@ public class PostService {
 			tagPublisher.publish(post.getId(), post.getTags())
 		);
 	}
+
+	public Mono<Post> updateTitle(final long id, final String title) {
+		return repository.findById(id).map(p -> {
+			p.setTitle(title);
+			p.setDraftTitle(title);
+			p.setUpdateDate(new Date());
+			return p;
+		}).flatMap(repository::save).doOnSuccess(post ->
+				tagPublisher.publish(post.getId(), post.getTags())
+		);
+	}
+
+	public Mono<Post> updateContent(final long id, final String content) {
+		return repository.findById(id).map(p -> {
+			p.setContent(content);
+			p.setDraftContent(content);
+			p.setUpdateDate(new Date());
+			return p;
+		}).flatMap(repository::save).doOnSuccess(post ->
+				tagPublisher.publish(post.getId(), post.getTags())
+		);
+	}
+
+	public Mono<Post> updateImage(final long id, final String image) {
+		return repository.findById(id).map(p -> {
+			p.setImage(image);
+			p.setDraftImage(image);
+			p.setUpdateDate(new Date());
+			return p;
+		}).flatMap(repository::save).doOnSuccess(post ->
+				tagPublisher.publish(post.getId(), post.getTags())
+		);
+	}
 	
 	public Mono<Post> increaseViews(long id, long views) {
 		return this.repository.findById(id).map(p -> {
