@@ -180,10 +180,8 @@ public class PostHandler {
 	 */
 	public Mono<ServerResponse> increaseViews(final ServerRequest serverRequest) {
 		return okNoContent(
-			serverRequest.bodyToFlux(Post.class).flatMap(p ->
-				service.increaseViews(
-					handlerParameter.id(serverRequest), p.getViews()
-				)
+			service.increaseViews(
+				handlerParameter.id(serverRequest)
 			)
 		);
 	}

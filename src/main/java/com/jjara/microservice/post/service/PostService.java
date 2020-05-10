@@ -121,11 +121,11 @@ public class PostService {
 		);
 	}
 	
-	public Mono<Post> increaseViews(long id, long views) {
+	public Mono<Post> increaseViews(long id) {
 		return this.repository.findById(id).map(p -> {
-			p.setViews(views + 1);
+			p.setViews(p.getViews() + 1);
 			return p;
-		});
+		}).flatMap(repository::save);
 	}
 
 	public Mono<Post> delete(long id) {
