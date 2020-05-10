@@ -24,7 +24,7 @@ public class PostService {
 	@Autowired private RedisPublishTag tagPublisher;
 
 	private final static String KEY = "post";
-	private final static Sort DESC_ID_SORT = Sort.by(Direction.DESC, "id");
+	private final static Sort SORT_BY_UPDATE_DATE = Sort.by(Direction.DESC, "updateDate");
 
 	public Flux<Post> findAll(final int page, final int size) {
 		final var pageable = getPageable(page, size);
@@ -35,9 +35,9 @@ public class PostService {
 	public Flux<Post> findByTag(final int page, final int size, int tag) {
 		Flux<Post> result = null;
 		if (tag > 0) {
-			result = repository.findByTags(PageRequest.of(page, size, Sort.by(Direction.DESC, "id")), tag);
+			result = repository.findByTags(PageRequest.of(page, size, SORT_BY_UPDATE_DATE), tag);
 		} else if (size > 0) {
-			result = this.repository.findAll(PageRequest.of(page, size, Sort.by(Direction.DESC, "id")));
+			result = this.repository.findAll(PageRequest.of(page, size, SORT_BY_UPDATE_DATE));
 		} else {
 			result = repository.findAll();
 		}
@@ -49,7 +49,7 @@ public class PostService {
 	}
 
 	private Pageable getPageable(final int page, final int size) {
-		return PageRequest.of(page, size, DESC_ID_SORT);
+		return PageRequest.of(page, size, SORT_BY_UPDATE_DATE);
 	}
 	
 	public Flux<Post> findMostPopular(final int page, final int size, int tag) {
