@@ -165,7 +165,7 @@ public class PostHandler {
 	 */
 	public Mono<ServerResponse> updateImageById(final ServerRequest serverRequest) {
 		final var id = serverRequest.bodyToFlux(Post.class).flatMap(p ->
-				service.updateContent(
+				service.updateImage(
 						handlerParameter.id(serverRequest),
 						p.getImage()
 				)
