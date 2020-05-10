@@ -123,7 +123,7 @@ public class PostService {
 	
 	public Mono<Post> increaseViews(long id, long views) {
 		return this.repository.findById(id).map(p -> {
-			p.setViews(views);
+			p.setViews(views + 1);
 			return p;
 		});
 	}
