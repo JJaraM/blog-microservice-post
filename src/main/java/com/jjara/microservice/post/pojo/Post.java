@@ -1,5 +1,6 @@
 package com.jjara.microservice.post.pojo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Post {
 	private String draftImage;
 	private Date createDate;
 	private Date updateDate;
-	private List<Long> tags;
+	private List<Long> tags = new ArrayList();
 	private String description;
 	private String draftDescription;
 	private String link;
