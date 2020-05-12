@@ -104,7 +104,7 @@ public class PostService {
     public Mono<Post> removeTags(long id, List<Long> tags) {
         return repository.findById(id).map(p -> {
             p.setUpdateDate(new Date());
-            p.setTags(tags);
+			tags.forEach(tag -> p.getTags().remove(tag));
             return p;
         }).flatMap(repository::save).doOnSuccess(post ->
                 tagPublisher.remove(post.getId(), post.getTags())
