@@ -16,11 +16,12 @@ import io.lettuce.core.RedisClient;
 public class RedisPublishTag {
 
 	@Value("${spring.data.redis.uri}") private String uri;
-	@Value("${spring.data.redis.channel-tag}") private String channelTag;
-	
+	@Value("${spring.data.redis.channel-tag-add}") private String channelTagAdd;
+	@Value("${spring.data.redis.channel-tag-remove}") private String channelTagRemove;
+
 	@Autowired private ObjectMapper objectMapper;
-	
-	public void publish(long postId, List<Long> tags) {
+
+	public void publish(final long postId, final List<Long> tags) {
 		try {
 			final var client = RedisClient.create(uri);
 			final var sender = client.connect();
@@ -28,13 +29,26 @@ public class RedisPublishTag {
 			message.postId = postId;
 			message.tags = tags;
 			var jsonMessage = objectMapper.writeValueAsString(message);
-			sender.sync().publish(channelTag, jsonMessage);
+			sender.sync().publish(channelTagAdd, jsonMessage);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
 	}
-	
+
+	public void remove(final long postId, final List<Long> tags) {
+		try {
+			final var client = RedisClient.create(uri);
+			final var sender = client.connect();
+			var message = new SubscriberMessage();
+			message.postId = postId;
+			message.tags = tags;
+			var jsonMessage = objectMapper.writeValueAsString(message);
+			sender.sync().publish(channelTagRemove, jsonMessage);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static final class SubscriberMessage implements Serializable {
 		
 		protected long postId;

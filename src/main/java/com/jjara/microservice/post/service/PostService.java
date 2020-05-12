@@ -25,12 +25,12 @@ public class PostService {
 
 	private final static String KEY = "post";
 	private final static Sort SORT_BY_UPDATE_DATE = Sort.by(Direction.DESC, "updateDate");
+	private final static Sort SORT_BY_VIEWS = Sort.by(Direction.DESC, "views");
 
 	public Flux<Post> findAll(final int page, final int size) {
 		final var pageable = getPageable(page, size);
 		return repository.findAll(pageable);
 	}
-
 
 	public Flux<Post> findByTag(final int page, final int size, int tag) {
 		Flux<Post> result = null;
@@ -54,11 +54,11 @@ public class PostService {
 	
 	public Flux<Post> findMostPopular(final int page, final int size, int tag) {
 		Flux<Post> result = null;
-		var pageRquest = PageRequest.of(page, size, Sort.by(Direction.DESC, "views"));
+		var pageRequest = PageRequest.of(page, size, SORT_BY_VIEWS);
 		if (tag > 0) {
-			result = repository.findMostPopularByTag(pageRquest, tag);
+			result = repository.findMostPopularByTag(pageRequest, tag);
 		} else {
-			result = repository.findAll(pageRquest);
+			result = repository.findAll(pageRequest);
 		}
 		return result;
 	}
@@ -90,6 +90,26 @@ public class PostService {
 			tagPublisher.publish(post.getId(), post.getTags())
 		);
 	}
+
+    public Mono<Post> addTags(long id, List<Long> tags) {
+        return repository.findById(id).map(p -> {
+            p.setUpdateDate(new Date());
+            p.setTags(tags);
+            return p;
+        }).flatMap(repository::save).doOnSuccess(post ->
+                tagPublisher.publish(post.getId(), post.getTags())
+        );
+    }
+
+    public Mono<Post> removeTags(long id, List<Long> tags) {
+        return repository.findById(id).map(p -> {
+            p.setUpdateDate(new Date());
+            p.setTags(tags);
+            return p;
+        }).flatMap(repository::save).doOnSuccess(post ->
+                tagPublisher.remove(post.getId(), post.getTags())
+        );
+    }
 
 	public Mono<Post> updateTitle(final long id, final String title) {
 		return repository.findById(id).map(p -> {
@@ -125,14 +145,18 @@ public class PostService {
 	}
 	
 	public Mono<Post> increaseViews(long id) {
-		return this.repository.findById(id).map(p -> {
+		return repository.findById(id).map(p -> {
 			p.setViews(p.getViews() + 1);
 			return p;
 		}).flatMap(repository::save);
 	}
 
 	public Mono<Post> delete(long id) {
-		return this.repository.findById(id).flatMap(p -> this.repository.deleteById(p.getId()).thenReturn(p));
+		return repository.findById(id).flatMap(post ->
+				repository.deleteById(post.getId()).doOnSuccess(p ->
+						tagPublisher.remove(post.getId(), post.getTags())
+				).thenReturn(post)
+		);
 	}
 
 	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description, String link) {

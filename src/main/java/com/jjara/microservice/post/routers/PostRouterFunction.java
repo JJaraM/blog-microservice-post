@@ -50,6 +50,10 @@ public class PostRouterFunction {
 				.andRoute(POST("/post").and(accept(APPLICATION_JSON)), post::create)
 				.andRoute(PUT("/post/view/{id}"), post::increaseViews)
 				.andRoute(PUT("/post/{id}"), post::updateById)
+
+				.andRoute(PUT("/post/addTag/{id}"), post::addTag)
+				.andRoute(PUT("/post/removeTag/{id}"), post::removeTag)
+
 				.andRoute(PUT("/post/updateTitle/{id}"), post::updateTitleById)
 				.andRoute(PUT("/post/updateContent/{id}"), post::updateContentById)
 				.andRoute(PUT("/post/updateImage/{id}"), post::updateImageById)

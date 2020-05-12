@@ -203,5 +203,34 @@ public class PostHandler {
 		));
 	}
 
+	/**
+	 * Add a new tag to the post using the <code>id</code>
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> addTag(final ServerRequest serverRequest) {
+		final var id = serverRequest.bodyToFlux(Post.class).flatMap(p ->
+				service.addTags(
+						handlerParameter.id(serverRequest),
+						p.getTags()
+				)
+		);
+		return okNoContent(id);
+	}
+
+	/**
+	 * Remove a tag to the post using the <code>id</code>
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> removeTag(final ServerRequest serverRequest) {
+		final var id = serverRequest.bodyToFlux(Post.class).flatMap(p ->
+				service.removeTags(
+						handlerParameter.id(serverRequest),
+						p.getTags()
+				)
+		);
+		return okNoContent(id);
+	}
 
 }
