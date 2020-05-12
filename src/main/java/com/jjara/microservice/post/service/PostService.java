@@ -94,7 +94,7 @@ public class PostService {
     public Mono<Post> addTags(long id, List<Long> tags) {
         return repository.findById(id).map(p -> {
             p.setUpdateDate(new Date());
-            p.setTags(tags);
+            p.getTags().addAll(tags);
             return p;
         }).flatMap(repository::save).doOnSuccess(post ->
                 tagPublisher.publish(post.getId(), post.getTags())
@@ -153,9 +153,9 @@ public class PostService {
 
 	public Mono<Post> delete(long id) {
 		return repository.findById(id).flatMap(post ->
-				repository.deleteById(post.getId()).doOnSuccess(p ->
-						tagPublisher.remove(post.getId(), post.getTags())
-				).thenReturn(post)
+			repository.deleteById(post.getId()).doOnSuccess(p ->
+					tagPublisher.remove(post.getId(), post.getTags())
+			).thenReturn(post)
 		);
 	}
 
