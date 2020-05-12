@@ -97,17 +97,17 @@ public class PostService {
             p.getTags().addAll(tags);
             return p;
         }).flatMap(repository::save).doOnSuccess(post ->
-                tagPublisher.publish(post.getId(), post.getTags())
+				tagPublisher.publish(post.getId(), tags)
         );
     }
 
-    public Mono<Post> removeTags(long id, List<Long> tags) {
+    public Mono<Post> removeTags(final long id, final List<Long> tags) {
         return repository.findById(id).map(p -> {
             p.setUpdateDate(new Date());
 			tags.forEach(tag -> p.getTags().remove(tag));
             return p;
         }).flatMap(repository::save).doOnSuccess(post ->
-                tagPublisher.remove(post.getId(), post.getTags())
+            tagPublisher.remove(post.getId(), tags)
         );
     }
 

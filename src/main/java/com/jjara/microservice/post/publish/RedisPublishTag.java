@@ -3,6 +3,7 @@ package com.jjara.microservice.post.publish;
 import java.io.Serializable;
 import java.util.List;
 
+import io.lettuce.core.api.StatefulRedisConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.lettuce.core.RedisClient;
+
+import javax.annotation.PostConstruct;
 
 @Component
 public class RedisPublishTag {
@@ -21,10 +24,17 @@ public class RedisPublishTag {
 
 	@Autowired private ObjectMapper objectMapper;
 
+	private RedisClient client;
+	private StatefulRedisConnection<String, String> sender;
+
+	@PostConstruct
+	public void onInit() {
+		client = RedisClient.create(uri);
+		sender = client.connect();
+	}
+
 	public void publish(final long postId, final List<Long> tags) {
 		try {
-			final var client = RedisClient.create(uri);
-			final var sender = client.connect();
 			var message = new SubscriberMessage();
 			message.postId = postId;
 			message.tags = tags;
@@ -37,8 +47,6 @@ public class RedisPublishTag {
 
 	public void remove(final long postId, final List<Long> tags) {
 		try {
-			final var client = RedisClient.create(uri);
-			final var sender = client.connect();
 			var message = new SubscriberMessage();
 			message.postId = postId;
 			message.tags = tags;
