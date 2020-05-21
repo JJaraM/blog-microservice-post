@@ -4,6 +4,11 @@ import com.jjara.microservice.post.api.HandlerParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Component
 public class DefaultHandlerParameter implements HandlerParameter<ServerRequest> {
 
@@ -29,8 +34,8 @@ public class DefaultHandlerParameter implements HandlerParameter<ServerRequest> 
     }
 
     @Override
-    public Integer tag(final ServerRequest serverRequest) {
-        return asInteger(serverRequest, TAG);
+    public List<Integer> tag(final ServerRequest serverRequest) {
+        return asList(serverRequest, TAG);
     }
 
     @Override
@@ -40,6 +45,10 @@ public class DefaultHandlerParameter implements HandlerParameter<ServerRequest> 
 
     public Integer asInteger(ServerRequest serverRequest, String name) {
         return Integer.valueOf(serverRequest.pathVariable(name));
+    }
+
+    public List<Integer> asList(ServerRequest serverRequest, String name) {
+        return Stream.of(serverRequest.pathVariable(name).split(",")).map(Integer::valueOf).collect(Collectors.toList());
     }
 
     public Long asLong(ServerRequest serverRequest, String name) {

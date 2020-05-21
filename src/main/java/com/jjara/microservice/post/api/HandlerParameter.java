@@ -1,5 +1,7 @@
 package com.jjara.microservice.post.api;
 
+import java.util.List;
+
 /**
  * Specification that defines the parameters that supports the application.
  * @param <T>
@@ -32,7 +34,7 @@ public interface HandlerParameter<T> {
      * @param serverRequest
      * @return
      */
-    Integer tag(T serverRequest);
+    List<Integer> tag(T serverRequest);
 
     /**
      * Gets the title parameter from the URL

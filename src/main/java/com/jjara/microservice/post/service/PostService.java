@@ -2,6 +2,7 @@ package com.jjara.microservice.post.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -32,10 +33,10 @@ public class PostService {
 		return repository.findAll(pageable);
 	}
 
-	public Flux<Post> findByTag(final int page, final int size, int tag) {
-		Flux<Post> result = null;
-		if (tag > 0) {
-			result = repository.findByTags(PageRequest.of(page, size, SORT_BY_UPDATE_DATE), tag);
+	public Flux<Post> findByTag(final int page, final int size, List<Integer> tag) {
+		Flux<Post> result;
+		if (tag.size() > 0) {
+			result = repository.findByTagsIn(PageRequest.of(page, size, SORT_BY_UPDATE_DATE), tag);
 		} else if (size > 0) {
 			result = this.repository.findAll(PageRequest.of(page, size, SORT_BY_UPDATE_DATE));
 		} else {
@@ -44,7 +45,7 @@ public class PostService {
 		return result;
 	}
 
-	public Flux<Post> findByTitle(final int page, final int size, String title) {
+	public Flux<Post> findByTitle(final int page, final int size, final String title) {
 		return repository.findByTitle(getPageable(page, size), title);
 	}
 
@@ -52,13 +53,13 @@ public class PostService {
 		return PageRequest.of(page, size, SORT_BY_UPDATE_DATE);
 	}
 	
-	public Flux<Post> findMostPopular(final int page, final int size, int tag) {
-		Flux<Post> result = null;
+	public Flux<Post> findMostPopular(final int page, final int size, List<Integer> tag) {
+		Flux<Post> result;
 		var pageRequest = PageRequest.of(page, size, SORT_BY_VIEWS);
-		if (tag > 0) {
-			result = repository.findMostPopularByTag(pageRequest, tag);
+		if (tag.isEmpty()) {
+            result = repository.findAll(pageRequest);
 		} else {
-			result = repository.findAll(pageRequest);
+            result = repository.findMostPopularByTag(pageRequest, tag);
 		}
 		return result;
 	}
@@ -92,71 +93,48 @@ public class PostService {
 	}
 
     public Mono<Post> addTags(long id, List<Long> tags) {
-        return repository.findById(id).map(p -> {
-            p.setUpdateDate(new Date());
-            p.getTags().addAll(tags);
-            return p;
-        }).flatMap(repository::save).doOnSuccess(post ->
-				tagPublisher.publish(post.getId(), tags)
-        );
+		return update(id, post ->
+			post.getTags().addAll(tags)
+		).doOnSuccess(this::publishAdd);
     }
 
     public Mono<Post> removeTags(final long id, final List<Long> tags) {
-        return repository.findById(id).map(p -> {
-            p.setUpdateDate(new Date());
-			tags.forEach(tag -> p.getTags().remove(tag));
-            return p;
-        }).flatMap(repository::save).doOnSuccess(post ->
-            tagPublisher.remove(post.getId(), tags)
-        );
+		return update(id, post ->
+			tags.forEach(tag -> post.getTags().remove(tag))
+		).doOnSuccess(this::publishRemove);
     }
 
 	public Mono<Post> updateTitle(final long id, final String title) {
-		return repository.findById(id).map(p -> {
-			p.setTitle(title);
-			p.setDraftTitle(title);
-			p.setUpdateDate(new Date());
-			return p;
-		}).flatMap(repository::save).doOnSuccess(post ->
-				tagPublisher.publish(post.getId(), post.getTags())
-		);
+		return update(id, post -> {
+			post.setTitle(title);
+			post.setDraftTitle(title);
+		});
 	}
 
 	public Mono<Post> updateContent(final long id, final String content) {
-		return repository.findById(id).map(p -> {
-			p.setContent(content);
-			p.setDraftContent(content);
-			p.setUpdateDate(new Date());
-			return p;
-		}).flatMap(repository::save).doOnSuccess(post ->
-				tagPublisher.publish(post.getId(), post.getTags())
-		);
+		return update(id, post -> {
+			post.setContent(content);
+			post.setDraftContent(content);
+		});
 	}
 
 	public Mono<Post> updateImage(final long id, final String image) {
-		return repository.findById(id).map(p -> {
-			p.setImage(image);
-			p.setDraftImage(image);
-			p.setUpdateDate(new Date());
-			return p;
-		}).flatMap(repository::save).doOnSuccess(post ->
-				tagPublisher.publish(post.getId(), post.getTags())
-		);
+		return update(id, post -> {
+			post.setImage(image);
+			post.setDraftImage(image);
+		});
 	}
 	
 	public Mono<Post> increaseViews(long id) {
-		return repository.findById(id).map(p -> {
-			p.setViews(p.getViews() + 1);
-			return p;
-		}).flatMap(repository::save);
+		return update(id, post -> post.setViews(post.getViews() + 1));
 	}
 
 	public Mono<Post> delete(long id) {
 		return repository.findById(id).flatMap(post ->
-			repository.deleteById(post.getId()).doOnSuccess(p ->
-					tagPublisher.remove(post.getId(), post.getTags())
-			).thenReturn(post)
-		);
+			repository.deleteById(post.getId())
+				.doOnSuccess(p -> publishRemove(post))
+				.thenReturn(post)
+			);
 	}
 
 	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description, String link) {
@@ -169,10 +147,23 @@ public class PostService {
 		post.setTags(tags);
 		post.setDescription(description);
 		post.setLink(link);
-		return this.repository.save(post).doOnSuccess(profile -> 
-			this.tagPublisher.publish(post.getId(), post.getTags())
-		);
+		return repository.save(post).doOnSuccess(this::publishAdd);
 	}
 
+	private void publishAdd(final Post post) {
+		tagPublisher.publish(post.getId(), post.getTags());
+	}
+
+	private void publishRemove(final Post post) {
+		tagPublisher.remove(post.getId(), post.getTags());
+	}
+
+	private Mono<Post> update(final long id, Consumer<Post> consumer) {
+		return repository.findById(id).map(p -> {
+			p.setUpdateDate(new Date());
+			consumer.accept(p);
+			return p;
+		}).flatMap(repository::save);
+	}
 	
 }
