@@ -59,7 +59,7 @@ public class PostService {
 		if (tag.isEmpty()) {
             result = repository.findAll(pageRequest);
 		} else {
-            result = repository.findMostPopularByTag(pageRequest, tag);
+            result = repository.findByTagsIn(pageRequest, tag);
 		}
 		return result;
 	}
