@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
@@ -55,6 +56,7 @@ public class PostHandlerTest {
         mockInstance.setId(id);
         mockInstance.setTitle(title);
         when(repository.findById(id)).thenReturn(Mono.just(mockInstance));
+        when(repository.save(Mockito.any())).thenReturn(Mono.just(mockInstance));
 
         final String path = "/post/".concat(String.valueOf(id));
 
