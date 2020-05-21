@@ -56,7 +56,7 @@ public class PostService {
 	public Flux<Post> findMostPopular(final int page, final int size, List<Integer> tag) {
 		Flux<Post> result;
 		var pageRequest = PageRequest.of(page, size, SORT_BY_VIEWS);
-		if (tag.isEmpty()) {
+		if (tag.isEmpty() || (tag.size() == 1 && tag.get(0) == 0)) {
             result = repository.findAll(pageRequest);
 		} else {
             result = repository.findByTagsIn(pageRequest, tag);
