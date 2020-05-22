@@ -35,12 +35,10 @@ public class PostService {
 
 	public Flux<Post> findByTag(final int page, final int size, List<Integer> tag) {
 		Flux<Post> result;
-		if (tag.size() > 0 && (tag.size() == 1 && tag.get(0) != 0)) {
-			result = repository.findByTagsIn(PageRequest.of(page, size, SORT_BY_UPDATE_DATE), tag);
-		} else if (size > 0) {
-			result = this.repository.findAll(PageRequest.of(page, size, SORT_BY_UPDATE_DATE));
+		if (tag.size() == 1 && tag.get(0) == 0) {
+			result = findAll(page, size);
 		} else {
-			result = repository.findAll();
+			result = repository.findByTagsIn(PageRequest.of(page, size, SORT_BY_UPDATE_DATE), tag);
 		}
 		return result;
 	}
