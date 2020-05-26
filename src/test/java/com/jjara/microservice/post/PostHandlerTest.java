@@ -71,7 +71,9 @@ public class PostHandlerTest {
     public void findByAll() {
         var page = 0;
         var size = 2;
-
+        var sort = 0;
+        var tag = 0;
+        
         final var mockInstance = new Post();
         mockInstance.setId(3L);
         mockInstance.setTitle("Title 1L");
@@ -82,7 +84,7 @@ public class PostHandlerTest {
 
         when(repository.findAll(isA(Pageable.class))).thenReturn(Flux.just(mockInstance, mockInstance2));
 
-        webClient.get().uri("/post/{page}/{size}", page, size).exchange().expectStatus().isOk().expectBodyList(Post.class).consumeWith(result -> {
+        webClient.get().uri("/post/find/all/{page}/{size}/{tag}/{sort}", page, size, tag, sort).exchange().expectStatus().isOk().expectBodyList(Post.class).consumeWith(result -> {
             List<Post> posts = result.getResponseBody();
             Assertions.assertThat(posts.size()).isEqualTo(2);
         });
