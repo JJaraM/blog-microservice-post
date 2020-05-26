@@ -24,43 +24,41 @@ public class PostService {
 	@Autowired private SequenceRepository sequenceRepository;
 	@Autowired private RedisPublishTag tagPublisher;
 
+	private final int SELECTION_SORT_BY_VIEWS = 0;
+	private final int SELECTION_SORT_BY_UPDATE_DATE = 1;
+
 	private final static String KEY = "post";
-	private final static Sort SORT_BY_UPDATE_DATE = Sort.by(Direction.DESC, "updateDate");
-	private final static Sort SORT_BY_VIEWS = Sort.by(Direction.DESC, "views");
 
-	public Flux<Post> findAll(final int page, final int size) {
-		final var pageable = getPageable(page, size);
-		return repository.findAll(pageable);
-	}
+	public Flux<Post> findByTag(final int page, final int size, List<Integer> tags, int sort) {
+	    final var pageable = getPageable(page, size, sort);
+        final var findByAllTags = tags.size() == 1 && tags.get(0) == 0;
+		final var findAll = tags.isEmpty();
+        Flux<Post> result;
 
-	public Flux<Post> findByTag(final int page, final int size, List<Integer> tag) {
-		Flux<Post> result;
-		if (tag.size() == 1 && tag.get(0) == 0) {
-			result = findAll(page, size);
+        if (findByAllTags || findAll) {
+			result = repository.findAll(pageable);
 		} else {
-			result = repository.findByTagsIn(PageRequest.of(page, size, SORT_BY_UPDATE_DATE), tag);
+			result = repository.findByTagsIn(pageable, tags);
 		}
+
 		return result;
 	}
 
 	public Flux<Post> findByTitle(final int page, final int size, final String title) {
-		return repository.findByTitle(getPageable(page, size), title);
+		return repository.findByTitle(getPageable(page, size, SELECTION_SORT_BY_UPDATE_DATE), title);
 	}
 
-	private Pageable getPageable(final int page, final int size) {
-		return PageRequest.of(page, size, SORT_BY_UPDATE_DATE);
+	private Pageable getPageable(final int page, final int size, int sort) {
+		return PageRequest.of(page, size, getSort(sort));
 	}
-	
-	public Flux<Post> findMostPopular(final int page, final int size, List<Integer> tag) {
-		Flux<Post> result;
-		var pageRequest = PageRequest.of(page, size, SORT_BY_VIEWS);
-		if (tag.isEmpty() || (tag.size() == 1 && tag.get(0) == 0)) {
-            result = repository.findAll(pageRequest);
-		} else {
-            result = repository.findByTagsIn(pageRequest, tag);
-		}
-		return result;
-	}
+
+	private Sort getSort(int option) {
+	    var sort = Sort.by(Direction.DESC, "updateDate");
+        if (SELECTION_SORT_BY_VIEWS == option) {
+            sort =  Sort.by(Direction.DESC, "views");
+        }
+        return sort;
+    }
 
 	public Mono<Post> find(long id) {
 		return repository.findById(id).map(p -> {
@@ -71,20 +69,20 @@ public class PostService {
 
 	public Mono<Post> update(long id, String title, String draftTitle, String content, String draftContent,
 			String image, String draftImage, List<Long> tags, String description, String draftDescription, long views, String link) {
-		return repository.findById(id).map(p -> {
-			p.setContent(content);
-			p.setDraftContent(draftContent);
-			p.setTitle(title);
-			p.setDraftTitle(draftTitle);
-			p.setImage(image);
-			p.setDraftImage(draftImage);
-			p.setUpdateDate(new Date());
-			p.setTags(tags);
-			p.setDescription(description);
-			p.setDraftDescription(draftDescription);
-			p.setViews(views);
-			p.setLink(link);
-			return p;
+		return repository.findById(id).map(post -> {
+			post.setContent(content);
+			post.setDraftContent(draftContent);
+			post.setTitle(title);
+			post.setDraftTitle(draftTitle);
+			post.setImage(image);
+			post.setDraftImage(draftImage);
+			post.setUpdateDate(new Date());
+			post.setTags(tags);
+			post.setDescription(description);
+			post.setDraftDescription(draftDescription);
+			post.setViews(views);
+			post.setLink(link);
+			return post;
 		}).flatMap(repository::save).doOnSuccess(post ->
 			tagPublisher.publish(post.getId(), post.getTags())
 		);

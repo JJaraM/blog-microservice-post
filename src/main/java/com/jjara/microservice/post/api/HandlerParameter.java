@@ -42,4 +42,11 @@ public interface HandlerParameter<T> {
      * @return
      */
     String title(T serverRequest);
+
+    /**
+     * Gets the sort from the URL
+     * @param serverRequest
+     * @return
+     */
+    Integer sort(T serverRequest);
 }

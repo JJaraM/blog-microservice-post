@@ -35,49 +35,20 @@ public class PostHandler {
 	}
 
 	/**
-	 * Find all posts the total of results that wants to retrieve according with the <code>size</code> and <code>page</code>
-	 *
-	 * @param serverRequest to make the search
-	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
-	 */
-	public Mono<ServerResponse> findAll(final ServerRequest serverRequest) {
-		return okNoContent(
-			service.findAll(
-				handlerParameter.page(serverRequest),
-				handlerParameter.size(serverRequest)
-			)
-		);
-	}
-
-	/**
 	 * Find all posts by tag id <code>tag</code> and specify the total of results that wants to retrieve according with the <code>size</code> and
 	 * <code>page</code>
 	 *
 	 * @param serverRequest to make the search
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
-	public Mono<ServerResponse> findByTag(final ServerRequest serverRequest) {
+	public Mono<ServerResponse> find(final ServerRequest serverRequest) {
 		return okNoContent(
 				service.findByTag(
 						handlerParameter.page(serverRequest),
 						handlerParameter.size(serverRequest),
-						handlerParameter.tag(serverRequest)
+						handlerParameter.tag(serverRequest),
+						handlerParameter.sort(serverRequest)
 				)
-		);
-	}
-
-	/**
-	 * Finds all most popular posts by <code>tag</code> according with the <code>page</code>, <code>size</code> to specify the total of results to retrieve
-	 * @param serverRequest to make the search
-	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
-	 */
-	public Mono<ServerResponse> findMostPopular(final ServerRequest serverRequest) {
-		return okNoContent(
-			service.findMostPopular(
-				handlerParameter.page(serverRequest),
-				handlerParameter.size(serverRequest),
-				handlerParameter.tag(serverRequest)
-			)
 		);
 	}
 

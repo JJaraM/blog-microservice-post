@@ -17,6 +17,7 @@ public class DefaultHandlerParameter implements HandlerParameter<ServerRequest> 
     private final static String TAG = "tag";
     private final static String SIZE = "size";
     private final static String ID = "id";
+    private final static String SORT = "sort";
 
     @Override
     public Long id(final ServerRequest serverRequest) {
@@ -41,6 +42,11 @@ public class DefaultHandlerParameter implements HandlerParameter<ServerRequest> 
     @Override
     public String title(final ServerRequest serverRequest) {
         return asString(serverRequest, TITLE);
+    }
+
+    @Override
+    public Integer sort(ServerRequest serverRequest) {
+        return asInteger(serverRequest, SORT);
     }
 
     public Integer asInteger(ServerRequest serverRequest, String name) {

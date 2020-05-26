@@ -43,10 +43,8 @@ public class PostRouterFunction {
 	@Bean
 	protected RouterFunction<ServerResponse> postRoutes() {
 		return route(GET("/post/{id}"), post::findById)
-				.andRoute(GET("/post/{page}/{size}/{tag}"), post::findByTag)
-				.andRoute(GET("/post/mostPopular/{page}/{size}/{tag}"), post::findMostPopular)
-				.andRoute(GET("/post/{page}/{size}"), post::findAll)
-				.andRoute(GET("/post/byTitle/{page}/{size}/{title}"), post::findByTitle)
+				.andRoute(GET("/post/find/all/{page}/{size}/{tag}/{sort}"), post::find)
+				.andRoute(GET("/post/find/all/byTitle/{page}/{size}/{title}"), post::findByTitle)
 				.andRoute(POST("/post").and(accept(APPLICATION_JSON)), post::create)
 				.andRoute(PUT("/post/view/{id}"), post::increaseViews)
 				.andRoute(PUT("/post/{id}"), post::updateById)
