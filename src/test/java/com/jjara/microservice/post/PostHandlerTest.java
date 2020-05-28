@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -41,6 +42,7 @@ public class PostHandlerTest {
     @MockBean private PostRepository repository;
     @MockBean private SequenceRepository sequenceRepository;
     @MockBean private RedisPublishTag redisPublishTag;
+    @MockBean private ApplicationEventPublisher eventPublisher;
 
     @Before
     public void setUp() {
@@ -73,7 +75,7 @@ public class PostHandlerTest {
         var size = 2;
         var sort = 0;
         var tag = 0;
-        
+
         final var mockInstance = new Post();
         mockInstance.setId(3L);
         mockInstance.setTitle("Title 1L");
