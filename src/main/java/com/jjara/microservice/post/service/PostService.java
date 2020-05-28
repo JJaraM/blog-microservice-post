@@ -162,7 +162,9 @@ public class PostService {
 			p.setUpdateDate(new Date());
 			consumer.accept(p);
 			return p;
-		}).flatMap(repository::save).doOnSuccess(p -> publisher.publishEvent(new ProfileCreatedEvent(p)));
+		}).flatMap(repository::save).doOnSuccess(p -> {
+			publisher.publishEvent(new ProfileCreatedEvent(p));
+		});
 	}
 	
 }
