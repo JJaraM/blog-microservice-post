@@ -1,5 +1,6 @@
 package com.jjara.microservice.post;
 
+import com.jjara.microservice.post.configuration.PostWebSocketPublisher;
 import com.jjara.microservice.post.handler.PostHandler;
 import com.jjara.microservice.post.implementation.DefaultHandlerParameter;
 import com.jjara.microservice.post.pojo.Post;
@@ -9,7 +10,6 @@ import com.jjara.microservice.post.repository.SequenceRepository;
 import com.jjara.microservice.post.routers.PostRouterFunction;
 import com.jjara.microservice.post.service.PostService;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,6 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -42,7 +41,7 @@ public class PostHandlerTest {
     @MockBean private PostRepository repository;
     @MockBean private SequenceRepository sequenceRepository;
     @MockBean private RedisPublishTag redisPublishTag;
-    @MockBean private ApplicationEventPublisher eventPublisher;
+    @MockBean private PostWebSocketPublisher postWebSocketPublisher;
 
     @Before
     public void setUp() {

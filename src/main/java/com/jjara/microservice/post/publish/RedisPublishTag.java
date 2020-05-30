@@ -3,16 +3,16 @@ package com.jjara.microservice.post.publish;
 import java.io.Serializable;
 import java.util.List;
 
+import com.jjara.microservice.post.configuration.ReactiveWebSocketHandler;
 import io.lettuce.core.api.StatefulRedisConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.lettuce.core.RedisClient;
-
 import javax.annotation.PostConstruct;
 
 @Component
@@ -23,6 +23,7 @@ public class RedisPublishTag {
 	@Value("${spring.data.redis.channel-tag-remove}") private String channelTagRemove;
 
 	@Autowired private ObjectMapper objectMapper;
+	private Logger logger = LoggerFactory.getLogger(ReactiveWebSocketHandler.class);
 
 	private RedisClient client;
 	private StatefulRedisConnection<String, String> sender;
@@ -41,7 +42,7 @@ public class RedisPublishTag {
 			var jsonMessage = objectMapper.writeValueAsString(message);
 			sender.sync().publish(channelTagAdd, jsonMessage);
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 

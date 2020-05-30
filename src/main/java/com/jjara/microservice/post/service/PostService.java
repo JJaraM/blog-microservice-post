@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.jjara.microservice.post.configuration.ProfileCreatedEvent;
+import com.jjara.microservice.post.configuration.PostWebSocketPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,7 @@ public class PostService {
 	@Autowired private PostRepository repository;
 	@Autowired private SequenceRepository sequenceRepository;
 	@Autowired private RedisPublishTag tagPublisher;
-	@Autowired private ApplicationEventPublisher publisher;
+	@Autowired private PostWebSocketPublisher postWebSocketPublisher;
 
 	private final int SELECTION_SORT_BY_VIEWS = 0;
 	private final int SELECTION_SORT_BY_UPDATE_DATE = 1;
@@ -163,7 +163,7 @@ public class PostService {
 			consumer.accept(p);
 			return p;
 		}).flatMap(repository::save).doOnSuccess(p -> {
-			publisher.publishEvent(new ProfileCreatedEvent(p));
+            postWebSocketPublisher.publishStatus(p);
 		});
 	}
 	

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-@Configuration
+//@Configuration
 class WebSocketConfiguration {
 
     // <1>
@@ -54,10 +54,6 @@ class WebSocketConfiguration {
 
             Flux<WebSocketMessage> messageFlux = publish.map(evt -> {
                 try {
-                    //Post profile = (Post) evt.getSource(); // <1>
-                   // Map<String, Long> data = new HashMap<>(); // <2>
-                    //data.put("id", profile.getId());
-                    //return objectMapper.writeValueAsString(data); // <3>
                     return objectMapper.writeValueAsString(evt);
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
