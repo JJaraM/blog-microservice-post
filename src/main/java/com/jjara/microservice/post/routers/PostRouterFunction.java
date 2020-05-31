@@ -2,19 +2,11 @@ package com.jjara.microservice.post.routers;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.handler.PostHandler;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
-import java.lang.invoke.MethodType;
-import java.lang.invoke.SerializedLambda;
-import java.lang.reflect.Method;
-import java.net.URISyntaxException;
-import java.util.function.Consumer;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -43,18 +35,19 @@ public class PostRouterFunction {
 	@Bean
 	protected RouterFunction<ServerResponse> postRoutes() {
 		return route(GET("/post/{id}"), post::findById)
-				.andRoute(GET("/post/find/all/{page}/{size}/{tag}/{sort}"), post::find)
-				.andRoute(GET("/post/find/all/byTitle/{page}/{size}/{title}"), post::findByTitle)
-				.andRoute(POST("/post").and(accept(APPLICATION_JSON)), post::create)
-				.andRoute(PUT("/post/view/{id}"), post::increaseViews)
-				.andRoute(PUT("/post/{id}"), post::updateById)
+			.andRoute(GET("/post/find/all/byTitle/{page}/{size}/{title}"), post::findByTitle)
+			.andRoute(GET("/post/find/all/{page}/{size}/{tag}/{sort}"), post::findAll)
 
-				.andRoute(PUT("/post/addTag/{id}"), post::addTag)
-				.andRoute(PUT("/post/removeTag/{id}"), post::removeTag)
+			.andRoute(POST("/post").and(accept(APPLICATION_JSON)), post::create)
 
-				.andRoute(PUT("/post/updateTitle/{id}"), post::updateTitleById)
-				.andRoute(PUT("/post/updateContent/{id}"), post::updateContentById)
-				.andRoute(PUT("/post/updateImage/{id}"), post::updateImageById)
-				.andRoute(DELETE("/post/{id}"), post::deleteById);
+			.andRoute(PUT("/post/view/{id}"), post::increaseViews)
+			.andRoute(PUT("/post/{id}"), post::updateById)
+			.andRoute(PUT("/post/addTag/{id}"), post::addTag)
+			.andRoute(PUT("/post/removeTag/{id}"), post::removeTag)
+			.andRoute(PUT("/post/updateTitle/{id}"), post::updateTitleById)
+			.andRoute(PUT("/post/updateContent/{id}"), post::updateContentById)
+			.andRoute(PUT("/post/updateImage/{id}"), post::updateImageById)
+
+			.andRoute(DELETE("/post/{id}"), post::deleteById);
 	}
 }

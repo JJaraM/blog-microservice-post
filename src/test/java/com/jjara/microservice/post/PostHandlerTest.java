@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -42,6 +43,12 @@ public class PostHandlerTest {
     @MockBean private SequenceRepository sequenceRepository;
     @MockBean private RedisPublishTag redisPublishTag;
     @MockBean private PostWebSocketPublisher postWebSocketPublisher;
+
+    private final int page = 0;
+    private final int size = 2;
+    private final int sort = 0;
+    private final int tag = 0;
+    private final String title = "text";
 
     @Before
     public void setUp() {
@@ -69,12 +76,7 @@ public class PostHandlerTest {
     }
 
     @Test
-    public void findByAll() {
-        var page = 0;
-        var size = 2;
-        var sort = 0;
-        var tag = 0;
-
+    public void findAll() {
         final var mockInstance = new Post();
         mockInstance.setId(3L);
         mockInstance.setTitle("Title 1L");
@@ -89,5 +91,42 @@ public class PostHandlerTest {
             List<Post> posts = result.getResponseBody();
             Assertions.assertThat(posts.size()).isEqualTo(2);
         });
+    }
+
+    @Test
+    public void findByTitle() {
+        final var mockInstance = new Post();
+        mockInstance.setId(3L);
+        mockInstance.setTitle("Title 1L");
+
+        final var mockInstance2 = new Post();
+        mockInstance2.setId(4L);
+        mockInstance2.setTitle("Title 2L");
+
+        when(repository.findByTitle(isA(Pageable.class), isA(String.class))).thenReturn(Flux.just(mockInstance, mockInstance2));
+
+        webClient.get().uri("/post/find/all/byTitle/{page}/{size}/{title}", page, size, title).exchange().expectStatus().isOk().expectBodyList(Post.class).consumeWith(result -> {
+            List<Post> posts = result.getResponseBody();
+            Assertions.assertThat(posts.size()).isEqualTo(2);
+        });
+    }
+
+    //https://www.callicoder.com/spring-5-reactive-webclient-webtestclient-examples/
+    @Test
+    public void create() {
+        final var mockInstance = new Post();
+        mockInstance.setTitle("Title 2L");
+        when(repository.save(isA(Post.class))).thenReturn(Mono.just(mockInstance));
+
+        webClient.post().uri("/post")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .body(Mono.just(mockInstance), Post.class)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody(Post.class).consumeWith(result -> {
+                Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(mockInstance.getTitle());
+            });
     }
 }
