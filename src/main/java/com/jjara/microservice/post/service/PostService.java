@@ -6,7 +6,6 @@ import java.util.function.Consumer;
 
 import com.jjara.microservice.post.configuration.PostWebSocketPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -124,10 +123,6 @@ public class PostService {
 		});
 	}
 	
-	public Mono<Post> increaseViews(long id) {
-		return update(id, post -> post.setViews(post.getViews() + 1));
-	}
-
 	public Mono<Post> delete(long id) {
 		return repository.findById(id).flatMap(post ->
 			repository.deleteById(post.getId())

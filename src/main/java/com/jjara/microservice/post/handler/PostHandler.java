@@ -8,6 +8,9 @@ import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.service.PostService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
+import java.util.function.Function;
+
+import static com.jjara.microservice.post.handler.ResponseHandler.created;
 import static com.jjara.microservice.post.handler.ResponseHandler.okNoContent;
 
 /**
@@ -85,15 +88,14 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateById(final ServerRequest serverRequest) {
-		return okNoContent(serverRequest.bodyToFlux(Post.class).flatMap(p ->
-				service.update(
-					handlerParameter.id(serverRequest),
-					p.getTitle(), p.getDraftTitle(),
-					p.getContent(), p.getDraftContent(),
-					p.getImage(), p.getDraftImage(), p.getTags(), p.getDescription(),
-					p.getDraftDescription(), p.getViews(),
-					p.getLink()
-				)
+		return response(serverRequest, (p) ->
+			service.update(
+				handlerParameter.id(serverRequest),
+				p.getTitle(), p.getDraftTitle(),
+				p.getContent(), p.getDraftContent(),
+				p.getImage(), p.getDraftImage(), p.getTags(), p.getDescription(),
+				p.getDraftDescription(), p.getViews(),
+				p.getLink()
 			)
 		);
 	}
@@ -104,12 +106,10 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateTitleById(final ServerRequest serverRequest) {
-		return okNoContent(
-			serverRequest.bodyToFlux(Post.class).flatMap(p ->
-				service.updateTitle(
-					handlerParameter.id(serverRequest),
-					p.getTitle()
-				)
+		return response(serverRequest, (p) ->
+			service.updateTitle(
+				handlerParameter.id(serverRequest),
+				p.getTitle()
 			)
 		);
 	}
@@ -120,12 +120,10 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateContentById(final ServerRequest serverRequest) {
-		return okNoContent(
-			serverRequest.bodyToFlux(Post.class).flatMap(p ->
-				service.updateContent(
-					handlerParameter.id(serverRequest),
-					p.getContent()
-				)
+		return response(serverRequest, (p) ->
+			service.updateContent(
+				handlerParameter.id(serverRequest),
+				p.getContent()
 			)
 		);
 	}
@@ -136,25 +134,10 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateImageById(final ServerRequest serverRequest) {
-		return okNoContent(
-			serverRequest.bodyToFlux(Post.class).flatMap(p ->
-				service.updateImage(
-					handlerParameter.id(serverRequest),
-					p.getImage()
-				)
-			)
-		);
-	}
-
-	/**
-	 * Increment the count of views of a post using the <code>id</code>
-	 * @param serverRequest to make the search
-	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
-	 */
-	public Mono<ServerResponse> increaseViews(final ServerRequest serverRequest) {
-		return okNoContent(
-			service.increaseViews(
-				handlerParameter.id(serverRequest)
+		return response(serverRequest, (p) ->
+			service.updateImage(
+				handlerParameter.id(serverRequest),
+				p.getImage()
 			)
 		);
 	}
@@ -165,14 +148,14 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> create(final ServerRequest serverRequest) {
-		return okNoContent(
-			serverRequest.bodyToMono(Post.class).flatMap(data ->
-				service.create(
-					data.getTitle(),
-					data.getContent(), data.getImage(),
-					data.getTags(), data.getDescription(),
-					data.getLink()
-				)
+		return responseCreated(serverRequest, post ->
+			service.create(
+				post.getTitle(),
+				post.getContent(),
+				post.getImage(),
+				post.getTags(),
+				post.getDescription(),
+				post.getLink()
 			)
 		);
 	}
@@ -183,12 +166,10 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> addTag(final ServerRequest serverRequest) {
-		return okNoContent(
-			serverRequest.bodyToFlux(Post.class).flatMap(p ->
-				service.addTags(
-					handlerParameter.id(serverRequest),
-					p.getTags()
-				)
+		return response(serverRequest, (p) ->
+			service.addTags(
+				handlerParameter.id(serverRequest),
+				p.getTags()
 			)
 		);
 	}
@@ -199,13 +180,30 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> removeTag(final ServerRequest serverRequest) {
-		return okNoContent(serverRequest.bodyToFlux(Post.class).flatMap(p ->
-				service.removeTags(
-					handlerParameter.id(serverRequest),
-					p.getTags()
-				)
-			)
-		);
+		return response(serverRequest, (p) -> service.removeTags(
+			handlerParameter.id(serverRequest),
+			p.getTags()
+		));
+	}
+
+	/**
+	 * Gets the response for operations that needs to send a post Body
+	 * @param serverRequest to make the search
+	 * @param function with the operations that wants to be executed when the data is converted into an object
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	private Mono<ServerResponse> response(final ServerRequest serverRequest, Function<Post, Mono<Post>> function) {
+		return okNoContent(serverRequest.bodyToMono(Post.class).flatMap(function));
+	}
+
+	/**
+	 * Gets the response for operations that needs to create a new post
+	 * @param serverRequest to make the search
+	 * @param function with the operations that wants to be executed when the data is converted into an object
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return an internal server error
+	 */
+	private Mono<ServerResponse> responseCreated(final ServerRequest serverRequest, Function<Post, Mono<Post>> function) {
+		return created(serverRequest.bodyToMono(Post.class).flatMap(function));
 	}
 
 }

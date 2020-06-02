@@ -27,13 +27,15 @@ import reactor.core.publisher.Mono;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.isA;
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @WebFluxTest
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {
-        PostRouterFunction.class, DefaultHandlerParameter.class,
-        PostHandler.class, PostService.class
+    PostRouterFunction.class, DefaultHandlerParameter.class,
+    PostHandler.class, PostService.class
 })
 public class PostHandlerTest {
 
@@ -111,14 +113,35 @@ public class PostHandlerTest {
         });
     }
 
-    //https://www.callicoder.com/spring-5-reactive-webclient-webtestclient-examples/
     @Test
-    public void create() {
+    public void deleteById() {
+        final var post = new Post();
+        post.setTitle("Title 2L");
+        post.setId(1L);
+
+        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
+        when(repository.deleteById(isA(Long.class))).thenReturn(Mono.empty());
+
+        webClient.delete().uri("/post/{id}", post.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody(Post.class).consumeWith(result -> {
+                Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle());
+        });
+    }
+
+    @Test
+    public void updateById() {
         final var mockInstance = new Post();
+        mockInstance.setId(1L);
         mockInstance.setTitle("Title 2L");
+
+        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(mockInstance));
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(mockInstance));
 
-        webClient.post().uri("/post")
+        webClient.put().uri("/post/{id}", 1L)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .body(Mono.just(mockInstance), Post.class)
@@ -127,6 +150,150 @@ public class PostHandlerTest {
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody(Post.class).consumeWith(result -> {
                 Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(mockInstance.getTitle());
-            });
+        });
     }
+
+    @Test
+    public void updateByTitle() {
+        final var post = new Post();
+        post.setId(1L);
+        post.setTitle("Title 2L");
+
+        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
+        when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
+
+        webClient.put().uri("/post/{id}", post.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(post), Post.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(Post.class).consumeWith(result -> {
+            Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle());
+        });
+    }
+
+    @Test
+    public void updateContentById() {
+        final var post = new Post();
+        post.setId(1L);
+        post.setContent("Content");
+
+        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
+        when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
+
+        webClient.put().uri("/post/{id}", post.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(post), Post.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(Post.class).consumeWith(result -> {
+            Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle());
+        });
+    }
+
+    @Test
+    public void updateImageById() {
+        final var post = new Post();
+        post.setId(1L);
+        post.setImage("Image");
+
+        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
+        when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
+
+        webClient.put().uri("/post/{id}", post.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(post), Post.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(Post.class).consumeWith(result -> {
+            Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle());
+        });
+    }
+
+    @Test
+    public void create() {
+        final var existedPost = new Post();
+        existedPost.setId(1L);
+        existedPost.setTitle("Title");
+
+        final var newPost = new Post();
+        newPost.setTitle("Title");
+
+        when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
+
+        webClient.post().uri("/post/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .body(Mono.just(newPost), Post.class)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody(Post.class).consumeWith(result -> {
+                Assertions.assertThat(result.getResponseBody().getId()).isEqualTo(existedPost.getId());
+        });
+    }
+
+    @Test
+    public void addTag() {
+        final Long postId = 1L;
+
+        final var existedPost  = new Post();
+        existedPost.setId(postId);
+        existedPost.setTitle("Title 2L");
+        existedPost.setTags(new ArrayList<>());
+
+        final var changedPost = new Post();
+        changedPost.setId(postId);
+        changedPost.setTags(Collections.singletonList(1L));
+
+        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
+        when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
+
+        webClient.put().uri("/post/addTag/{id}", postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(changedPost), Post.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(Post.class).consumeWith(result -> {
+            Assertions.assertThat(result.getResponseBody().getTags()).isEqualTo(existedPost.getTags());
+        });
+    }
+
+    @Test
+    public void removeTag() {
+        final Long postId = 1L;
+
+        final var existedPost  = new Post();
+        existedPost.setId(postId);
+        existedPost.setTitle("Title 2L");
+        existedPost.setTags(new ArrayList<>());
+
+        final var changedPost = new Post();
+        changedPost.setId(postId);
+        changedPost.setTags(Collections.singletonList(1L));
+
+        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
+        when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
+
+        webClient.put().uri("/post/removeTag/{id}", postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(changedPost), Post.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(Post.class).consumeWith(result -> {
+            Assertions.assertThat(result.getResponseBody().getTags()).isEmpty();
+        });
+    }
+
 }
+
