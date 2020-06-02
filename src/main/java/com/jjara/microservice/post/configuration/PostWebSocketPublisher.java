@@ -16,12 +16,11 @@ import java.util.function.Function;
 @Service
 public class PostWebSocketPublisher {
 
+    @Autowired private ObjectMapper objectMapper;
+
     private final FluxProcessor<String, String> processor;
     private final FluxSink<String> sink;
-
     private Logger logger = LoggerFactory.getLogger(PostWebSocketPublisher.class);
-
-    @Autowired private ObjectMapper objectMapper;
 
     public PostWebSocketPublisher() {
         this.processor = DirectProcessor.<String>create().serialize();
