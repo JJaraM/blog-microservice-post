@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.jjara.microservice.post.configuration.PostWebSocketPublisher;
+import com.jjara.microservice.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.pojo.Post;
-import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
 
 @Service
@@ -153,13 +153,11 @@ public class PostService {
 	}
 
 	private Mono<Post> update(final long id, Consumer<Post> consumer) {
-		return repository.findById(id).map(p -> {
-			p.setUpdateDate(new Date());
-			consumer.accept(p);
-			return p;
-		}).flatMap(repository::save).doOnSuccess(p -> {
-            postWebSocketPublisher.publishStatus(p);
-		});
+		return repository.findById(id).map(post -> {
+			post.setUpdateDate(new Date());
+			consumer.accept(post);
+			return post;
+		}).flatMap(repository::save).doOnSuccess(postWebSocketPublisher::publishStatus);
 	}
 	
 }
