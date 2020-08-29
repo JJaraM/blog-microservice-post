@@ -1,6 +1,6 @@
 package com.jjara.microservice.post.handler;
 
-import com.jjara.microservice.post.configuration.PostWebSocketPublisher;
+import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
 import com.jjara.microservice.post.implementation.DefaultHandlerParameter;
 import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.publish.RedisPublishTag;

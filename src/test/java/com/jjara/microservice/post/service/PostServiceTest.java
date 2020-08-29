@@ -1,28 +1,20 @@
 package com.jjara.microservice.post.service;
 
-import com.jjara.microservice.post.configuration.PostWebSocketPublisher;
-import com.jjara.microservice.post.handler.PostHandler;
-import com.jjara.microservice.post.implementation.DefaultHandlerParameter;
+import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
 import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
-import com.jjara.microservice.post.routers.PostRouterFunction;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 import java.util.Arrays;
 import java.util.List;

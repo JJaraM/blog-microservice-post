@@ -1,4 +1,4 @@
-package com.jjara.microservice.post.configuration;
+package com.jjara.microservice.post.configuration.websocket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

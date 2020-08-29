@@ -6,9 +6,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.service.TestimonialService;
 import reactor.core.publisher.Mono;
-
 import javax.annotation.Resource;
-
 import static com.jjara.microservice.post.handler.ResponseHandler.okNoContent;
 
 /**

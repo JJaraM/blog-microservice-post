@@ -32,7 +32,8 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: ${EUREKA_URI}
+      defaultZone: http://localhost:5000/eureka/
+      #https://blog-eureka-server.herokuapp.com/eureka/
 
 discovery:
   uri: https://jjara-discovery.herokuapp.com/v1/discovery/

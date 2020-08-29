@@ -1,4 +1,4 @@
-package com.jjara.microservice.post.configuration;
+package com.jjara.microservice.post.configuration.websocket;
 
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package com.jjara.microservice.post.publish;
 import java.io.Serializable;
 import java.util.List;
 
-import com.jjara.microservice.post.configuration.ReactiveWebSocketHandler;
+import com.jjara.microservice.post.configuration.websocket.ReactiveWebSocketHandler;
 import io.lettuce.core.api.StatefulRedisConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

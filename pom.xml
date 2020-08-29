@@ -70,7 +70,7 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Spring Fox Dependencies -->
+		<!-- Spring Fox Dependencies
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -86,6 +86,8 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${io.springfox.version}</version>
 		</dependency>
+ -->
+
 
 		<!-- Security
 		<dependency>

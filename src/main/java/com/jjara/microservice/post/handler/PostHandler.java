@@ -9,7 +9,6 @@ import com.jjara.microservice.post.service.PostService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.util.function.Function;
-
 import static com.jjara.microservice.post.handler.ResponseHandler.created;
 import static com.jjara.microservice.post.handler.ResponseHandler.okNoContent;
 
@@ -91,11 +90,9 @@ public class PostHandler {
 		return response(serverRequest, (p) ->
 			service.update(
 				handlerParameter.id(serverRequest),
-				p.getTitle(), p.getDraftTitle(),
-				p.getContent(), p.getDraftContent(),
-				p.getImage(), p.getDraftImage(), p.getTags(), p.getDescription(),
-				p.getDraftDescription(), p.getViews(),
-				p.getLink()
+				p.getTitle(), p.getContent(),
+				p.getImage(), p.getTags(), p.getDescription(),
+				p.getViews(), p.getLink()
 			)
 		);
 	}

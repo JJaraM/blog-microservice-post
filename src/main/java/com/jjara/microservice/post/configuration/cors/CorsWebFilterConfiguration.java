@@ -1,4 +1,4 @@
-package com.jjara.microservice.post.configuration;
+package com.jjara.microservice.post.configuration.cors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,16 +1,11 @@
 package com.jjara.microservice.post.configuration.webflux;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
-import org.springframework.web.reactive.handler.AbstractUrlHandlerMapping;
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.resource.ResourceWebHandler;
-import org.springframework.web.util.pattern.PathPattern;
 
 import java.util.Map;
 
@@ -42,7 +37,7 @@ public class WebFluxConfigurationTest {
         return registry;
     }
 
-    public class ResourceHandlerRegistryTestable extends ResourceHandlerRegistry {
+    private static class ResourceHandlerRegistryTestable extends ResourceHandlerRegistry {
 
         public ResourceHandlerRegistryTestable(ResourceLoader resourceLoader) {
             super(resourceLoader);
