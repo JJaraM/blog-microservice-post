@@ -1,4 +1,5 @@
 # Post Web Service
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/eab4ac3cb26843d0b860de6c8d344ffa)](https://app.codacy.com/manual/JJaraM/blog-microservice-post?utm_source=github.com&utm_medium=referral&utm_content=JJaraM/blog-microservice-post&utm_campaign=Badge_Grade_Dashboard)
 [![codecov](https://codecov.io/gh/JJaraM/blog-microservice-post/branch/master/graph/badge.svg)](https://codecov.io/gh/JJaraM/blog-microservice-post)
 [![Build Status](https://travis-ci.org/JJaraM/blog-microservice-post.svg?branch=master)](https://travis-ci.org/JJaraM/blog-microservice-post)
 [![Maintainability](https://api.codeclimate.com/v1/badges/831a3fc398e9b20dd58c/maintainability)](https://codeclimate.com/github/JJaraM/blog-microservice-post/maintainability)
