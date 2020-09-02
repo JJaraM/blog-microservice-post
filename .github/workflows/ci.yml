@@ -12,7 +12,7 @@ jobs:
         java: [ '13' ]
     runs-on: ubuntu-latest
     steps:
-      - name: Code Climate Coverage Action
+      - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:
           # Set CC_TEST_REPORTER_ID as secret of your repo
