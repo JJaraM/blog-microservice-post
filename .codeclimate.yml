@@ -7,3 +7,7 @@ engines:
         - src/test/**
 exclude_paths:
   - build/
+  - build/
+  - fixtures/
+  - gradle/
+  - .gradle/
