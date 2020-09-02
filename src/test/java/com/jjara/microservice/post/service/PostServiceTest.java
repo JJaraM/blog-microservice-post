@@ -2,6 +2,7 @@ package com.jjara.microservice.post.service;
 
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
 import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.pojo.Sequence;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
@@ -20,8 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {
@@ -45,7 +45,11 @@ public class PostServiceTest {
         String link = "link";
 
         Answer<Mono<Post>> answer = invocation -> Mono.just(invocation.getArgument(0));
+        final Sequence sequence = new Sequence();
+        sequence.setSeq(1L);
 
+        final Mono<Sequence> sequenceMono = Mono.just(sequence);
+        when(sequenceRepository.getNextSequenceId(isA(String.class))).thenReturn(sequenceMono);
         doAnswer(answer).when(repository).save(isA(Post.class));
 
         postService.create(title, content, image, tags, description, link).subscribe(p -> {
