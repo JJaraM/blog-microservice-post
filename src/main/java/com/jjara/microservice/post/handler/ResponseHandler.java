@@ -49,7 +49,7 @@ public class ResponseHandler {
      * @return a server response
      */
     private static Function<Throwable, Mono<ServerResponse>> internalServerError() {
-        return throwable -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue(throwable.getMessage());
+        return throwable -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).bodyValue(throwable.getMessage());
     }
 
     /**
@@ -57,7 +57,7 @@ public class ResponseHandler {
      * @return a server response
      */
     private static <T> Function<T, Mono<ServerResponse>> created() {
-        return publisher -> ServerResponse.status(HttpStatus.CREATED).build();
+        return publisher -> ServerResponse.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(publisher, new ParameterizedTypeReference<>() {});
     }
 
     /**

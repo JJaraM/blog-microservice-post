@@ -3,6 +3,7 @@ package com.jjara.microservice.post.handler;
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
 import com.jjara.microservice.post.implementation.DefaultHandlerParameter;
 import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.pojo.Sequence;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
@@ -224,6 +225,11 @@ public class PostHandlerTest {
         final var newPost = new Post();
         newPost.setTitle("Title");
 
+        final Sequence sequence = new Sequence();
+        sequence.setSeq(1L);
+
+        final Mono<Sequence> sequenceMono = Mono.just(sequence);
+        when(sequenceRepository.getNextSequenceId(isA(String.class))).thenReturn(sequenceMono);
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
 
         webClient.post().uri("/post/")
