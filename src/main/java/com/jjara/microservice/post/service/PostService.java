@@ -1,5 +1,6 @@
 package com.jjara.microservice.post.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
@@ -39,6 +40,8 @@ public class PostService {
 	 * @return a list of posts
 	 */
 	public Flux<Post> findByTag(final int page, final int size, List<Integer> tags, int sort) {
+		if (tags == null) tags = new ArrayList<>();
+
 	    final var pageable = getPageable(page, size, sort);
         final var findByAllTags = tags.size() == 1 && tags.get(0) == 0;
 		final var findAll = tags.isEmpty();

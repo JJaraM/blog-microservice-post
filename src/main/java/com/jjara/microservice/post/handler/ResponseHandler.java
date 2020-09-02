@@ -13,7 +13,7 @@ import java.util.function.Function;
 /**
  * Base Response Handler response types
  */
-public class ResponseHandler {
+public final class ResponseHandler {
 
     /**
      * Returns an OK if there is data, otherwise will return a no content http status
