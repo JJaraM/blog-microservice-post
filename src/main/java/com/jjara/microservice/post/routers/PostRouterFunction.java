@@ -1,11 +1,23 @@
 package com.jjara.microservice.post.routers;
 
 
+import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.repository.PostRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springdoc.core.annotations.RouterOperation;
+import org.springdoc.core.annotations.RouterOperations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.handler.PostHandler;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -29,6 +41,16 @@ public class PostRouterFunction {
 	 * @return the method that needs to me invoked when the request match
 	 */
 	@Bean
+	@RouterOperations({
+			@RouterOperation(path = "/post/{id}", method = GET,
+					operation = @Operation(operationId = "findById", description = "Finds a post by id",
+					parameters = { @Parameter(name = "id", description = "Post's id", in = ParameterIn.PATH,
+					schema = @Schema(implementation = Long.class))},
+					responses = {
+						@ApiResponse( responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class))),
+						@ApiResponse( responseCode = "204")
+					})),
+			@RouterOperation(path = "/post/find/all/byTitle/{page}/{size}/{title}", method = GET) })
 	protected RouterFunction<ServerResponse> postRoutes(PostHandler post) {
 		return route(GET("/post/{id}"), post::findById)
 			.andRoute(GET("/post/find/all/byTitle/{page}/{size}/{title}"), post::findByTitle)

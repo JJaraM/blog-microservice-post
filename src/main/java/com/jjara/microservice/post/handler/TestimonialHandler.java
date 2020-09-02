@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.service.TestimonialService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
-import static com.jjara.microservice.post.handler.ResponseHandler.okNoContent;
+import static com.jjara.microservice.post.handler.ResponseHandler.ok;
 
 /**
  * Handler used to process all requests related with a testimonial
@@ -25,7 +25,7 @@ public class TestimonialHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> findAll(ServerRequest serverRequest) {
-		return okNoContent(
+		return ok(
 				service.findAll(
 						handlerParameter.page(serverRequest),
 						handlerParameter.size(serverRequest)

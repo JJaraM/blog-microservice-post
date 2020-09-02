@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
+import com.jjara.microservice.post.pojo.Sequence;
 import com.jjara.microservice.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -236,16 +237,19 @@ public class PostService {
 	 * @return a new instance with an id of post
 	 */
 	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description, String link) {
-		final Post post = new Post();
-		post.setId(sequenceRepository.getNextSequenceId(KEY));
-		post.setTitle(title);
-		post.setContent(content);
-		post.setImage(image);
-		post.setCreateDate(new Date());
-		post.setTags(tags);
-		post.setDescription(description);
-		post.setLink(link);
-		return repository.save(post).doOnSuccess(this::publishAdd);
+		final Mono<Sequence> sequenceMono = sequenceRepository.getNextSequenceId(KEY);
+		return sequenceMono.flatMap(sequence -> {
+			final Post post = new Post();
+			post.setId(sequence.getSeq());
+			post.setTitle(title);
+			post.setContent(content);
+			post.setImage(image);
+			post.setCreateDate(new Date());
+			post.setTags(tags);
+			post.setDescription(description);
+			post.setLink(link);
+			return Mono.just(post);
+		}).flatMap(repository::save).doOnSuccess(this::publishAdd);
 	}
 
 	/**

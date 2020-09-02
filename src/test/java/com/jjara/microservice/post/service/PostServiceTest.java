@@ -33,7 +33,6 @@ public class PostServiceTest {
     @MockBean private RedisPublishTag tagPublisher;
     @MockBean private PostWebSocketPublisher postWebSocketPublisher;
     @MockBean private PostRepository repository;
-
     @Autowired private PostService postService;
 
     @Test

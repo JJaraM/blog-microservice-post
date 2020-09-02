@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.util.function.Function;
 import static com.jjara.microservice.post.handler.ResponseHandler.created;
-import static com.jjara.microservice.post.handler.ResponseHandler.okNoContent;
+import static com.jjara.microservice.post.handler.ResponseHandler.ok;
 
 /**
  * Handler used to process all requests related with a post service.
@@ -28,7 +28,7 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
-		return okNoContent(
+		return ok(
 			service.find(
 				handlerParameter.id(serverRequest)
 			)
@@ -43,7 +43,7 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> findAll(final ServerRequest serverRequest) {
-		return okNoContent(
+		return ok(
 			service.findByTag(
 				handlerParameter.page(serverRequest),
 				handlerParameter.size(serverRequest),
@@ -59,7 +59,7 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> findByTitle(final ServerRequest serverRequest) {
-		return okNoContent(
+		return ok(
 			service.findByTitle(
 				handlerParameter.page(serverRequest),
 				handlerParameter.size(serverRequest),
@@ -74,7 +74,7 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> deleteById(final ServerRequest serverRequest) {
-		return okNoContent(
+		return ok(
 			service.delete(
 				handlerParameter.id(serverRequest)
 			)
@@ -190,7 +190,7 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	private Mono<ServerResponse> response(final ServerRequest serverRequest, Function<Post, Mono<Post>> function) {
-		return okNoContent(serverRequest.bodyToMono(Post.class).flatMap(function));
+		return ok(serverRequest.bodyToMono(Post.class).flatMap(function));
 	}
 
 	/**

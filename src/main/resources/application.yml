@@ -2,22 +2,38 @@ server:
   port: ${PORT:5001}
 
 spring:
+  profiles:
+    active: "prod"
   application:
     name: blog-microservice
   data:
     mongodb:
       uri: ${MONGODB_URI}
+      databaseName: ${MONGODB_DBNAME}
     redis:
       uri: ${REDIS_URI}
       channel-tag-add: ${REDIS_CHANNEL_TAG_ADD}
       channel-tag-remove: ${REDIS_CHANNEL_TAG_REMOVE}
-
- # security:
- #   oauth2:
- #     resourceserver:
- #       jwt:
- #         issuer-uri: ${AUTHORIZATION_SERVER}/auth/realms/blog
- #         jwk-set-uri: ${AUTHORIZATION_SERVER}/auth/realms/blog/protocol/openid-connect/certs
+  resources:
+    cache:
+      period: 31536000
+      cachecontrol:
+        max-age: 31536000
+    chain:
+      html-application-cache: true
+      enabled: true
+      strategy:
+        content:
+          enabled: true
+          paths: /webjars/swagger-ui/**.*
+springdoc:
+  version: '@springdoc.version@'
+# security:
+#   oauth2:
+#     resourceserver:
+#       jwt:
+#         issuer-uri: ${AUTHORIZATION_SERVER}/auth/realms/blog
+#         jwk-set-uri: ${AUTHORIZATION_SERVER}/auth/realms/blog/protocol/openid-connect/certs
 
 eureka:
   instance:
@@ -32,10 +48,21 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:5000/eureka/
-      #https://blog-eureka-server.herokuapp.com/eureka/
+      defaultZone: https://blog-eureka-server.herokuapp.com/eureka/
 
 discovery:
   uri: https://jjara-discovery.herokuapp.com/v1/discovery/
+
+---
+spring:
+  profiles: "dev"
+  cors:
+    allowed-origin: '*'
+---
+spring:
+  profiles: "prod"
+  cors:
+    allowed-origin: "https://jonathanjaramorales.herokuapp.com"
+
 
 

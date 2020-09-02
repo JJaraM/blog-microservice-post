@@ -22,8 +22,8 @@ public class TestimonialRouterFunction {
     @Bean
     protected RouterFunction<ServerResponse> testimonialRoutes() {
         return RouterFunctions.route()
-                .path("/testimonial", builder -> builder
-                        .GET("/{page}/{size}", accept(MediaType.APPLICATION_JSON), handler::findAll)
-                ).build();
+            .path("/testimonial", builder -> builder
+                    .GET("/{page}/{size}", accept(MediaType.APPLICATION_JSON), handler::findAll)
+            ).build();
     }
 }

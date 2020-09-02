@@ -1,22 +1,31 @@
 package com.jjara.microservice.post.repository;
 
+import com.mongodb.reactivestreams.client.MongoClient;
+import com.mongodb.reactivestreams.client.MongoClients;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Repository;
 
 import com.jjara.microservice.post.pojo.Sequence;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
-import javax.annotation.Resource;
-
-@Repository
+//https://www.baeldung.com/spring-data-mongodb-reactive
+//https://github.com/eugenp/tutorials/blob/master/persistence-modules/spring-boot-persistence-mongodb/src/main/java/com/baeldung/mongodb/services/SequenceGeneratorService.java
+//https://www.baeldung.com/spring-data-mongodb-tutorial
+@Service
 public class SequenceRepository {
 
-	@Resource private MongoOperations operation;
-	
-	public long getNextSequenceId(final String key) {
+	@Autowired private ReactiveMongoTemplate mongoTemplate;
+
+	public Mono<Sequence> getNextSequenceId(final String key) {
 
 		// get sequence id
 		Query query = new Query(Criteria.where("_id").is(key));
@@ -30,9 +39,9 @@ public class SequenceRepository {
 		options.returnNew(true);
 
 		// this is the magic happened.
-		Sequence seqId = operation.findAndModify(query, update, options, Sequence.class);
+		Mono<Sequence> seqId = mongoTemplate.findAndModify(query, update, options, Sequence.class);
 
-		return seqId.getSeq();
+		return seqId;
 
 	}
 
