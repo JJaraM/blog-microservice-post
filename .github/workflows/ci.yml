@@ -9,6 +9,7 @@ jobs:
       matrix:
         platform: [ ubuntu-latest, macOS-latest ]
         java: [ '13' ]
+    runs-on: ubuntu-latest
     steps:
       - name: Code Climate Coverage Action
         uses: paambaati/codeclimate-action@v2.6.0
