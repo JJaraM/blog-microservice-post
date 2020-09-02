@@ -21,4 +21,4 @@ jobs:
         with:
           # The report file must be there, otherwise Code Climate won't find it
           coverageCommand: mvn test
-          coverageLocations: ${{github.workspace}}/target/site/jacoco/jacoco.xml:jacoco
+          coverageLocations: /target/site/jacoco/jacoco.xml:jacoco
