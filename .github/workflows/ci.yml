@@ -1,0 +1,11 @@
+steps:
+  - name: Code Climate Coverage Action
+    uses: paambaati/codeclimate-action@v2.6.0
+    env:
+      # Set CC_TEST_REPORTER_ID as secret of your repo
+      CC_TEST_REPORTER_ID: c734b38d0ac3daabba10974db54c85f78023a80edcae9a7b5002a71dd615eecc
+      JACOCO_SOURCE_PATH: "blog-microservice-post/src/main/java"
+    with:
+      # The report file must be there, otherwise Code Climate won't find it
+      coverageCommand: mvn test
+      coverageLocations: blog-microservice-post/target/site/jacoco/jacoco.xml:jacoco
