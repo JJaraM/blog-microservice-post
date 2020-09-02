@@ -20,4 +20,4 @@ jobs:
         with:
           # The report file must be there, otherwise Code Climate won't find it
           coverageCommand: mvn test
-          coverageLocations: blog-microservice-post/target/jacoco.exec
+          coverageLocations: blog-microservice-post/target/site/jacoco/jacoco.xml:jacoco
