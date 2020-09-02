@@ -5,7 +5,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/831a3fc398e9b20dd58c/maintainability)](https://codeclimate.com/github/JJaraM/blog-microservice-post/maintainability)
 [![HitCount](http://hits.dwyl.com/JJaraM/blog-microservice-post.svg)](http://hits.dwyl.com/JJaraM/blog-microservice-post)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=blog-microservice-post&style=flat)](https://blog-microservice-post.herokuapp.com/)
-[![Coverage Status](https://coveralls.io/repos/github/JJaraM/blog-microservice-post/badge.svg?branch=master)](https://coveralls.io/github/JJaraM/blog-microservice-post?branch=master)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/616202951ec1ab5a65bb/test_coverage)](https://codeclimate.com/github/JJaraM/blog-microservice-post/test_coverage)
 
 # Deploy 
