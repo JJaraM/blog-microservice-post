@@ -14,6 +14,7 @@ import static com.jjara.microservice.post.handler.ResponseHandler.ok;
 
 /**
  * Handler used to process all requests related with a post service.
+ * @author Jonathan Jara Morales
  */
 @Component
 public class PostHandler {
