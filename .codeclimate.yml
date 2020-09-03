@@ -4,8 +4,8 @@ checks:
     config:
       threshold: 1
   argument-count:
-  config:
-    threshold: 2
+    config:
+      threshold: 2
   similar-code:
     config:
       threshold: 20
