@@ -8,8 +8,7 @@ plugins:
         - src/test/**
 checks:
   argument-count:
-    config:
-      threshold: 10
+    enabled: false
   complex-logic:
     config:
       threshold: 4
