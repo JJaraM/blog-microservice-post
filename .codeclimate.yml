@@ -5,6 +5,18 @@ engines:
       sonar.java.source: 13
       tests_patterns:
         - src/test/**
+
+checks:
+  method-lines:
+    config:
+      threshold: 1
+  argument-count:
+    enabled: false
+
+plugins:
+  checkstyle:
+    enabled: true
+
 exclude_paths:
   - build/
   - build/
