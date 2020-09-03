@@ -20,7 +20,7 @@ plugins:
       tests_patterns:
         - src/test/**
 
-exclude_paths:
+exclude_patterns:
   - build/
   - build/
   - fixtures/
