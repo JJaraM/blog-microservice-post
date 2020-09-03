@@ -7,13 +7,13 @@ engines:
       tests_patterns:
         - src/test/**
   checks:
-    argument-count:
-      config:
-        threshold: 10
     squid:CommentedOutCodeLine:
       enabled: false
     squid:S00107:
       enabled: false
+    argument-count:
+      config:
+        threshold: 10
     complex-logic:
       config:
         threshold: 4
