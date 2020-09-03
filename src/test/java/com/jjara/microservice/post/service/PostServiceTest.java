@@ -16,10 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Mono;
-
 import java.util.Arrays;
 import java.util.List;
-
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 

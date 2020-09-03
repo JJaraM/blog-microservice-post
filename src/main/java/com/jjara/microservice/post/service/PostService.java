@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
+import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.pojo.PostBuilder;
 import com.jjara.microservice.post.pojo.Sequence;
 import com.jjara.microservice.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import com.jjara.microservice.post.publish.RedisPublishTag;
-import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.repository.SequenceRepository;
 
 @Service
@@ -233,15 +234,16 @@ public class PostService {
 	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description, String link) {
 		final Mono<Sequence> sequenceMono = sequenceRepository.getNextSequenceId(KEY);
 		return sequenceMono.flatMap(sequence -> {
-			final Post post = new Post();
-			post.setId(sequence.getSeq());
-			post.setTitle(title);
-			post.setContent(content);
-			post.setImage(image);
-			post.setCreateDate(new Date());
-			post.setTags(tags);
-			post.setDescription(description);
-			post.setLink(link);
+			final Post post = new PostBuilder()
+					.setId(sequence.getSeq())
+					.setTitle(title)
+					.setContent(content)
+					.setImage(image)
+					.setCreateDate(new Date())
+					.setTags(tags)
+					.setDescription(description)
+					.setLink(link)
+					.build();
 			return Mono.just(post);
 		}).flatMap(repository::save).doOnSuccess(this::publishAdd);
 	}

@@ -1,6 +1,6 @@
 package com.jjara.microservice.post.handler;
 
-import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.pojo.PostBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -28,7 +28,7 @@ public class ResponseHandlerTest {
 
     @Test
     public void when_mono_ok_with_validData() {
-        Mono<ServerResponse> serverResponseMono = ResponseHandler.ok(Mono.just(new Post()));
+        Mono<ServerResponse> serverResponseMono = ResponseHandler.ok(Mono.just(new PostBuilder().build()));
         StepVerifier.create(serverResponseMono)
                 .expectNextMatches(serverResponse -> HttpStatus.OK.equals(serverResponse.statusCode()))
                 .verifyComplete();
@@ -52,7 +52,7 @@ public class ResponseHandlerTest {
 
     @Test
     public void when_mono_flux_with_validData() {
-        Mono<ServerResponse> serverResponseMono = ResponseHandler.ok(Flux.just(new Post()));
+        Mono<ServerResponse> serverResponseMono = ResponseHandler.ok(Flux.just(new PostBuilder().build()));
         StepVerifier.create(serverResponseMono)
                 .expectNextMatches(serverResponse -> HttpStatus.OK.equals(serverResponse.statusCode()))
                 .verifyComplete();

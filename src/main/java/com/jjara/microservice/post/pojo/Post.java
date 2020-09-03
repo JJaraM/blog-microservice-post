@@ -24,6 +24,8 @@ public class Post {
 	private List<Long> tags = new ArrayList();
 	private String description;
 	private String link;
+
+	Post(){}
 	
 	public long getId() {
 		return id;

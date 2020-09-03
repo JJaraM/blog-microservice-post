@@ -3,6 +3,7 @@ package com.jjara.microservice.post.handler;
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
 import com.jjara.microservice.post.implementation.DefaultHandlerParameter;
 import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.pojo.PostBuilder;
 import com.jjara.microservice.post.pojo.Sequence;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
@@ -27,7 +28,6 @@ import reactor.core.publisher.Mono;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.isA;
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,9 +62,7 @@ public class PostHandlerTest {
         var id = 1L;
         var title = "title";
 
-        final var mockInstance = new Post();
-        mockInstance.setId(id);
-        mockInstance.setTitle(title);
+        final Post mockInstance = new PostBuilder().setId(id).setTitle(title).build();
         when(repository.findById(id)).thenReturn(Mono.just(mockInstance));
         when(repository.save(Mockito.any())).thenReturn(Mono.just(mockInstance));
 
@@ -79,13 +77,9 @@ public class PostHandlerTest {
 
     @Test
     public void findAll() {
-        final var mockInstance = new Post();
-        mockInstance.setId(3L);
-        mockInstance.setTitle("Title 1L");
+        final Post mockInstance = new PostBuilder().setId(3L).setTitle("Title 1L").build();
 
-        final var mockInstance2 = new Post();
-        mockInstance2.setId(4L);
-        mockInstance2.setTitle("Title 2L");
+        final var mockInstance2 = new PostBuilder().setId(4L).setTitle("Title 2L").build();
 
         when(repository.findAll(isA(Pageable.class))).thenReturn(Flux.just(mockInstance, mockInstance2));
 
@@ -97,13 +91,8 @@ public class PostHandlerTest {
 
     @Test
     public void findByTitle() {
-        final var mockInstance = new Post();
-        mockInstance.setId(3L);
-        mockInstance.setTitle("Title 1L");
-
-        final var mockInstance2 = new Post();
-        mockInstance2.setId(4L);
-        mockInstance2.setTitle("Title 2L");
+        final var mockInstance = new PostBuilder().setId(3L).setTitle("Title 1L").build();
+        final var mockInstance2 = new PostBuilder().setId(4L).setTitle("Title 2L").build();
 
         when(repository.findByTitle(isA(Pageable.class), isA(String.class))).thenReturn(Flux.just(mockInstance, mockInstance2));
 
@@ -115,9 +104,7 @@ public class PostHandlerTest {
 
     @Test
     public void deleteById() {
-        final var post = new Post();
-        post.setTitle("Title 2L");
-        post.setId(1L);
+        final var post = new PostBuilder().setTitle("Title 2L").setId(1L).build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
         when(repository.deleteById(isA(Long.class))).thenReturn(Mono.empty());
@@ -127,16 +114,14 @@ public class PostHandlerTest {
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .expectBody(Post.class).consumeWith(result -> {
-                Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle());
-        });
+            .expectBody(Post.class).consumeWith(result ->
+                Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle())
+            );
     }
 
     @Test
     public void updateById() {
-        final var mockInstance = new Post();
-        mockInstance.setId(1L);
-        mockInstance.setTitle("Title 2L");
+        final var mockInstance = new PostBuilder().setId(1L).setTitle("Title 2L").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(mockInstance));
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(mockInstance));
@@ -155,9 +140,7 @@ public class PostHandlerTest {
 
     @Test
     public void updateByTitle() {
-        final var post = new Post();
-        post.setId(1L);
-        post.setTitle("Title 2L");
+        final var post = new PostBuilder().setId(1L).setTitle("Title 2L").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
@@ -176,9 +159,7 @@ public class PostHandlerTest {
 
     @Test
     public void updateContentById() {
-        final var post = new Post();
-        post.setId(1L);
-        post.setContent("Content");
+        final var post = new PostBuilder().setId(1L).setContent("Content").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
@@ -197,9 +178,7 @@ public class PostHandlerTest {
 
     @Test
     public void updateImageById() {
-        final var post = new Post();
-        post.setId(1L);
-        post.setImage("Image");
+        final var post = new PostBuilder().setId(1L).setImage("Image").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
@@ -218,12 +197,8 @@ public class PostHandlerTest {
 
     @Test
     public void create() {
-        final var existedPost = new Post();
-        existedPost.setId(1L);
-        existedPost.setTitle("Title");
-
-        final var newPost = new Post();
-        newPost.setTitle("Title");
+        final var existedPost = new PostBuilder().setId(1L).setTitle("Title").build();
+        final var newPost = new PostBuilder().setTitle("Title").build();
 
         final Sequence sequence = new Sequence();
         sequence.setSeq(1L);
@@ -248,14 +223,8 @@ public class PostHandlerTest {
     public void addTag() {
         final Long postId = 1L;
 
-        final var existedPost  = new Post();
-        existedPost.setId(postId);
-        existedPost.setTitle("Title 2L");
-        existedPost.setTags(new ArrayList<>());
-
-        final var changedPost = new Post();
-        changedPost.setId(postId);
-        changedPost.setTags(Collections.singletonList(1L));
+        final var existedPost  = new PostBuilder().setId(postId).setTitle("Title 2L").build();
+        final var changedPost = new PostBuilder().setId(postId).setTags(Collections.singletonList(1L)).build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
@@ -276,14 +245,8 @@ public class PostHandlerTest {
     public void removeTag() {
         final Long postId = 1L;
 
-        final var existedPost  = new Post();
-        existedPost.setId(postId);
-        existedPost.setTitle("Title 2L");
-        existedPost.setTags(new ArrayList<>());
-
-        final var changedPost = new Post();
-        changedPost.setId(postId);
-        changedPost.setTags(Collections.singletonList(1L));
+        final var existedPost  = new PostBuilder().setId(postId).setTitle("Title 2L").build();
+        final var changedPost = new PostBuilder().setId(postId).setTags(Collections.singletonList(1L));
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
@@ -295,9 +258,9 @@ public class PostHandlerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody(Post.class).consumeWith(result -> {
-            Assertions.assertThat(result.getResponseBody().getTags()).isEmpty();
-        });
+                .expectBody(Post.class).consumeWith(result ->
+            Assertions.assertThat(result.getResponseBody().getTags()).isEmpty()
+        );
     }
 
 }

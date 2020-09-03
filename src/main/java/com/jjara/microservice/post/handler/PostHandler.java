@@ -1,14 +1,15 @@
 package com.jjara.microservice.post.handler;
 
 import com.jjara.microservice.post.api.HandlerParameter;
+import com.jjara.microservice.post.pojo.Post;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import com.jjara.microservice.post.pojo.Post;
 import com.jjara.microservice.post.service.PostService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.util.function.Function;
+
 import static com.jjara.microservice.post.handler.ResponseHandler.created;
 import static com.jjara.microservice.post.handler.ResponseHandler.ok;
 

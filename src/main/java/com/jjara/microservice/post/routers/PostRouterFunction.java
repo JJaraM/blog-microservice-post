@@ -1,8 +1,6 @@
 package com.jjara.microservice.post.routers;
 
-
 import com.jjara.microservice.post.pojo.Post;
-import com.jjara.microservice.post.repository.PostRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
