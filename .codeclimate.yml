@@ -7,6 +7,9 @@ plugins:
       tests_patterns:
         - src/test/**
   checks:
+    argument-count:
+      config:
+        threshold: 10
     squid:CommentedOutCodeLine:
       enabled: false
     squid:S00107:
