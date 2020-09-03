@@ -178,10 +178,7 @@ public class PostService {
 	 * @return the post instance updated
 	 */
 	public Mono<Post> updateTitle(final long id, final String title) {
-		return update(id, post -> {
-			post.setTitle(title);
-			post.setDraftTitle(title);
-		});
+		return update(id, post -> post.setTitle(title));
 	}
 
 	/**
@@ -192,10 +189,7 @@ public class PostService {
 	 * @return the post instance updated
 	 */
 	public Mono<Post> updateContent(final long id, final String content) {
-		return update(id, post -> {
-			post.setContent(content);
-			post.setDraftContent(content);
-		});
+		return update(id, post -> post.setContent(content));
 	}
 
 	/**
@@ -206,10 +200,7 @@ public class PostService {
 	 * @return the post instance updated
 	 */
 	public Mono<Post> updateImage(final long id, final String image) {
-		return update(id, post -> {
-			post.setImage(image);
-			post.setDraftImage(image);
-		});
+		return update(id, post -> post.setImage(image));
 	}
 
 	/**
