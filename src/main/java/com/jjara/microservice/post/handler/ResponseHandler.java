@@ -16,6 +16,11 @@ import java.util.function.Function;
 public final class ResponseHandler {
 
     /**
+     * Created so in that way this class can be accessed only by static methods
+     */
+    private ResponseHandler() {}
+
+    /**
      * Returns an OK if there is data, otherwise will return a no content http status
      * @param publisher which contains the information
      * @param <T>

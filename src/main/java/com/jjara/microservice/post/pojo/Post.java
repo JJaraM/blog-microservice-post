@@ -17,16 +17,12 @@ public class Post {
 	private long id;
 	private long views;
 	private String title;
-	private String draftTitle;
 	private String content;
-	private String draftContent;
 	private String image;
-	private String draftImage;
 	private Date createDate;
 	private Date updateDate;
 	private List<Long> tags = new ArrayList();
 	private String description;
-	private String draftDescription;
 	private String link;
 	
 	public long getId() {
@@ -77,30 +73,6 @@ public class Post {
 		this.updateDate = updateDate;
 	}
 
-	public String getDraftContent() {
-		return draftContent;
-	}
-
-	public void setDraftContent(String draftContent) {
-		this.draftContent = draftContent;
-	}
-
-	public String getDraftImage() {
-		return draftImage;
-	}
-
-	public void setDraftImage(String draftImage) {
-		this.draftImage = draftImage;
-	}
-
-	public String getDraftTitle() {
-		return draftTitle;
-	}
-
-	public void setDraftTitle(String draftTitle) {
-		this.draftTitle = draftTitle;
-	}
-
 	public List<Long> getTags() {
 		return tags;
 	}
@@ -115,14 +87,6 @@ public class Post {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getDraftDescription() {
-		return draftDescription;
-	}
-
-	public void setDraftDescription(String draftDescription) {
-		this.draftDescription = draftDescription;
 	}
 
 	public long getViews() {
