@@ -11,7 +11,8 @@ engines:
       config:
         threshold: 1
     argument-count:
-      enabled: false
+    config:
+      threshold: 2
     similar-code:
       config:
         threshold: 20
@@ -24,3 +25,4 @@ exclude_paths:
   - fixtures/
   - gradle/
   - .gradle/
+  - "**/test/"
