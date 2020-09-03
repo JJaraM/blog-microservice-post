@@ -1,6 +1,10 @@
-engines:
+plugins:
   sonar-java:
     enabled: true
+    config:
+      sonar.java.source: 13
+      tests_patterns:
+        - src/test/**
     checks:
       method-lines:
         config:
@@ -14,12 +18,8 @@ engines:
         identical-code:
           config:
             threshold: 20
-    config:
-      sonar.java.source: 13
-      tests_patterns:
-        - src/test/**
 
-exclude_paths:
+exclude_patterns:
   - build/
   - build/
   - fixtures/
