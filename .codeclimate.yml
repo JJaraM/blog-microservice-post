@@ -7,7 +7,7 @@ plugins:
       tests_patterns:
         - src/test/**
 checks:
-  argument-count:
+  squid:CommentedOutCodeLine:
     enabled: false
   complex-logic:
     config:
