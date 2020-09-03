@@ -9,6 +9,8 @@ plugins:
   checks:
     squid:CommentedOutCodeLine:
       enabled: false
+    squid:S00107:
+      enabled: false
     complex-logic:
       config:
         threshold: 4
