@@ -1,11 +1,4 @@
-version: "2"         # required to adjust maintainability checks
-  checks:
-    method-lines:
-      config:
-        threshold: 1
-    argument-count:
-      enabled: false
-
+version: "2"
 engines:
   sonar-java:
     enabled: true
@@ -13,17 +6,21 @@ engines:
       sonar.java.source: 13
       tests_patterns:
         - src/test/**
-
-plugins:
-  checkstyle:
-    enabled: true
-  duplication:
-    enabled: true
+  checks:
+    method-lines:
       config:
-        languages:
-          java:
-            mass_threshold: 20
-
+        threshold: 1
+    argument-count:
+      enabled: false
+  plugins:
+    checkstyle:
+      enabled: true
+    duplication:
+      enabled: true
+        config:
+          languages:
+            java:
+              mass_threshold: 20
 exclude_paths:
   - build/
   - build/
