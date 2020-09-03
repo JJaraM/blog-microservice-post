@@ -12,15 +12,12 @@ engines:
         threshold: 1
     argument-count:
       enabled: false
-  plugins:
-    checkstyle:
-      enabled: true
-    duplication:
-      enabled: true
+    similar-code:
+      config:
+        threshold: 20
+      identical-code:
         config:
-          languages:
-            java:
-              mass_threshold: 20
+          threshold: 20
 exclude_paths:
   - build/
   - build/
