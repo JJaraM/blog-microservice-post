@@ -35,33 +35,29 @@ public class RedisPublishTag {
 	}
 
 	public void publish(final long postId, final List<Long> tags) {
+		publish(channelTagAdd, postId, tags);
+	}
+
+	public void remove(final long postId, final List<Long> tags) {
+		publish(channelTagRemove, postId, tags);
+	}
+
+	private void publish(final String channel, final long postId, final List<Long> tags) {
 		try {
 			var message = new SubscriberMessage();
 			message.postId = postId;
 			message.tags = tags;
 			var jsonMessage = objectMapper.writeValueAsString(message);
-			sender.sync().publish(channelTagAdd, jsonMessage);
+			sender.sync().publish(channel, jsonMessage);
 		} catch (JsonProcessingException e) {
 			logger.error(e.getMessage());
 		}
 	}
 
-	public void remove(final long postId, final List<Long> tags) {
-		try {
-			var message = new SubscriberMessage();
-			message.postId = postId;
-			message.tags = tags;
-			var jsonMessage = objectMapper.writeValueAsString(message);
-			sender.sync().publish(channelTagRemove, jsonMessage);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static final class SubscriberMessage implements Serializable {
 		
-		protected long postId;
-		protected List<Long> tags;
+		private long postId;
+		private List<Long> tags;
 
 		public long getPostId() {
 			return postId;
