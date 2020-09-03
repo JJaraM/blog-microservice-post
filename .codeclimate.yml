@@ -1,5 +1,4 @@
-version: "2"
-plugins:
+engines:
   sonar-java:
     enabled: true
     checks:
@@ -20,7 +19,7 @@ plugins:
       tests_patterns:
         - src/test/**
 
-exclude_patterns:
+exclude_paths:
   - build/
   - build/
   - fixtures/
