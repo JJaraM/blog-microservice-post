@@ -2,23 +2,24 @@ version: "2"
 engines:
   sonar-java:
     enabled: true
+    checks:
+      method-lines:
+        config:
+          threshold: 1
+      argument-count:
+      config:
+        threshold: 2
+      similar-code:
+        config:
+          threshold: 20
+        identical-code:
+          config:
+            threshold: 20
     config:
       sonar.java.source: 13
       tests_patterns:
         - src/test/**
-  checks:
-    method-lines:
-      config:
-        threshold: 1
-    argument-count:
-    config:
-      threshold: 2
-    similar-code:
-      config:
-        threshold: 20
-      identical-code:
-        config:
-          threshold: 20
+
 exclude_paths:
   - build/
   - build/
