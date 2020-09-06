@@ -254,7 +254,7 @@ public class PostHandlerTest {
         final Long postId = 1L;
 
         final var existedPost  = new PostBuilder().setId(postId).setTitle("Title 2L").build();
-        final var changedPost = new PostBuilder().setId(postId).setTags(Collections.singletonList(1L));
+        final var changedPost = new PostBuilder().setId(postId).setTags(Collections.singletonList(1L)).build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
         when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
