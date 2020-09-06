@@ -38,6 +38,15 @@ public class PostHandler {
 	}
 
 	/**
+	 * Increment the count of views of a post using the <code>id</code>
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> create(final ServerRequest serverRequest) {
+		return responseCreated(serverRequest, service::create);
+	}
+
+	/**
 	 * Find all posts by tag id <code>tag</code> and specify the total of results that wants to retrieve according with the <code>size</code> and
 	 * <code>page</code>
 	 *
@@ -76,10 +85,10 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> deleteById(final ServerRequest serverRequest) {
+		var id = getId(serverRequest);
+
 		return ok(
-			service.delete(
-				handlerParameter.id(serverRequest)
-			)
+			service.delete(id)
 		);
 	}
 
@@ -89,14 +98,13 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateById(final ServerRequest serverRequest) {
-		return response(serverRequest, (p) ->
-			service.update(
-				handlerParameter.id(serverRequest),
-				p.getTitle(), p.getContent(),
-				p.getImage(), p.getTags(), p.getDescription(),
-				p.getViews(), p.getLink()
-			)
-		);
+		var id = getId(serverRequest);
+
+		return response(serverRequest, p ->
+			service.find(id).map(post -> {
+				p.setId(p.getId());
+				return p;
+			}).flatMap(service::update));
 	}
 
 	/**
@@ -105,12 +113,13 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateTitleById(final ServerRequest serverRequest) {
-		return response(serverRequest, (p) ->
-			service.updateTitle(
-				handlerParameter.id(serverRequest),
-				p.getTitle()
-			)
-		);
+		var id = getId(serverRequest);
+
+		return response(serverRequest, p ->
+			service.find(id).map(post -> {
+				post.setTitle(p.getTitle());
+				return post;
+			}).flatMap(service::update));
 	}
 
 	/**
@@ -119,12 +128,22 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateContentById(final ServerRequest serverRequest) {
-		return response(serverRequest, (p) ->
-			service.updateContent(
-				handlerParameter.id(serverRequest),
-				p.getContent()
-			)
-		);
+		var id = getId(serverRequest);
+
+		return response(serverRequest, p ->
+			service.find(id).map(post -> {
+				post.setContent(p.getContent());
+				return post;
+			}).flatMap(service::update));
+	}
+
+	/**
+	 * Gets the id from the request
+	 * @param serverRequest with the request data
+	 * @return
+	 */
+	private long getId(final ServerRequest serverRequest) {
+		return handlerParameter.id(serverRequest);
 	}
 
 	/**
@@ -133,30 +152,13 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateImageById(final ServerRequest serverRequest) {
-		return response(serverRequest, (p) ->
-			service.updateImage(
-				handlerParameter.id(serverRequest),
-				p.getImage()
-			)
-		);
-	}
+		var id = getId(serverRequest);
 
-	/**
-	 * Increment the count of views of a post using the <code>id</code>
-	 * @param serverRequest to make the search
-	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
-	 */
-	public Mono<ServerResponse> create(final ServerRequest serverRequest) {
-		return responseCreated(serverRequest, post ->
-			service.create(
-				post.getTitle(),
-				post.getContent(),
-				post.getImage(),
-				post.getTags(),
-				post.getDescription(),
-				post.getLink()
-			)
-		);
+		return response(serverRequest, p ->
+			service.find(id).map(post -> {
+				post.setImage(p.getImage());
+				return post;
+			}).flatMap(service::update));
 	}
 
 	/**
@@ -179,10 +181,11 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> removeTag(final ServerRequest serverRequest) {
-		return response(serverRequest, (p) -> service.removeTags(
-			handlerParameter.id(serverRequest),
-			p.getTags()
-		));
+		return response(serverRequest, (p) ->
+			service.removeTags(
+				handlerParameter.id(serverRequest),
+				p.getTags()
+			));
 	}
 
 	/**

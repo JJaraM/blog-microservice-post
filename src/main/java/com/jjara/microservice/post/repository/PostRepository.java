@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PostRepository extends ReactiveMongoRepository<Post, Long> {
 		
-	@Query("{ id: { $exists: true }}")
+	@Query("{ _id: { $exists: true }}")
 	Flux<Post> findAll(Pageable page);
 
 	Flux<Post> findByTagsIn(Pageable page, List<Integer> tag);

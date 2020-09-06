@@ -1,15 +1,11 @@
 package com.jjara.microservice.post.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Consumer;
-
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
 import com.jjara.microservice.post.pojo.Post;
-import com.jjara.microservice.post.pojo.PostBuilder;
 import com.jjara.microservice.post.pojo.Sequence;
+import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
+import com.jjara.microservice.post.repository.SequenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +14,11 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import com.jjara.microservice.post.publish.RedisPublishTag;
-import com.jjara.microservice.post.repository.SequenceRepository;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Consumer;
 
 @Service
 public class PostService {
@@ -116,30 +115,15 @@ public class PostService {
 	/**
 	 * Updates a post
 	 *
-	 * @param id of the post to find it
-	 * @param title of the post
-	 * @param content of the post
-	 * @param image of the post
-	 * @param tags list of tags that identifies the post
-	 * @param description brief text that describes the main idea of the post
-	 * @param views count of read of the post
-	 * @param link if the post is for an external article
+	 * @param post with the information that we want to save
 	 * @return an updated post instance
 	 */
-	public Mono<Post> update(long id, String title, String content,  String image, List<Long> tags, String description, long views, String link) {
-		return repository.findById(id).map(post -> {
-			post.setContent(content);
-			post.setTitle(title);
-			post.setImage(image);
-			post.setUpdateDate(new Date());
-			post.setTags(tags);
-			post.setDescription(description);
-			post.setViews(views);
-			post.setLink(link);
-			return post;
-		}).flatMap(repository::save).doOnSuccess(post ->
-			tagPublisher.publish(post.getId(), post.getTags())
-		);
+	public Mono<Post> update(final Post post) {
+		post.setUpdateDate(new Date());
+
+		return repository.save(post)
+			.doOnSuccess(p -> tagPublisher.publish(p.getId(), p.getTags()))
+			.doOnSuccess(postWebSocketPublisher::publishStatus);
 	}
 
 	/**
@@ -172,39 +156,6 @@ public class PostService {
     }
 
 	/**
-	 * Update the post title
-	 *
-	 * @param id of the post to search and update
-	 * @param title new title for the post
-	 * @return the post instance updated
-	 */
-	public Mono<Post> updateTitle(final long id, final String title) {
-		return update(id, post -> post.setTitle(title));
-	}
-
-	/**
-	 * Update the content of the post
-	 *
-	 * @param id of the post to search and update
-	 * @param content of the post that we want to update
-	 * @return the post instance updated
-	 */
-	public Mono<Post> updateContent(final long id, final String content) {
-		return update(id, post -> post.setContent(content));
-	}
-
-	/**
-	 * Update the image that is used by the post
-	 *
-	 * @param id of the post to search and update
-	 * @param image that will be used by the post
-	 * @return the post instance updated
-	 */
-	public Mono<Post> updateImage(final long id, final String image) {
-		return update(id, post -> post.setImage(image));
-	}
-
-	/**
 	 * Deletes the post and then sends a notification to the tag microservice to remove the post reference
 	 * of all associate tags that this post is.
 	 *
@@ -223,28 +174,18 @@ public class PostService {
 	 * Creates a new post, and when this is complete will send a notification to the tag microservice to update
 	 * its reference
 	 *
-	 * @param title of the post
-	 * @param content of the post
-	 * @param image of the post
-	 * @param tags of the post
-	 * @param description of the post
-	 * @param link of the post
+	 * @param post to save
 	 * @return a new instance with an id of post
 	 */
-	public Mono<Post> create(String title, String content, String image, List<Long> tags, String description, String link) {
+	public Mono<Post> create(final Post post) {
+		var currentDate = new Date();
+		post.setCreateDate(currentDate);
+		post.setUpdateDate(currentDate);
+
 		final Mono<Sequence> sequenceMono = sequenceRepository.getNextSequenceId(KEY);
-		return sequenceMono.flatMap(sequence -> {
-			final Post post = new PostBuilder()
-					.setId(sequence.getSeq())
-					.setTitle(title)
-					.setContent(content)
-					.setImage(image)
-					.setCreateDate(new Date())
-					.setTags(tags)
-					.setDescription(description)
-					.setLink(link)
-					.build();
-			return Mono.just(post);
+		return sequenceMono.map(sequence -> {
+			post.setId(sequence.getSeq());
+			return post;
 		}).flatMap(repository::save).doOnSuccess(this::publishAdd);
 	}
 

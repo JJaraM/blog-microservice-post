@@ -18,7 +18,7 @@ public class CorsWebFilterConfiguration {
 	    config.setAllowCredentials(true);
 	    config.addAllowedHeader("*");
 	    config.addAllowedMethod("*");
-	    config.addAllowedOrigin(allowedOrigin);
+	    config.addAllowedOrigin("*");
 	    
 	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("/**", config);

@@ -2,6 +2,7 @@ package com.jjara.microservice.post.service;
 
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
 import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.pojo.PostBuilder;
 import com.jjara.microservice.post.pojo.Sequence;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
@@ -10,6 +11,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -50,17 +52,29 @@ public class PostServiceTest {
         when(sequenceRepository.getNextSequenceId(isA(String.class))).thenReturn(sequenceMono);
         doAnswer(answer).when(repository).save(isA(Post.class));
 
-        postService.create(title, content, image, tags, description, link).subscribe(p -> {
-            Assert.assertThat("Invalid title", p.getTitle(), CoreMatchers.equalTo(title));
-            Assert.assertThat("Invalid content", p.getContent(), CoreMatchers.equalTo(content));
-            Assert.assertThat("Invalid image", p.getImage(), CoreMatchers.equalTo(image));
-            Assert.assertThat("Invalid tags", p.getTags(), CoreMatchers.equalTo(tags));
-            Assert.assertThat("Invalid description", p.getDescription(), CoreMatchers.equalTo(description));
-            Assert.assertThat("Invalid link", p.getLink(), CoreMatchers.equalTo(link));
+        final Post post = new PostBuilder()
+                .setTitle(title)
+                .setContent(content)
+                .setImage(image)
+                .setTags(tags)
+                .setDescription(description)
+                .setLink(link).build();
+
+        postService.create(post).subscribe(p -> {
+            Assert.assertSame("Invalid title", p.getTitle(), title);
+            Assert.assertSame("Invalid content", p.getContent(), content);
+            Assert.assertSame("Invalid image", p.getImage(), image);
+            Assert.assertSame("Invalid tags", p.getTags(), tags);
+            Assert.assertSame("Invalid description", p.getDescription(), description);
+            Assert.assertSame("Invalid link", p.getLink(), link);
+            Assert.assertSame("Invalid id", p.getId(), sequence.getSeq());
+            Assert.assertSame("The tag list is different", p.getTags(), tags);
+            Assert.assertNotNull("The create date can not be null", p.getCreateDate());
+            Assert.assertNull("Can not exists a value in the update date", p.getUpdateDate());
         });
 
         verify(sequenceRepository).getNextSequenceId(isA(String.class));
-        verify(repository).save(isA(Post.class));
+        verify(repository, Mockito.atLeastOnce()).save(isA(Post.class));
         verify(tagPublisher).publish(isA(Long.class), isA(List.class));
     }
 }

@@ -4,6 +4,7 @@ import org.reactivestreams.Publisher;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -46,7 +47,7 @@ public final class ResponseHandler {
      * @return a server response
      */
     private static <T> Function<T, Mono<ServerResponse>> ok() {
-        return publisher -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(publisher, new ParameterizedTypeReference<>() {});
+        return publisher -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(publisher));
     }
 
     /**
@@ -62,7 +63,15 @@ public final class ResponseHandler {
      * @return a server response
      */
     private static <T> Function<T, Mono<ServerResponse>> created() {
-        return publisher -> ServerResponse.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(publisher, new ParameterizedTypeReference<>() {});
+        return publisher -> ServerResponse.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(publisher));
+    }
+
+    /**
+     * Indicates when there is not data
+     * @return a server response
+     */
+    private static Mono<ServerResponse> noContent() {
+        return ServerResponse.noContent().build();
     }
 
     /**
@@ -72,25 +81,20 @@ public final class ResponseHandler {
      * @param <T>
      * @return
      */
-    private static <T> Mono<ServerResponse> doOperation(final Publisher<T> publisher, final Function<Publisher<T>, Mono<ServerResponse>> function) {
-        var hasElementMono = Mono.just(Boolean.FALSE);
-        final var noContent = ServerResponse.noContent().build();
-        final Function<Boolean, Mono<ServerResponse>> serverResponse = hasElement -> hasElement ? function.apply(publisher) : Mono.empty();
+    private static <T> Mono<ServerResponse> doOperation(final Publisher<T> publisher, final Function<Object, Mono<ServerResponse>> function) {
+        Mono<ServerResponse> serverResponse = noContent();
 
         if (publisher instanceof Mono) {
-            Mono<T> monoPublisher = (Mono) publisher;
-            hasElementMono = monoPublisher.hasElement();
+            Mono<T> mono = (Mono) publisher;
+            serverResponse = mono.flatMap(function::apply).switchIfEmpty(noContent()).onErrorResume(internalServerError());
         }
 
         if (publisher instanceof Flux) {
             Flux<T> fluxPublisher = (Flux) publisher;
-            hasElementMono = fluxPublisher.hasElements();
+            serverResponse = fluxPublisher.collectList().flatMap(list -> list.isEmpty() ? noContent() : function.apply(list));
         }
 
-        return hasElementMono
-                .flatMap(serverResponse)
-                .switchIfEmpty(noContent)
-                .onErrorResume(internalServerError());
+        return serverResponse;
     }
 
 }

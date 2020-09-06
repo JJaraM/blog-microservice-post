@@ -25,8 +25,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import static org.mockito.Mockito.when;
+
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +45,7 @@ public class PostHandlerTest {
     @Resource private WebTestClient webClient;
     @MockBean private PostRepository repository;
     @MockBean private SequenceRepository sequenceRepository;
-    @MockBean private RedisPublishTag redisPublishTag;
+    @MockBean private RedisPublishTag tagPublisher;
     @MockBean private PostWebSocketPublisher postWebSocketPublisher;
 
     private final int page = 0;
@@ -139,22 +141,28 @@ public class PostHandlerTest {
     }
 
     @Test
-    public void updateByTitle() {
-        final var post = new PostBuilder().setId(1L).setTitle("Title 2L").build();
+    public void updateTitleById() {
+        final var oldPost = new PostBuilder().setId(1L).setTitle("Title 1L").build();
+        final var updatedPost = new PostBuilder().setId(1L).setTitle("Title 2L").build();
 
-        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
-        when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
+        when(repository.findById(isA(Long.class))).thenReturn(Mono.just(oldPost));
+        when(repository.save(isA(Post.class))).thenReturn(Mono.just(updatedPost));
 
-        webClient.put().uri("/post/{id}", post.getId())
+        webClient.put().uri("/post/{id}", updatedPost.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(post), Post.class)
+                .body(Mono.just(updatedPost), Post.class)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Post.class).consumeWith(result -> {
-            Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle());
+            Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(updatedPost.getTitle());
         });
+
+        verify(repository, times(1)).findById(isA(Long.class));
+        verify(repository, times(2)).save(isA(Post.class));
+        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
     @Test
