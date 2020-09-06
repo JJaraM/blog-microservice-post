@@ -3,9 +3,12 @@ package com.jjara.microservice.post.configuration.cors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,6 +24,13 @@ public class CorsWebFilterConfiguration {
 	CorsWebFilter corsWebFilter() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowedOrigins(allowedOrigins);
+		config.setAllowedMethods(Arrays.asList(
+			HttpMethod.GET.name(),
+			HttpMethod.PUT.name(),
+			HttpMethod.POST.name(),
+			HttpMethod.DELETE.name()
+		));
+		config.addAllowedHeader("*");
 
 	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("/**", config);
