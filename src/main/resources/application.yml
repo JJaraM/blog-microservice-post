@@ -57,7 +57,7 @@ discovery:
 spring:
   profiles: "dev"
   cors:
-    allowed-origin: '*'
+    allowed-origin: 'http://localhost:3000'
 ---
 spring:
   profiles: "prod"
