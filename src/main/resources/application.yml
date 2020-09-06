@@ -62,7 +62,6 @@ spring:
 spring:
   profiles: "prod"
   cors:
-    allowed-origin: "https://jonathanjaramorales.herokuapp.com"
-
-
-
+    allowed-origin: >
+      https://jonathanjaramorales.herokuapp.com,
+      http://jonathanjaramorales.herokuapp.com

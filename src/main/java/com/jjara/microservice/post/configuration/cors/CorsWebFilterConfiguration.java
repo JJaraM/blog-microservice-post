@@ -6,20 +6,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import java.util.List;
 
+/**
+ * Allows to configure the cors for the web service, for more details please visit:
+ * https://www.baeldung.com/spring-webflux-cors
+ */
 @Configuration
 public class CorsWebFilterConfiguration {
 
-	@Value("${spring.cors.allowed-origin}") private String allowedOrigin;
+	@Value("${spring.cors.allowed-origin}") private List<String> allowedOrigins;
 
 	@Bean
 	CorsWebFilter corsWebFilter() {
 		CorsConfiguration config = new CorsConfiguration();
-	    config.setAllowCredentials(true);
-	    config.addAllowedHeader("*");
-	    config.addAllowedMethod("*");
-	    config.addAllowedOrigin("*");
-	    
+		config.setAllowedOrigins(allowedOrigins);
+
 	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("/**", config);
 

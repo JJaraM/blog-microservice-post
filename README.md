@@ -55,6 +55,13 @@ MONGODB_NAME:
 AUTHORIZATION_SERVER:
 ```
 
+# How to run locally
+## IntelliJ
+* Go to your run/debug configuration and add the following configuration in the program arguments:
+
+``
+--spring.profiles.active=dev
+``
 # About 
 This is a web service that is used to feed my personal web site, and it's showing the post information.
 

@@ -70,7 +70,7 @@ public class PostServiceTest {
             Assert.assertSame("Invalid id", p.getId(), sequence.getSeq());
             Assert.assertSame("The tag list is different", p.getTags(), tags);
             Assert.assertNotNull("The create date can not be null", p.getCreateDate());
-            Assert.assertNull("Can not exists a value in the update date", p.getUpdateDate());
+            Assert.assertNotNull("Needs to exists the update date in order to list the new posts when we want to sort it", p.getUpdateDate());
         });
 
         verify(sequenceRepository).getNextSequenceId(isA(String.class));
