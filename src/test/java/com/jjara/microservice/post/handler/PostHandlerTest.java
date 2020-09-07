@@ -15,6 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
@@ -30,7 +32,9 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @WebFluxTest
@@ -75,6 +79,9 @@ public class PostHandlerTest {
             Assertions.assertThat(mockInstance.getId()).isEqualTo(post.getId());
             Assertions.assertThat(mockInstance.getTitle()).isEqualTo(post.getTitle());
         });
+
+        verify(repository, times(1)).findById(isA(Long.class));
+        verify(repository, times(1)).save(isA(Post.class));
     }
 
     @Test
@@ -89,6 +96,9 @@ public class PostHandlerTest {
             List<Post> posts = result.getResponseBody();
             Assertions.assertThat(posts.size()).isEqualTo(2);
         });
+
+        verify(repository, never()).findById(isA(Long.class));
+        verify(repository, never()).save(isA(Post.class));
     }
 
     @Test
@@ -102,6 +112,9 @@ public class PostHandlerTest {
             List<Post> posts = result.getResponseBody();
             Assertions.assertThat(posts.size()).isEqualTo(2);
         });
+
+        verify(repository, never()).findById(isA(Long.class));
+        verify(repository, never()).save(isA(Post.class));
     }
 
     @Test
@@ -119,6 +132,10 @@ public class PostHandlerTest {
             .expectBody(Post.class).consumeWith(result ->
                 Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle())
             );
+
+        verify(repository, times(1)).findById(isA(Long.class));
+        verify(repository, times(1)).deleteById(isA(Long.class));
+        verify(tagPublisher, times(1)).remove(isA(Long.class), isA(List.class));
     }
 
     @Test
@@ -126,7 +143,7 @@ public class PostHandlerTest {
         final var mockInstance = new PostBuilder().setId(1L).setTitle("Title 2L").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(mockInstance));
-        when(repository.save(isA(Post.class))).thenReturn(Mono.just(mockInstance));
+        doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
 
         webClient.put().uri("/post/{id}", 1L)
             .contentType(MediaType.APPLICATION_JSON)
@@ -138,17 +155,34 @@ public class PostHandlerTest {
             .expectBody(Post.class).consumeWith(result -> {
                 Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(mockInstance.getTitle());
         });
+
+        verify(repository, times(1)).findById(isA(Long.class));
+        verify(repository, times(1)).save(isA(Post.class));
+        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
     @Test
     public void updateTitleById() {
-        final var oldPost = new PostBuilder().setId(1L).setTitle("Title 1L").build();
-        final var updatedPost = new PostBuilder().setId(1L).setTitle("Title 2L").build();
+        final var id = 1L;
+        final var oldPost = new PostBuilder().setId(id).setTitle("Title 1L").build();
+        final var updatedPost = new PostBuilder()
+                .setTitle("Title")
+                .setLink("Link")
+                .setViews(10)
+                .setContent("Content")
+                .setDescription("Description")
+                .setTags(Arrays.asList(1L, 2L, 3L))
+                .setImage("Image")
+                .setCreateDate(new Date())
+                .setUpdateDate(new Date())
+                .setId(100)
+                .build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(oldPost));
-        when(repository.save(isA(Post.class))).thenReturn(Mono.just(updatedPost));
+        doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
 
-        webClient.put().uri("/post/{id}", updatedPost.getId())
+        webClient.put().uri("/post/updateTitle/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(updatedPost), Post.class)
@@ -156,11 +190,22 @@ public class PostHandlerTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Post.class).consumeWith(result -> {
-            Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(updatedPost.getTitle());
+            var postResponse = result.getResponseBody();
+            Assertions.assertThat(postResponse.getUpdateDate()).isNotNull();
+            Assertions.assertThat(postResponse.getTitle()).isEqualTo(updatedPost.getTitle());
+            Assertions.assertThat(postResponse.getId()).isEqualTo(id);
+
+            Assertions.assertThat(postResponse.getContent()).isNull();
+            Assertions.assertThat(postResponse.getLink()).isNull();
+            Assertions.assertThat(postResponse.getViews()).isEqualTo(0);
+            Assertions.assertThat(postResponse.getDescription()).isNull();
+            Assertions.assertThat(postResponse.getTags()).isEmpty();
+            Assertions.assertThat(postResponse.getImage()).isNull();
+            Assertions.assertThat(postResponse.getCreateDate()).isNull();
         });
 
         verify(repository, times(1)).findById(isA(Long.class));
-        verify(repository, times(2)).save(isA(Post.class));
+        verify(repository, times(1)).save(isA(Post.class));
         verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
         verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
@@ -170,9 +215,9 @@ public class PostHandlerTest {
         final var post = new PostBuilder().setId(1L).setContent("Content").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
-        when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
+        doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
 
-        webClient.put().uri("/post/{id}", post.getId())
+        webClient.put().uri("/post/updateContent/{id}", post.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(post), Post.class)
@@ -180,8 +225,15 @@ public class PostHandlerTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Post.class).consumeWith(result -> {
-            Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle());
+            var postResponse = result.getResponseBody();
+            Assertions.assertThat(postResponse.getUpdateDate()).isNotNull();
+            Assertions.assertThat(postResponse.getContent()).isEqualTo(post.getContent());
         });
+
+        verify(repository, times(1)).findById(isA(Long.class));
+        verify(repository, times(1)).save(isA(Post.class));
+        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
     @Test
@@ -189,9 +241,9 @@ public class PostHandlerTest {
         final var post = new PostBuilder().setId(1L).setImage("Image").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
-        when(repository.save(isA(Post.class))).thenReturn(Mono.just(post));
+        doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
 
-        webClient.put().uri("/post/{id}", post.getId())
+        webClient.put().uri("/post/updateImage/{id}", post.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(post), Post.class)
@@ -199,8 +251,15 @@ public class PostHandlerTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Post.class).consumeWith(result -> {
-            Assertions.assertThat(result.getResponseBody().getTitle()).isEqualTo(post.getTitle());
+            var postResponse = result.getResponseBody();
+            Assertions.assertThat(postResponse.getUpdateDate()).isNotNull();
+            Assertions.assertThat(postResponse.getTitle()).isEqualTo(post.getTitle());
         });
+
+        verify(repository, times(1)).findById(isA(Long.class));
+        verify(repository, times(1)).save(isA(Post.class));
+        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
     @Test
@@ -213,7 +272,7 @@ public class PostHandlerTest {
 
         final Mono<Sequence> sequenceMono = Mono.just(sequence);
         when(sequenceRepository.getNextSequenceId(isA(String.class))).thenReturn(sequenceMono);
-        when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
+        doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
 
         webClient.post().uri("/post/")
             .contentType(MediaType.APPLICATION_JSON)
@@ -223,7 +282,10 @@ public class PostHandlerTest {
             .expectStatus().isCreated()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody(Post.class).consumeWith(result -> {
-                Assertions.assertThat(result.getResponseBody().getId()).isEqualTo(existedPost.getId());
+                var post = result.getResponseBody();
+                Assertions.assertThat(post.getCreateDate()).isNotNull();
+                Assertions.assertThat(post.getUpdateDate()).isNotNull();
+                Assertions.assertThat(post.getId()).isEqualTo(existedPost.getId());
         });
     }
 
@@ -235,7 +297,7 @@ public class PostHandlerTest {
         final var changedPost = new PostBuilder().setId(postId).setTags(Collections.singletonList(1L)).build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
-        when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
+        doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
 
         webClient.put().uri("/post/addTag/{id}", postId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -245,8 +307,15 @@ public class PostHandlerTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Post.class).consumeWith(result -> {
-            Assertions.assertThat(result.getResponseBody().getTags()).isEqualTo(existedPost.getTags());
+            var post = result.getResponseBody();
+            Assertions.assertThat(post.getUpdateDate()).isNotNull();
+            Assertions.assertThat(post.getTags()).isEqualTo(existedPost.getTags());
         });
+
+        verify(repository, times(1)).findById(isA(Long.class));
+        verify(repository, times(1)).save(isA(Post.class));
+        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
     @Test
@@ -257,7 +326,7 @@ public class PostHandlerTest {
         final var changedPost = new PostBuilder().setId(postId).setTags(Collections.singletonList(1L)).build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
-        when(repository.save(isA(Post.class))).thenReturn(Mono.just(existedPost));
+        doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
 
         webClient.put().uri("/post/removeTag/{id}", postId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -266,9 +335,17 @@ public class PostHandlerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody(Post.class).consumeWith(result ->
-            Assertions.assertThat(result.getResponseBody().getTags()).isEmpty()
+                .expectBody(Post.class).consumeWith(result -> {
+                    var post = result.getResponseBody();
+                    Assertions.assertThat(post.getUpdateDate()).isNotNull();
+                    Assertions.assertThat(result.getResponseBody().getTags()).isEmpty();
+                }
         );
+
+        verify(repository, times(1)).findById(isA(Long.class));
+        verify(repository, times(1)).save(isA(Post.class));
+        verify(tagPublisher, times(1)).remove(isA(Long.class), isA(List.class));
+        verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
 }

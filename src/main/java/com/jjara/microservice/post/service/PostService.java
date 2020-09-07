@@ -106,10 +106,7 @@ public class PostService {
 	 * @return a post
 	 */
 	public Mono<Post> find(long id) {
-		return repository.findById(id).map(p -> {
-			p.setViews(p.getViews() + 1);
-			return p;
-		}).flatMap(repository::save);
+		return repository.findById(id);
 	}
 
 	/**
@@ -178,13 +175,12 @@ public class PostService {
 	 * @return a new instance with an id of post
 	 */
 	public Mono<Post> create(final Post post) {
-		var currentDate = new Date();
-		post.setCreateDate(currentDate);
-		post.setUpdateDate(currentDate);
-
 		final Mono<Sequence> sequenceMono = sequenceRepository.getNextSequenceId(KEY);
 		return sequenceMono.map(sequence -> {
+			var currentDate = new Date();
 			post.setId(sequence.getSeq());
+			post.setCreateDate(currentDate);
+			post.setUpdateDate(currentDate);
 			return post;
 		}).flatMap(repository::save).doOnSuccess(this::publishAdd);
 	}

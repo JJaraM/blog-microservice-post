@@ -32,10 +32,13 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
+		var id = getId(serverRequest);
+
 		return ok(
-			service.find(
-				handlerParameter.id(serverRequest)
-			)
+			service.find(id).map(post -> {
+				post.setViews(post.getViews() + 1);
+				return post;
+			}).flatMap(service::update)
 		);
 	}
 
