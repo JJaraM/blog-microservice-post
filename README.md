@@ -62,6 +62,9 @@ AUTHORIZATION_SERVER:
 ``
 --spring.profiles.active=dev
 ``
+
+* You will need to configure your IntelliJ to use [Lombok project](https://plugins.jetbrains.com/plugin/6317-lombok/versions).
+
 # About 
 This is a web service that is used to feed my personal web site, and it's showing the post information.
 
@@ -70,4 +73,6 @@ This is a web service that is used to feed my personal web site, and it's showin
 * Eureka Service Discovery
 * Reactive API
 * MongoDB
-
+* Lombok
+* Redis
+* Lettuce

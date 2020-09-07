@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Sequence {
 
 	private long seq;
-	
+
 	public long getSeq() {
 		return seq;
 	}

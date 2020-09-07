@@ -1,5 +1,6 @@
 package com.jjara.microservice.post;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -11,19 +12,20 @@ import reactor.core.publisher.Mono;
  * for all responses.
  */
 @Component
+@Slf4j
 public class ResponseFilter implements WebFilter {
 
-	/**
-	 * For each responses we want to return the next information:
-	 * <ul>
-	 * 	<li>Cache-Control:</li> Because we want that our applications don't cache the information
-	 * </ul>
-	 */
 	@Override
-	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-		exchange.getResponse().getHeaders().add("Cache-Control", "no-cache, no-store, must-revalidate");
+	public Mono<Void> filter(final ServerWebExchange exchange, final WebFilterChain chain) {
+		var methodName = exchange.getRequest().getMethod().name();
+		var requestId = exchange.getRequest().getId();
+		var URI = exchange.getRequest().getURI().toASCIIString();
 
-		return chain.filter(exchange);
+		log.info("Request Received: {} {} {}", methodName, URI, requestId);
+
+		return chain.filter(exchange).doFinally(signalType ->
+			log.info("Request Completed: {} {} {}", methodName, URI, requestId)
+		);
 	}
 
 }
