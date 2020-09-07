@@ -1,7 +1,25 @@
 server:
   port: ${PORT:5001}
 
+info:
+  app:
+    name: @project.name@
+    version: @project.version@
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
 spring:
+  boot:
+    admin:
+      client:
+        url: ${REDIS_URI}
   profiles:
     active: "dev"
   application:
@@ -28,6 +46,7 @@ spring:
           paths: /webjars/swagger-ui/**.*
 springdoc:
   version: '@springdoc.version@'
+
 # security:
 #   oauth2:
 #     resourceserver:

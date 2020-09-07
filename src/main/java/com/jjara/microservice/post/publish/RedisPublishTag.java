@@ -18,21 +18,13 @@ import javax.annotation.PostConstruct;
 @Component
 public class RedisPublishTag {
 
-	@Value("${spring.data.redis.uri}") private String uri;
 	@Value("${spring.data.redis.channel-tag-add}") private String channelTagAdd;
 	@Value("${spring.data.redis.channel-tag-remove}") private String channelTagRemove;
 
 	@Autowired private ObjectMapper objectMapper;
+	@Autowired private StatefulRedisConnection<String, String> sender;
+
 	private Logger logger = LoggerFactory.getLogger(ReactiveWebSocketHandler.class);
-
-	private RedisClient client;
-	private StatefulRedisConnection<String, String> sender;
-
-	@PostConstruct
-	public void onInit() {
-		client = RedisClient.create(uri);
-		sender = client.connect();
-	}
 
 	public void publish(final long postId, final List<Long> tags) {
 		publish(channelTagAdd, postId, tags);
