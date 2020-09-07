@@ -19,6 +19,11 @@ spring:
     admin:
       client:
         url: ${ADMIN_SERVER}
+      instance:
+        management-base-url: http://blog-microservice-post.herokuapp.com/
+        service-base-url: ${spring.boot.admin.client.instance.management-base-url}
+        auto-deregistration: true
+        period: 5m
   redis:
     configuration:
       host: ${REDIS_HOST}
