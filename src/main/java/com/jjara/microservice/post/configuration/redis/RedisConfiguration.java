@@ -1,6 +1,7 @@
 package com.jjara.microservice.post.configuration.redis;
 
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisURI;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,9 +18,17 @@ import java.time.Duration;
 @Configuration
 public class RedisConfiguration {
 
+    @Value("${spring.redis.configuration.host}") private String host;
+    @Value("${spring.redis.configuration.port}") private int port;
+    @Value("${spring.redis.configuration.password}") private String password;
+
     @Bean
-    public RedisClient getRedisClient(@Value("${spring.data.redis.uri}") String uri) {
-        return RedisClient.create(uri);
+    public RedisClient getRedisClient() {
+        RedisURI redisURI = new RedisURI();
+        redisURI.setHost(host);
+        redisURI.setPort(port);
+        redisURI.setPassword(password);
+        return RedisClient.create(redisURI);
     }
 
     @Bean(destroyMethod = "close")
@@ -35,9 +44,9 @@ public class RedisConfiguration {
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName("ec2-3-91-141-186.compute-1.amazonaws.com");
-        redisStandaloneConfiguration.setPort(20539);
-        redisStandaloneConfiguration.setPassword(RedisPassword.of("p30265bf32c2a98f5d3e24cd1176a807a9979660244128f150926a817c1ed205e"));
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
+        redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
 
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
         jedisClientConfiguration.connectTimeout(Duration.ofSeconds(60));

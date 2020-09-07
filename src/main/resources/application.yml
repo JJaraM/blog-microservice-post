@@ -16,10 +16,15 @@ management:
       show-details: always
 
 spring:
-  boot:
-    admin:
-      client:
-        url: ${REDIS_URI}
+  redis:
+    configuration:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+    channels:
+      channel-tag-add: ${REDIS_CHANNEL_TAG_ADD}
+      channel-tag-remove: ${REDIS_CHANNEL_TAG_REMOVE}
+
   profiles:
     active: "dev"
   application:
@@ -28,10 +33,6 @@ spring:
     mongodb:
       uri: ${MONGODB_URI}
       databaseName: ${MONGODB_DBNAME}
-    redis:
-      uri: ${REDIS_URI}
-      channel-tag-add: ${REDIS_CHANNEL_TAG_ADD}
-      channel-tag-remove: ${REDIS_CHANNEL_TAG_REMOVE}
   resources:
     cache:
       period: 31536000

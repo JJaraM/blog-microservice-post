@@ -18,8 +18,8 @@ import javax.annotation.PostConstruct;
 @Component
 public class RedisPublishTag {
 
-	@Value("${spring.data.redis.channel-tag-add}") private String channelTagAdd;
-	@Value("${spring.data.redis.channel-tag-remove}") private String channelTagRemove;
+	@Value("${spring.redis.channels.channel-tag-add}") private String channelTagAdd;
+	@Value("${spring.redis.channels.channel-tag-remove}") private String channelTagRemove;
 
 	@Autowired private ObjectMapper objectMapper;
 	@Autowired private StatefulRedisConnection<String, String> sender;
