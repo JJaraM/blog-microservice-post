@@ -8,6 +8,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.service.PostService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.jjara.microservice.post.handler.ResponseHandler.created;
@@ -113,13 +115,7 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateTitleById(final ServerRequest serverRequest) {
-		var id = getId(serverRequest);
-
-		return response(serverRequest, p ->
-			service.find(id).map(post -> {
-				post.setTitle(p.getTitle());
-				return post;
-			}).flatMap(service::update));
+		return update(serverRequest, (post, p) ->  post.setTitle(p.getTitle()));
 	}
 
 	/**
@@ -128,11 +124,30 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateContentById(final ServerRequest serverRequest) {
+		return update(serverRequest, (post, p) ->  post.setContent(p.getContent()));
+	}
+
+	/**
+	 * Update the post content using the <code>id</code>
+	 * @param serverRequest to make the search
+	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
+	 */
+	public Mono<ServerResponse> updateImageById(final ServerRequest serverRequest) {
+		return update(serverRequest, (post, p) ->  post.setImage(p.getImage()));
+	}
+
+	/**
+	 * Updates a post
+	 * @param serverRequest that contains the information that you may want to update
+	 * @param postConsumer with the original post information and the new data that you may want to save
+	 * @return a server response with the result of the request
+	 */
+	private Mono<ServerResponse> update(final ServerRequest serverRequest, BiConsumer<Post, Post> postConsumer) {
 		var id = getId(serverRequest);
 
 		return response(serverRequest, p ->
 			service.find(id).map(post -> {
-				post.setContent(p.getContent());
+				postConsumer.accept(post, p);
 				return post;
 			}).flatMap(service::update));
 	}
@@ -144,21 +159,6 @@ public class PostHandler {
 	 */
 	private long getId(final ServerRequest serverRequest) {
 		return handlerParameter.id(serverRequest);
-	}
-
-	/**
-	 * Update the post content using the <code>id</code>
-	 * @param serverRequest to make the search
-	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
-	 */
-	public Mono<ServerResponse> updateImageById(final ServerRequest serverRequest) {
-		var id = getId(serverRequest);
-
-		return response(serverRequest, p ->
-			service.find(id).map(post -> {
-				post.setImage(p.getImage());
-				return post;
-			}).flatMap(service::update));
 	}
 
 	/**
