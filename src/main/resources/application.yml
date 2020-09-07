@@ -14,8 +14,11 @@ management:
   endpoint:
     health:
       show-details: always
-
 spring:
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_SERVER}
   redis:
     configuration:
       host: ${REDIS_HOST}
