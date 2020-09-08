@@ -22,41 +22,31 @@
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>
-            </repositories>
-        </profile>
-
-        <profile>
-            <id>sonatype-repository</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>sonatype</id>
-                    <name>Sonatype Maven OSS Repository</name>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                    <url>https://oss.sonatype.org/content/groups/public</url>
-                </pluginRepository>
-            </pluginRepositories>
-            <repositories>
                 <repository>
                     <id>sonatype</id>
                     <name>Sonatype Maven OSS Repository</name>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
                     <url>https://oss.sonatype.org/content/groups/public</url>
+                </repository>
+                <repository>
+                    <id>jcenter-release</id>
+                    <name>JCenter Release Repository</name>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                    <url>https://jcenter.bintray.com/</url>
+                </repository>
+                <repository>
+                    <id>jcenter-snapshots</id>
+                    <name>JCenter Snapshots Repository</name>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                    <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
                 </repository>
             </repositories>
         </profile>
+
+
     </profiles>
 
     <servers>
