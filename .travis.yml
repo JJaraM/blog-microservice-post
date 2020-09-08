@@ -7,6 +7,9 @@ language: java
 jdk:
   - openjdk13
 
+before_install:
+  - cp .travis.settings.xml $HOME/.m2/settings.xml
+
 # To generate a token please use travis and heroku cli
 # Warning: token will expire 04/25/2021
 # https://docs.travis-ci.com/user/deployment/heroku/
