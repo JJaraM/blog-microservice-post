@@ -9,6 +9,10 @@ jdk:
 
 before_install:
   - cp .travis.settings.xml $HOME/.m2/settings.xml
+  - mvn dependency:go-offline
+
+script:
+  - mvn clean install site
 
 # To generate a token please use travis and heroku cli
 # Warning: token will expire 04/25/2021
