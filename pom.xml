@@ -71,6 +71,12 @@
 		</repository>
 
 		<repository>
+			<id>github</id>
+			<name>GitHub jjara Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/jjaram/blog-microservice-ui</url>
+		</repository>
+
+		<repository>
 			<id>jcenter-snapshots</id>
 			<name>jcenter</name>
 			<url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
