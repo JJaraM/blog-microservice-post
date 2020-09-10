@@ -100,4 +100,6 @@ spring:
   cors:
     allowed-origin: >
       https://jonathanjaramorales.herokuapp.com,
-      http://jonathanjaramorales.herokuapp.com
+      https://blog-eureka-server.herokuapp.com,
+      http://jonathanjaramorales.herokuapp.com,
+      http://blog-eureka-server.herokuapp.com
