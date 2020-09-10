@@ -6,6 +6,11 @@ server:
 #    name: @project.name@
 #    version: @project.version@
 
+logging:
+  file:
+    path: "logs"
+    name: "logs/client.log"
+
 management:
   endpoints:
     web:
@@ -14,6 +19,9 @@ management:
   endpoint:
     health:
       show-details: always
+    logfile:
+      external-file: "logs/client.log"
+
 spring:
   boot:
     admin:
