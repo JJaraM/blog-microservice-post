@@ -27,6 +27,9 @@ spring:
     admin:
       client:
         url: ${ADMIN_SERVER}
+        username: ${ADMIN_SECURITY_NAME}
+        password: ${ADMIN_SECURITY_PASSWORD}
+        
         instance:
           management-base-url: https://blog-microservice-post.herokuapp.com/
           service-base-url: ${spring.boot.admin.client.instance.management-base-url}
