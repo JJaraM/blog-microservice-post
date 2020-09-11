@@ -28,6 +28,20 @@
     </a>
 </p>
 
+<p align="center">
+    <a href="https://blog-microservice-post.herokuapp.com/">View Demo</a>
+    ·
+    <a href="https://github.com/JJaraM/blog-microservice-post/issues/new/choose">Report Bug</a>
+    ·
+    <a href="https://github.com/JJaraM/blog-microservice-post/issues/new/choose">Request Feature</a>
+</p>
+
+<p align="center">
+    <a href="/docs/README.md">English</a>
+    ·
+    <a href="/docs/README_ES.md">Español</a>
+</p>
+
 # Deploy 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
