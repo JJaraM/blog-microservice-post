@@ -1,4 +1,7 @@
-# Post Web Service
+<p align="center">
+    <img src="https://github.com/JJaraM/blog-microservice-post/blob/master/src/main/resources/logo-210x.png"
+        height="210">
+</p>
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/eab4ac3cb26843d0b860de6c8d344ffa)](https://app.codacy.com/manual/JJaraM/blog-microservice-post?utm_source=github.com&utm_medium=referral&utm_content=JJaraM/blog-microservice-post&utm_campaign=Badge_Grade_Dashboard)
 [![codecov](https://codecov.io/gh/JJaraM/blog-microservice-post/branch/master/graph/badge.svg)](https://codecov.io/gh/JJaraM/blog-microservice-post)
 [![Build Status](https://travis-ci.org/JJaraM/blog-microservice-post.svg?branch=master)](https://travis-ci.org/JJaraM/blog-microservice-post)
@@ -6,6 +9,8 @@
 [![HitCount](http://hits.dwyl.com/JJaraM/blog-microservice-post.svg)](http://hits.dwyl.com/JJaraM/blog-microservice-post)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=blog-microservice-post&style=flat)](https://blog-microservice-post.herokuapp.com/)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/616202951ec1ab5a65bb/test_coverage)](https://codeclimate.com/github/JJaraM/blog-microservice-post/test_coverage)
+
+# Post Web Service
 
 # Deploy 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
