@@ -16,7 +16,11 @@ public class IndexRouter {
 
     @Bean
     public RouterFunction<ServerResponse> htmlRouter() {
-        String content = getIndex("Post Web Service","Post Web Service", "");
+        String content = getIndex(
+                "Post Web Service",
+                "Post Web Service",
+                "webflux, spring-boot, java13, mongo, redis, mockito, junit",
+                "https://github.com/JJaraM/blog-microservice-post");
         return route(GET("/"), request -> ok().contentType(MediaType.TEXT_HTML).bodyValue(content));
     }
 }
