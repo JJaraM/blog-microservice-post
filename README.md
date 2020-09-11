@@ -8,20 +8,25 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/anuraghazra/github-readme-stats/actions">
-      <img alt="" src="" />
+    <a href="https://codecov.io/gh/JJaraM/blog-microservice-post">
+      <img src="https://codecov.io/gh/JJaraM/blog-microservice-post/branch/master/graph/badge.svg" />
+    </a>
+    <a href="https://travis-ci.org/github/JJaraM/blog-microservice-post">
+      <img src="https://travis-ci.org/JJaraM/blog-microservice-post.svg?branch=master" />
+    </a>
+    <a href="https://codeclimate.com/github/JJaraM/blog-microservice-post/maintainability">
+       <img src="https://api.codeclimate.com/v1/badges/616202951ec1ab5a65bb/maintainability" />
+    </a>
+    <a href="https://codeclimate.com/github/JJaraM/blog-microservice-post/test_coverage">
+        <img src="https://api.codeclimate.com/v1/badges/616202951ec1ab5a65bb/test_coverage" />
+    </a>
+     <a href="http://hits.dwyl.com/JJaraM/blog-microservice-post">
+        <img src="http://hits.dwyl.com/JJaraM/blog-microservice-post.svg" />
+    </a>
+     <a href="https://blog-microservice-post.herokuapp.com/">
+        <img src="https://heroku-badge.herokuapp.com/?app=blog-microservice-post&style=flat" />
     </a>
 </p>
-
-
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/eab4ac3cb26843d0b860de6c8d344ffa)](https://app.codacy.com/manual/JJaraM/blog-microservice-post?utm_source=github.com&utm_medium=referral&utm_content=JJaraM/blog-microservice-post&utm_campaign=Badge_Grade_Dashboard)
-[![codecov](https://codecov.io/gh/JJaraM/blog-microservice-post/branch/master/graph/badge.svg)](https://codecov.io/gh/JJaraM/blog-microservice-post)
-[![Build Status](https://travis-ci.org/JJaraM/blog-microservice-post.svg?branch=master)](https://travis-ci.org/JJaraM/blog-microservice-post)
-[![Maintainability](https://api.codeclimate.com/v1/badges/616202951ec1ab5a65bb/maintainability)](https://codeclimate.com/github/JJaraM/blog-microservice-post/maintainability)
-[![HitCount](http://hits.dwyl.com/JJaraM/blog-microservice-post.svg)](http://hits.dwyl.com/JJaraM/blog-microservice-post)
-[![Heroku](https://heroku-badge.herokuapp.com/?app=blog-microservice-post&style=flat)](https://blog-microservice-post.herokuapp.com/)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/616202951ec1ab5a65bb/test_coverage)](https://codeclimate.com/github/JJaraM/blog-microservice-post/test_coverage)
-
 
 # Deploy 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
