@@ -30,6 +30,9 @@ management:
       external-file: "logs/client.log"
 
 spring:
+  shell:
+    interactive:
+      enabled: false
 
   boot:
     admin:
