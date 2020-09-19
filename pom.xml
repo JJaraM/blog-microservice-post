@@ -47,6 +47,8 @@
 		<maven-install-plugin.version>3.0.0-M1</maven-install-plugin.version>
 		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
 		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+
+		<maven.test.skip>true</maven.test.skip>
 	</properties>
 
 	<parent>
@@ -301,13 +303,14 @@
 
 		<plugins>
 
-			<!-- To build the application -->
+			<!-- To build the application
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
 				<version>${maven-install-plugin.version}</version>
 			</plugin>
-
+			-->
+			
 			<!-- To compile the application -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
