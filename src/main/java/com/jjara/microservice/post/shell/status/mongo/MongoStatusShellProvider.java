@@ -14,7 +14,7 @@ public class MongoStatusShellProvider implements StatusShellProvider {
   public String status() {
     var status = new StringBuilder();
     status.append("Database name: ").append(databaseName).append(System.lineSeparator());
-    status.append("uri: ").append(uri).append(System.lineSeparator());
+    status.append("URI: ").append(uri).append(System.lineSeparator());
     return status.toString();
   }
 
