@@ -30,6 +30,7 @@ management:
       external-file: "logs/client.log"
 
 spring:
+
   boot:
     admin:
       client:
