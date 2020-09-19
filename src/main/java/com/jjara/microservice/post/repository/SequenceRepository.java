@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
 import com.jjara.microservice.post.pojo.Sequence;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -17,7 +16,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class SequenceRepository {
 
-	@Autowired private ReactiveMongoTemplate mongoTemplate;
+	@Autowired private ReactiveMongoTemplate reactiveMongoTemplate;
 
 	public Mono<Sequence> getNextSequenceId(final String key) {
 
@@ -33,9 +32,7 @@ public class SequenceRepository {
 		options.returnNew(true);
 
 		// this is the magic happened.
-		Mono<Sequence> seqId = mongoTemplate.findAndModify(query, update, options, Sequence.class);
-
-		return seqId;
+		return reactiveMongoTemplate.findAndModify(query, update, options, Sequence.class, key.concat("_sequence"));
 
 	}
 

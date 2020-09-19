@@ -1,6 +1,13 @@
 server:
   port: ${PORT:5001}
 
+shell:
+  out:
+    info: CYAN
+    success: GREEN
+    warning: YELLOW
+    error: RED
+
 #info:
 #  app:
 #    name: @project.name@
