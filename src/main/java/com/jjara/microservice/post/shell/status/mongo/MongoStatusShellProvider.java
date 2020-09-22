@@ -2,9 +2,11 @@ package com.jjara.microservice.post.shell.status.mongo;
 
 import com.jjara.microservice.post.shell.status.api.StatusShellProvider;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 @Component
+@RefreshScope
 public class MongoStatusShellProvider implements StatusShellProvider {
 
   @Value("${spring.data.mongodb.databaseName}") private String databaseName;

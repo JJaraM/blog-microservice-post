@@ -16,6 +16,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import java.time.Duration;
 
 @Configuration
+@RefreshScope
 public class RedisConfiguration {
 
     @Value("${spring.redis.configuration.host}") private String host;

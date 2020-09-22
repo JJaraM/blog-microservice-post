@@ -8,6 +8,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * https://www.baeldung.com/spring-webflux-cors
  */
 @Configuration
+@RefreshScope
 public class CorsWebFilterConfiguration {
 
 	@Value("${spring.cors.allowed-origin}") private List<String> allowedOrigins;

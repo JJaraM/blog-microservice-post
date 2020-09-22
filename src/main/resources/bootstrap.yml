@@ -1,0 +1,19 @@
+spring:
+
+  application:
+    name: blog-post-microservice
+
+  profiles:
+    active: development
+
+  cloud:
+    services:
+      registrationMethod: route
+    config:
+      name: blog-post-microservice
+      enabled: true
+      uri: https://pr-microservice-config-server.herokuapp.com
+      label: master
+      username: ${spring.cloud.config.username}
+      password: ${spring.cloud.config.password}
+      fail-fast: true

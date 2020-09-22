@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
@@ -16,7 +17,8 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import java.util.Collections;
 
-@Configuration
+//@Configuration
+//@RefreshScope
 public class DiscoveryRegister {
 
     @Resource private RestTemplate restTemplate;
