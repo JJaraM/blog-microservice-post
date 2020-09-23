@@ -34,6 +34,13 @@ public class PostHandler {
 	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
 		var id = getId(serverRequest);
 
+		/*
+				post.setUpdateDate(new Date());
+
+		return repository.save(post)
+			.doOnSuccess(p -> tagPublisher.publish(p.getId(), p.getTags()))
+			.doOnSuccess(postWebSocketPublisher::publishStatus);
+		 */
 		return ok(
 			service.find(id).map(post -> {
 				post.setViews(post.getViews() + 1);
@@ -109,7 +116,7 @@ public class PostHandler {
 			service.find(id).map(post -> {
 				p.setId(p.getId());
 				return p;
-			}).flatMap(service::update));
+			}).flatMap(service::updatePublish));
 	}
 
 	/**
@@ -152,7 +159,7 @@ public class PostHandler {
 			service.find(id).map(post -> {
 				postConsumer.accept(post, p);
 				return post;
-			}).flatMap(service::update));
+			}).flatMap(service::updatePublish));
 	}
 
 	/**

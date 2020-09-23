@@ -116,11 +116,14 @@ public class PostService {
 	 * @return an updated post instance
 	 */
 	public Mono<Post> update(final Post post) {
-		post.setUpdateDate(new Date());
+		return repository.save(post);
+	}
 
-		return repository.save(post)
-			.doOnSuccess(p -> tagPublisher.publish(p.getId(), p.getTags()))
-			.doOnSuccess(postWebSocketPublisher::publishStatus);
+	public Mono<Post> updatePublish(final Post post) {
+		post.setUpdateDate(new Date());
+		return update(post)
+				.doOnSuccess(p -> tagPublisher.publish(p.getId(), p.getTags()))
+				.doOnSuccess(postWebSocketPublisher::publishStatus);
 	}
 
 	/**
