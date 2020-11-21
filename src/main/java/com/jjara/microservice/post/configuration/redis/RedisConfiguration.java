@@ -22,14 +22,18 @@ public class RedisConfiguration {
     @Value("${spring.redis.configuration.host}") private String host;
     @Value("${spring.redis.configuration.port}") private int port;
     @Value("${spring.redis.configuration.password}") private String password;
+    @Value("${REDIS_URL}") private String redisURL;
 
     @Bean
     public RedisClient getRedisClient() {
-        RedisURI redisURI = new RedisURI();
+        /*RedisURI redisURI = new RedisURI();
         redisURI.setHost(host);
         redisURI.setPort(port);
         redisURI.setPassword(password);
-        return RedisClient.create(redisURI);
+        return RedisClient.create(redisURI);*/
+        //RedisURI redisURI = new RedisURI();
+
+        return RedisClient.create(redisURL);
     }
 
     @Bean(destroyMethod = "close")
