@@ -1,4 +1,4 @@
-package com.jjara.microservice.post.builder;
+package com.jjara.microservice.post.pojos;
 
 import java.util.Date;
 
@@ -20,5 +20,5 @@ public class Testimonial {
 	private Date date;
 	private String title;
 	private String img;
-	
+
 }

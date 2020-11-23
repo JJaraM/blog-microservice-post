@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
-import com.jjara.microservice.post.pojo.Testimonial;
+import com.jjara.microservice.post.pojos.Testimonial;
 import com.jjara.microservice.post.repository.TestimonialRepository;
 
 import reactor.core.publisher.Flux;

@@ -1,8 +1,8 @@
 package com.jjara.microservice.post.service;
 
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
-import com.jjara.microservice.post.pojo.Post;
-import com.jjara.microservice.post.pojo.Sequence;
+import com.jjara.microservice.post.pojos.Post;
+import com.jjara.microservice.post.pojos.Sequence;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
@@ -119,10 +119,15 @@ public class PostService {
 		return repository.save(post);
 	}
 
+	/**
+	 * Update the publish date and update its status
+	 * @param post to be updated
+	 * @return an updated post instance
+	 */
 	public Mono<Post> updatePublish(final Post post) {
 		post.setUpdateDate(new Date());
 		return update(post)
-				.doOnSuccess(p -> tagPublisher.publish(p.getId(), p.getTags()))
+				.doOnSuccess(p -> tagPublisher.add(p.getId(), p.getTags()))
 				.doOnSuccess(postWebSocketPublisher::publishStatus);
 	}
 
@@ -194,7 +199,7 @@ public class PostService {
 	 * @param post with the information that we want to notify
 	 */
 	private void publishAdd(final Post post) {
-		tagPublisher.publish(post.getId(), post.getTags());
+		tagPublisher.add(post.getId(), post.getTags());
 	}
 
 	/**

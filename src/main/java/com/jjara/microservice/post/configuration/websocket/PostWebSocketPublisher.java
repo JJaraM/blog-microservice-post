@@ -2,7 +2,7 @@ package com.jjara.microservice.post.configuration.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.pojos.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

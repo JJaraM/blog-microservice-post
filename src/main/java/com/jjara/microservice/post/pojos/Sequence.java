@@ -1,4 +1,4 @@
-package com.jjara.microservice.post.builder;
+package com.jjara.microservice.post.pojos;
 
 
 import lombok.Getter;

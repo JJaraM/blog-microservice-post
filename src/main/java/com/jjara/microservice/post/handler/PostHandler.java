@@ -1,7 +1,7 @@
 package com.jjara.microservice.post.handler;
 
 import com.jjara.microservice.post.api.HandlerParameter;
-import com.jjara.microservice.post.pojo.Post;
+import com.jjara.microservice.post.pojos.Post;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -9,7 +9,6 @@ import com.jjara.microservice.post.service.PostService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.jjara.microservice.post.handler.ResponseHandler.created;
@@ -33,14 +32,6 @@ public class PostHandler {
 	 */
 	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
 		var id = getId(serverRequest);
-
-		/*
-				post.setUpdateDate(new Date());
-
-		return repository.save(post)
-			.doOnSuccess(p -> tagPublisher.publish(p.getId(), p.getTags()))
-			.doOnSuccess(postWebSocketPublisher::publishStatus);
-		 */
 		return ok(
 			service.find(id).map(post -> {
 				post.setViews(post.getViews() + 1);

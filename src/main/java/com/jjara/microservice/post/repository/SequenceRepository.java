@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import com.jjara.microservice.post.pojo.Sequence;
+import com.jjara.microservice.post.pojos.Sequence;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 

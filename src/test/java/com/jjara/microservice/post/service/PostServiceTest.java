@@ -1,9 +1,9 @@
 package com.jjara.microservice.post.service;
 
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
-import com.jjara.microservice.post.pojo.Post;
-import com.jjara.microservice.post.pojo.PostBuilder;
-import com.jjara.microservice.post.pojo.Sequence;
+import com.jjara.microservice.post.pojos.Post;
+import com.jjara.microservice.post.pojos.PostBuilder;
+import com.jjara.microservice.post.pojos.Sequence;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
@@ -74,6 +74,6 @@ public class PostServiceTest {
 
         verify(sequenceRepository).getNextSequenceId(isA(String.class));
         verify(repository, Mockito.atLeastOnce()).save(isA(Post.class));
-        verify(tagPublisher).publish(isA(Long.class), isA(List.class));
+        verify(tagPublisher).add(isA(Long.class), isA(List.class));
     }
 }

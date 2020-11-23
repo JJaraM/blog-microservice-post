@@ -26,10 +26,10 @@ public class TestimonialHandler {
 	 */
 	public Mono<ServerResponse> findAll(ServerRequest serverRequest) {
 		return ok(
-				service.findAll(
-						handlerParameter.page(serverRequest),
-						handlerParameter.size(serverRequest)
-				)
+			service.findAll(
+				handlerParameter.page(serverRequest),
+				handlerParameter.size(serverRequest)
+			)
 		);
 	}
 

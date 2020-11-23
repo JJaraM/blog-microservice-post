@@ -1,6 +1,6 @@
 package com.jjara.microservice.post.handler;
 
-import com.jjara.microservice.post.pojo.PostBuilder;
+import com.jjara.microservice.post.pojos.PostBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.ServerResponse;

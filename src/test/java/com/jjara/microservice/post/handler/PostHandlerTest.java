@@ -2,9 +2,9 @@ package com.jjara.microservice.post.handler;
 
 import com.jjara.microservice.post.configuration.websocket.PostWebSocketPublisher;
 import com.jjara.microservice.post.implementation.DefaultHandlerParameter;
-import com.jjara.microservice.post.pojo.Post;
-import com.jjara.microservice.post.pojo.PostBuilder;
-import com.jjara.microservice.post.pojo.Sequence;
+import com.jjara.microservice.post.pojos.Post;
+import com.jjara.microservice.post.pojos.PostBuilder;
+import com.jjara.microservice.post.pojos.Sequence;
 import com.jjara.microservice.post.publish.RedisPublishTag;
 import com.jjara.microservice.post.repository.PostRepository;
 import com.jjara.microservice.post.repository.SequenceRepository;
@@ -15,8 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
@@ -158,7 +156,7 @@ public class PostHandlerTest {
 
         verify(repository, times(1)).findById(isA(Long.class));
         verify(repository, times(1)).save(isA(Post.class));
-        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(tagPublisher, times(1)).add(isA(Long.class), isA(List.class));
         verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
@@ -206,7 +204,7 @@ public class PostHandlerTest {
 
         verify(repository, times(1)).findById(isA(Long.class));
         verify(repository, times(1)).save(isA(Post.class));
-        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(tagPublisher, times(1)).add(isA(Long.class), isA(List.class));
         verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
@@ -232,7 +230,7 @@ public class PostHandlerTest {
 
         verify(repository, times(1)).findById(isA(Long.class));
         verify(repository, times(1)).save(isA(Post.class));
-        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(tagPublisher, times(1)).add(isA(Long.class), isA(List.class));
         verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
@@ -258,7 +256,7 @@ public class PostHandlerTest {
 
         verify(repository, times(1)).findById(isA(Long.class));
         verify(repository, times(1)).save(isA(Post.class));
-        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(tagPublisher, times(1)).add(isA(Long.class), isA(List.class));
         verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
@@ -314,7 +312,7 @@ public class PostHandlerTest {
 
         verify(repository, times(1)).findById(isA(Long.class));
         verify(repository, times(1)).save(isA(Post.class));
-        verify(tagPublisher, times(1)).publish(isA(Long.class), isA(List.class));
+        verify(tagPublisher, times(1)).add(isA(Long.class), isA(List.class));
         verify(postWebSocketPublisher, times(1)).publishStatus(isA(Post.class));
     }
 
