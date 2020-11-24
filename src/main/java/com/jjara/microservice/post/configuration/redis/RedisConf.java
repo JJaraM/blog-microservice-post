@@ -1,4 +1,4 @@
-package com.jjara.microservice.post.configuration.redis;
+/*package com.jjara.microservice.post.configuration.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -68,3 +68,4 @@ public class RedisConf {
     }
 
 }
+*/
