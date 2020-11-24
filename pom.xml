@@ -289,9 +289,10 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven-surefire-plugin.version}</version>
-					<!--<configuration>
-						<skipTests>true</skipTests>
-					</configuration>-->
+					<configuration>
+						<testFailureIgnore>true</testFailureIgnore>
+						<shutdown>kill</shutdown> <!-- Use it if required-->
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
