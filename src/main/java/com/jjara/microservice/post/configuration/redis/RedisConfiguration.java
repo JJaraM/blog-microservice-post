@@ -13,14 +13,25 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
+import javax.annotation.PostConstruct;
 import java.time.Duration;
 
 @Configuration
 public class RedisConfiguration {
 
-    @Value("${spring.redis.configuration.host}") private String host;
-    @Value("${spring.redis.configuration.port}") private int port;
-    @Value("${spring.redis.configuration.password}") private String password;
+    @Value("${REDIS_URL}") private String redisURL;
+
+    private String host;
+    private int port;
+    private String password;
+
+    @PostConstruct
+    private void populate() {
+        String[] parts = redisURL.split("@");
+        host = parts[1].split(":")[0];
+        port = Integer.valueOf(parts[1].split(":")[1]);
+        password = parts[0].replaceAll("redis://h:", "");
+    }
 
     @Bean
     public RedisClient getRedisClient() {
