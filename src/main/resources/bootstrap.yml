@@ -1,14 +1,12 @@
 spring:
   profiles:
     include:
-      - blog-post-microservice
-      - blog-post-microservice-${spring.profiles.active}
-      - redis-${spring.profiles.active}
-      - blog-post-microservice-${spring.profiles.active}
+      - blog-microservice-post
+      - blog-microservice-post-${spring.profiles.active}
       - eureka-client-${spring.profiles.active}
       - log
       - management
-      - mongo-dev
+      - mongo-${spring.profiles.active}
       - open-api
       - redis-${spring.profiles.active}
       - shell-${spring.profiles.active}
