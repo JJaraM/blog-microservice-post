@@ -1,10 +1,9 @@
 spring:
 
-  application:
-    name: blog-post-microservice
+
 
   profiles:
-    active:
+    include:
       - development
       - open-api
       - eureka-client
@@ -15,6 +14,4 @@ spring:
       enabled: true
       uri: https://pr-microservice-config-server.herokuapp.com
       label: master
-      username: ${spring.cloud.config.username}
-      password: ${spring.cloud.config.password}
       fail-fast: true

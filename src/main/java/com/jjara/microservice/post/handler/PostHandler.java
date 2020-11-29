@@ -31,9 +31,8 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
-		var id = getId(serverRequest);
 		return ok(
-			service.find(id).map(post -> {
+			service.find(handlerParameter.id(serverRequest)).map(post -> {
 				post.setViews(post.getViews() + 1);
 				return post;
 			}).flatMap(service::update)
@@ -88,10 +87,8 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> deleteById(final ServerRequest serverRequest) {
-		var id = getId(serverRequest);
-
 		return ok(
-			service.delete(id)
+			service.delete(handlerParameter.id(serverRequest))
 		);
 	}
 
@@ -101,10 +98,8 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> updateById(final ServerRequest serverRequest) {
-		var id = getId(serverRequest);
-
 		return response(serverRequest, p ->
-			service.find(id).map(post -> {
+			service.find(handlerParameter.id(serverRequest)).map(post -> {
 				p.setId(p.getId());
 				return p;
 			}).flatMap(service::updatePublish));
@@ -144,22 +139,11 @@ public class PostHandler {
 	 * @return a server response with the result of the request
 	 */
 	private Mono<ServerResponse> update(final ServerRequest serverRequest, BiConsumer<Post, Post> postConsumer) {
-		var id = getId(serverRequest);
-
 		return response(serverRequest, p ->
-			service.find(id).map(post -> {
+			service.find(handlerParameter.id(serverRequest)).map(post -> {
 				postConsumer.accept(post, p);
 				return post;
 			}).flatMap(service::updatePublish));
-	}
-
-	/**
-	 * Gets the id from the request
-	 * @param serverRequest with the request data
-	 * @return
-	 */
-	private long getId(final ServerRequest serverRequest) {
-		return handlerParameter.id(serverRequest);
 	}
 
 	/**
