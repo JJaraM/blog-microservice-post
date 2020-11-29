@@ -39,7 +39,7 @@
 		<lettuce-core.version>5.3.3.RELEASE</lettuce-core.version>
 		<byte-buddy.version>1.10.7</byte-buddy.version>
 
-		<spring-cloud-dependencies.version>Hoxton.SR8</spring-cloud-dependencies.version>
+		<spring-cloud-dependencies.version>Hoxton.SR9</spring-cloud-dependencies.version>
 
 		<!-- Plugin Versions -->
 		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
@@ -95,12 +95,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>de.codecentric</groupId>
-			<artifactId>spring-boot-admin-starter-client</artifactId>
-			<version>2.2.3</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
@@ -128,45 +122,6 @@
 			<artifactId>springdoc-openapi-webflux-ui</artifactId>
 			<version>1.4.5</version>
 		</dependency>
-
-		<!-- Spring Fox Dependencies
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${io.springfox.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-spring-webflux</artifactId>
-			<version>${io.springfox.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${io.springfox.version}</version>
-		</dependency>
- -->
-
-
-		<!-- Security
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-		</dependency>
- -->
-
-		<!--
-		I don't remember why I comment this
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-oauth2-resource-server</artifactId>
-			<version>5.3.1.RELEASE</version>
-		</dependency>
--->
 
 		<!-- Redis, Jedis, Lettuce for subscriptions -->
 		<dependency>
@@ -259,12 +214,12 @@
 			<version>1.2-SNAPSHOT</version>
 		</dependency>
 
-		<!-- Eureka Client
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-		 -->
+
 	</dependencies>
 
 	<!-- Spring Cloud dependencies -->

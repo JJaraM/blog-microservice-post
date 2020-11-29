@@ -3,6 +3,7 @@ package com.jjara.microservice.post.configuration.websocket;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jjara.microservice.post.pojos.Post;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import reactor.core.publisher.FluxProcessor;
 import reactor.core.publisher.FluxSink;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 public class PostWebSocketPublisher {
 
@@ -20,7 +22,6 @@ public class PostWebSocketPublisher {
 
     private final FluxProcessor<String, String> processor;
     private final FluxSink<String> sink;
-    private Logger logger = LoggerFactory.getLogger(PostWebSocketPublisher.class);
 
     public PostWebSocketPublisher() {
         this.processor = DirectProcessor.<String>create().serialize();
@@ -35,7 +36,7 @@ public class PostWebSocketPublisher {
         try {
             sink.next(objectMapper.writeValueAsString(post));
         } catch (JsonProcessingException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 }

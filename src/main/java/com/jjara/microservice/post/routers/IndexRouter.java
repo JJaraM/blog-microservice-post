@@ -1,5 +1,6 @@
 package com.jjara.microservice.post.routers;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -14,13 +15,14 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Configuration
 public class IndexRouter {
 
+    @Value("${page.index.metadata.title}") private String title;
+    @Value("${page.index.metadata.description}") private String description;
+    @Value("${page.index.metadata.stack}") private String stack;
+    @Value("${page.index.metadata.repository}") private String repository;
+
     @Bean
     public RouterFunction<ServerResponse> htmlRouter() {
-        String content = getIndex(
-                "Post Web Service",
-                "Post Web Service",
-                "webflux, spring-boot, java13, mongo, redis, mockito, junit",
-                "https://github.com/JJaraM/blog-microservice-post");
+        var content = getIndex(title, description, stack, repository);
         return route(GET("/"), request -> ok().contentType(MediaType.TEXT_HTML).bodyValue(content));
     }
 }

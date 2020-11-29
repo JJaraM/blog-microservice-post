@@ -4,13 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
-/**
- * Application that needs to run to start the application.
- * 
- * @since 0.0.1
- * @author jonathan
- */
+
+@EnableDiscoveryClient
 @SpringBootApplication
 public class Application {
 
@@ -19,7 +16,7 @@ public class Application {
     }
 
     @Bean
-    public HttpTraceRepository httpTraceRepository() {
+    HttpTraceRepository httpTraceRepository() {
         return new InMemoryHttpTraceRepository();
     }
 

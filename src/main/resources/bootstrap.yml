@@ -4,13 +4,14 @@ spring:
     name: blog-post-microservice
 
   profiles:
-    active: development
-
+    active:
+      - development
+      - open-api
+      - eureka-client
   cloud:
     services:
       registrationMethod: route
     config:
-      name: blog-post-microservice
       enabled: true
       uri: https://pr-microservice-config-server.herokuapp.com
       label: master

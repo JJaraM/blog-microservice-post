@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +23,7 @@ public class CorsWebFilterConfiguration {
 
 	@Bean
 	CorsWebFilter corsWebFilter() {
-		CorsConfiguration config = new CorsConfiguration();
+		var config = new CorsConfiguration();
 		config.setAllowedOrigins(allowedOrigins);
 		config.setAllowedMethods(Arrays.asList(
 			HttpMethod.GET.name(),
@@ -34,7 +33,7 @@ public class CorsWebFilterConfiguration {
 		));
 		config.addAllowedHeader("*");
 
-	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    var source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("/**", config);
 
 	    return new CorsWebFilter(source);

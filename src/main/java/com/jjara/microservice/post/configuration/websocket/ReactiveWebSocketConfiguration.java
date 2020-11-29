@@ -16,7 +16,7 @@ public class ReactiveWebSocketConfiguration {
     private WebSocketHandler webSocketHandler;
 
     @Bean
-    public HandlerMapping webSocketHandlerMapping() {
+    HandlerMapping webSocketHandlerMapping() {
         var map = new HashMap<String, WebSocketHandler>();
         map.put("/ws/post", webSocketHandler);
 
@@ -27,7 +27,7 @@ public class ReactiveWebSocketConfiguration {
     }
 
     @Bean
-    public WebSocketHandlerAdapter handlerAdapter() {
+    WebSocketHandlerAdapter handlerAdapter() {
         return new WebSocketHandlerAdapter();
     }
 
