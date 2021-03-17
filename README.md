@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/JJaraM/blog-microservice-post/blob/master/src/main/resources/logo-210x.png" height="210">
+    <img src="https://github.com/JJaraM/blog-microservice-ui/blob/master/src/main/resources/public/logo-210x.png" height="210">
 </p>
 
 <p align="center">
