@@ -9,14 +9,13 @@ import org.springframework.context.annotation.Bean;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-public class Application {
+public class PostApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(PostApplication.class, args);
     }
 
-    @Bean
-    HttpTraceRepository httpTraceRepository() {
+    @Bean HttpTraceRepository httpTraceRepository() {
         return new InMemoryHttpTraceRepository();
     }
 

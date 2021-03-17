@@ -33,9 +33,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>13</java.version>
+		<java.version>15</java.version>
 		<io.springfox.version>3.0.0-SNAPSHOT</io.springfox.version>
-		<start-class>com.jjara.microservice.post.Application</start-class>
+		<start-class>com.jjara.microservice.post.PostApplication</start-class>
 		<lettuce-core.version>5.3.3.RELEASE</lettuce-core.version>
 		<byte-buddy.version>1.10.7</byte-buddy.version>
 
@@ -208,7 +208,7 @@
 		<dependency>
 			<groupId>com.jjara.microservice</groupId>
 			<artifactId>blog-microservice-ui</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>1.4-SNAPSHOT</version>
 		</dependency>
 
 
