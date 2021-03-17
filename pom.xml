@@ -43,7 +43,7 @@
 
 		<!-- Plugin Versions -->
 		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
-		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
 		<maven-install-plugin.version>3.0.0-M1</maven-install-plugin.version>
 		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
 		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
