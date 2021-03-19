@@ -1,5 +1,5 @@
 # For Java 11, try this
-FROM adoptopenjdk/openjdk13:alpine-jre
+FROM adoptopenjdk/openjdk14:alpine-jre
 
 # Refer to Maven build -> finalName
 ARG JAR_FILE=target/post-microservice.jar
