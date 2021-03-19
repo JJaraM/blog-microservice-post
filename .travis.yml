@@ -1,38 +1,22 @@
-# This enables the 'defaults' to test java applications:
 language: java
-
-# We can specify a list of JDKs to be used for testing
-# A list of available JDKs in Trusty can be seed in:
-# https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
 jdk:
-  - openjdk14
-
+- openjdk14
 before_install:
-  - cp .travis.settings.xml $HOME/.m2/settings.xml
-  - mvn dependency:go-offline
-
-#script:
-#  - mvn clean install site
-
-# To generate a token please use travis and heroku cli
-# Warning: token will expire 04/25/2021
-# https://docs.travis-ci.com/user/deployment/heroku/
+- cp .travis.settings.xml $HOME/.m2/settings.xml
+- mvn dependency:go-offline
 deploy:
   provider: heroku
   api_key:
-    secure: rJ/b/U+FjzHZ7Nt81Q+aGBFsI63/WsM9kSxhIs/gkH/MQSv4TOptP9daRuZgB9zWqDkjhQLxTaDBru3mcdhDv0s02iyviIa1/snp6mzq3j3888v3BXzCYUNqn7XdFMxORsd8DDF4yYFnkHRgSoiktb+XMAyfQ8CdYVkqqFKYP2MmMvp7HB8NSQ6l/ZqTvWTBqYKezqsuEPhzjXVg/je1qvO3Ee+LQBg0jGI6qQwFUNZPWnOm6ot0GfUkMQ8VdswZo7lWLO+DIRylIU6BoZ60Fou0mjwrhuhJLZoelS088+os2P9MJwdQw6ugOk6NrGp5U9+NzioUTW6h/VqWh6niAliK2w3J5grtnzctGnUUpxSAOJV1kHoZvEQrhDNYaPLL7j+Wpq2VIX4uPRe2Oul0wdMcdYoPuiUgIN088VBCPTrdrLiJyvs6kfJ+6/XL3DzS3UonVyBdh7lbApDTvevmPCegEbk8oKVW/IWZ2IaXfG8262WbKAip59NZLGkySbJoBSWTEfdTVrB8m7EB6tbEWWHCfXPZSLSdsziXCv+GQXTTMoEdnuPpOlf4NEPSHtuWSc9IISots4GMbO8sGYipaV1zGH1pLb9iWLno0ix27bkMRybVPXS55V9tRIPQoRyum34gB0nG0aMY5VsScUVewIaJKJtffw4/s132B1pjN5U=
-
+    secure: R0W35YNe42vadxz+pq/dV7SIV2Z/5M4nBNlr9qy4F9jX10BERqQkWTP82WH/wf+maJ1cskUIYDcasToAiOWCD6RKAkkdpb2XU5S2cnjpxdsNM/UXkbBGkRMXeOlVcPYv2OWByBszAnbpqScqgxp/chsq/Ntg96Gly6WpQ23Y4cw3ip2MC110ez81ESdUxD315NXn82Rm9+Q7qy/0rf414QzP+4O6zDrI6A87Oz9Pp4/tFSg7rTVFjGbS8Bf9zstzL1qoMgNeCS3tFsUmTe4p+o65F9WT2Zh/s+x6bHa8TnpOSukFoMAL+Y+1D/9WD1uM7i+JEXzLIRnYIPM/7wozIgdYHGRicgZM/cuA+JW4y1/kfbQx5+FZtLliEzpVhRPrbZO0ErDmmcpwmIRDnEz7AwUldxA6GvfiTZiQh2UbDf+F2zuIPXLfeB+Du4Voytg1bUP7ec6JVIQiCxxHJs13FVIzBS/tOMyAVXLeEikCp3Cqd6eleYaYY4vTwYRLQioHCfz6V6yX1Efdowtbb0kuM57HoZb4/0O79rTJ8jV+ug9H3JwmjSvMl5VYakKjg/vkjBv+HUP5CS9Mj50R3K2cv9Q9moEcm8FYzsXnjZi3RPZWVncDvKR4kxdMf7I2klcGWXwNann299eSdsU24lHFPYDSdR0Jj8+RmE225Dwf65s=
 env:
   global:
-    - CC_TEST_REPORTER_ID=6852096fff8d221e182d7b8d6a3b86d3a0266e80539b96fd8f2e970526b5c4a3
-
+  - CC_TEST_REPORTER_ID=6852096fff8d221e182d7b8d6a3b86d3a0266e80539b96fd8f2e970526b5c4a3
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+  > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
+- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
