@@ -15,7 +15,7 @@ import java.util.List;
  * Allows to configure the cors for the web service, for more details please visit:
  * https://www.baeldung.com/spring-webflux-cors
  */
-@Configuration
+/*@Configuration
 @RefreshScope
 public class CorsWebFilterConfiguration {
 
@@ -39,3 +39,4 @@ public class CorsWebFilterConfiguration {
 	    return new CorsWebFilter(source);
 	}
 }
+*/
