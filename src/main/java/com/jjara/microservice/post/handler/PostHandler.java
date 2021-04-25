@@ -2,14 +2,23 @@ package com.jjara.microservice.post.handler;
 
 import com.jjara.microservice.post.api.HandlerParameter;
 import com.jjara.microservice.post.pojos.Post;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.service.PostService;
 import reactor.core.publisher.Mono;
+
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.jjara.microservice.post.handler.ResponseHandler.created;
 import static com.jjara.microservice.post.handler.ResponseHandler.ok;
@@ -19,10 +28,12 @@ import static com.jjara.microservice.post.handler.ResponseHandler.ok;
  * @author Jonathan Jara Morales
  */
 @Component
+@Slf4j
 public class PostHandler {
 
 	@Resource private PostService service;
 	@Resource private HandlerParameter<ServerRequest> handlerParameter;
+	private final String EMBEDDED_KEY = "[embedded:http-get-call]";
 
 	/**
 	 * Find a post by id
@@ -35,8 +46,77 @@ public class PostHandler {
 			service.find(handlerParameter.id(serverRequest)).map(post -> {
 				post.setViews(post.getViews() + 1);
 				return post;
-			}).flatMap(service::update)
+			}).flatMap(service::update).map(post -> {
+				var httpRequests = getRequests(post);
+				var postUpdated = post;
+				if (post.getContent().contains(EMBEDDED_KEY)) {
+					var mono = Mono.zip(httpRequests, (a) -> (ContentRequest) a[0]).map(
+						contentRequest -> contentRequest.getContent().map(content -> {
+							post.setContent(getNewContent(post, content));
+							return post;
+						})
+					).flatMap(a -> a.map(z -> z));
+					postUpdated = mono.block();
+				}
+				return postUpdated;
+			})
 		);
+	}
+
+	private List<Mono<ContentRequest>> getRequests(Post post) {
+		var postContentLines = post.getContent().split(System.lineSeparator());
+		var httpRequests = new ArrayList<Mono<ContentRequest>>();
+
+		for (var postContentEvaluationLine : postContentLines) {
+			if (isEmbeddedCall(postContentEvaluationLine)) {
+				var httpRequest = replaceEmbeddedSection(postContentEvaluationLine, "");
+				if (isAllowedRequest(httpRequest)) {
+					httpRequests.add(
+						getWebClient()
+							.get()
+							.uri(httpRequest)
+							.exchange().map(ex -> {
+								var request = new ContentRequest();
+								request.setPreContent(postContentEvaluationLine);
+								request.setContent(ex.bodyToMono(String.class));
+								return request;
+							}
+						)
+					);
+				}
+			}
+		}
+
+		return httpRequests;
+	}
+
+	private String getNewContent(final Post post, String content) {
+		var lines = post.getContent().split("\n");
+		var newContent = new ArrayList<String>();
+		for (String line: lines) {
+			if (isEmbeddedCall(line)) {
+				newContent.add(content);
+			} else {
+				newContent.add(line);
+			}
+		}
+		return String.join("", newContent.toArray(String[]::new));
+	}
+
+	private boolean isEmbeddedCall(final String line) {
+		return line.startsWith(EMBEDDED_KEY) && line.endsWith(EMBEDDED_KEY);
+	}
+
+	private String replaceEmbeddedSection(final String line, final String content) {
+		return line.replaceAll("\\[embedded:http\\-get\\-call]", content);
+	}
+
+	private boolean isAllowedRequest(final String httpRequest) {
+		return httpRequest.contains("https://raw.githubusercontent.com/jjaram");
+	}
+
+	private WebClient getWebClient() {
+		return WebClient.builder().build();
 	}
 
 	/**
@@ -193,4 +273,10 @@ public class PostHandler {
 		return created(serverRequest.bodyToMono(Post.class).flatMap(function));
 	}
 
+	@Getter
+	@Setter
+	private static class ContentRequest {
+		private Mono<String> content;
+		private String preContent;
+	}
 }

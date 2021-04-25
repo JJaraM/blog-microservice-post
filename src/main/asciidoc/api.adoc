@@ -1,0 +1,58 @@
+= RESTful Post API Guide
+Jonathan Jara;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+= Overview
+List of operations supported by the web service.
+
+== Retrieve By Id
+CRUD Operation that will retrieve a post information based on the post id
+
+
+=== HTTP Request
+Retrieves a post by `id`
+include::{snippets}/findById/http-request.adoc[]
+
+==== HTTP Path Parameters
+include::{snippets}/findById/path-parameters.adoc[]
+
+==== HTTP Curl Request
+Example of curl request:
+include::{snippets}/findById/curl-request.adoc[]
+
+==== HTTP Pie Request
+Example of pie request
+include::{snippets}/findById/httpie-request.adoc[]
+
+[[overview-http-verbs]]
+==== HTTP verbs
+|===
+| Verb | Usage
+| `GET`
+| Used to retrieve a resource
+|===
+
+
+[[resources-car-get]]
+=== HTTP Response
+
+A `GET` request is used to get a specific car
+
+==== HTTP Response Fields
+List of fields that are contained in the http response:
+include::{snippets}/findById/response-fields.adoc[]
+
+==== HTTP Response Structure
+Example of HTTP Response that you are going to receive when search a
+post by id.
+include::{snippets}/findById/response-body.adoc[]
+
+==== HTTP Response Example
+Example of the HTTP Response that you will get.
+include::{snippets}/findById/http-response.adoc[]

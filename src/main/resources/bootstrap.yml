@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: post-ws
   profiles:
     include:
       - blog-microservice-post

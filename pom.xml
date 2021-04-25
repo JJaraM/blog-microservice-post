@@ -42,13 +42,13 @@
 		<spring-cloud-dependencies.version>Hoxton.SR9</spring-cloud-dependencies.version>
 
 		<!-- Plugin Versions -->
-		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+		<maven-surefire-plugin.version>3.0.0-M1</maven-surefire-plugin.version>
 		<jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
 		<maven-install-plugin.version>3.0.0-M1</maven-install-plugin.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-		<!--
-                <maven.test.skip>true</maven.test.skip>-->
+
+		<snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
 	</properties>
 
 	<parent>
@@ -87,6 +87,24 @@
 	</repositories>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>io.r2dbc</groupId>
+			<artifactId>r2dbc-postgresql</artifactId>
+			<version>0.8.7.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.r2dbc</groupId>
+			<artifactId>r2dbc-pool</artifactId>
+			<version>0.9.0.M1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.restdocs</groupId>
+			<artifactId>spring-restdocs-webtestclient</artifactId>
+			<version>2.0.5.RELEASE</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
@@ -155,6 +173,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency> -->
+
 		<!-- Spring Web Flux -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -210,8 +233,6 @@
 			<artifactId>blog-microservice-ui</artifactId>
 			<version>1.4-SNAPSHOT</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -256,13 +277,65 @@
 
 		<plugins>
 
-			<!-- To build the application -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+								${project.build.outputDirectory}/static/docs
+							</outputDirectory>
+							<resources>
+								<resource>
+									<directory>
+										${project.build.directory}/generated-docs
+									</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Ascii Doctor For Spring Rest Docs -->
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>1.5.2</version>
+				<executions>
+					<execution>
+						<id>generate-docs</id>
+						<phase>package</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>html</backend>
+							<doctype>book</doctype>
+							<attributes>
+								<snippets>${snippetsDirectory}</snippets>
+							</attributes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+
+			<!-- To build the application
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
 				<version>${maven-install-plugin.version}</version>
 			</plugin>
-
+-->
 			<!-- To compile the application -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -302,30 +375,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-			<!-- To copy the assets -->
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>${maven-resources-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
-									<directory>src/main/assets</directory>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-							<outputDirectory>${basedir}/target/classes/assets</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- Maven Assembly Plugin
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -337,7 +386,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.jjara.microservice.post.Application</mainClass>
+							<mainClass>com.jjara.microservice.post.com.jjara.webflux.Application</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

@@ -82,6 +82,12 @@ To run in docker you need to run the following commands:
 
 The properies.yml will contains the environment variables like:
 
+# How to run maven
+
+```
+mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+```
+
 ```
 MONGODB_URI:
 REDIS_CHANNEL_TAG:

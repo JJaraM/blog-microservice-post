@@ -12,7 +12,9 @@ import com.jjara.microservice.post.routers.PostRouterFunction;
 import com.jjara.microservice.post.service.PostService;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -20,6 +22,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -28,6 +32,14 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -55,31 +67,56 @@ public class PostHandlerTest {
     private final int sort = 0;
     private final int tag = 0;
     private final String title = "text";
+    @Rule public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
 
     @Before
     public void setUp() {
-        webClient = WebTestClient.bindToApplicationContext(context).build();
+        webClient = WebTestClient.bindToApplicationContext(context)
+            .configureClient()
+            .filter(documentationConfiguration(restDocumentation)
+                .operationPreprocessors().withResponseDefaults(prettyPrint()))
+            .build();
     }
 
     @Test
+    @DisplayName("GET /post/{id}")
     public void findById() {
         var id = 1L;
         var title = "title";
 
-        final Post mockInstance = new PostBuilder().setId(id).setTitle(title).build();
+        final Post mockInstance = new PostBuilder()
+            .setId(id).setTitle(title)
+            .setViews(10).setContent("Post Content")
+            .setImage("http://jonathan.jara.morales/img/01")
+            .setCreateDate(new Date()).setUpdateDate(new Date())
+            .setTags(Arrays.asList(1L, 2L, 3L))
+            .setDescription("Post Description")
+            .setLink("http://jonathan.jara.morales/link")
+            .build();
+
         when(repository.findById(id)).thenReturn(Mono.just(mockInstance));
         when(repository.save(Mockito.any())).thenReturn(Mono.just(mockInstance));
 
-        final String path = "/post/".concat(String.valueOf(id));
-
-        webClient.get().uri(path).exchange().expectStatus().isOk().expectBody(Post.class).consumeWith(result -> {
-            Post post = result.getResponseBody();
-            Assertions.assertThat(mockInstance.getId()).isEqualTo(post.getId());
-            Assertions.assertThat(mockInstance.getTitle()).isEqualTo(post.getTitle());
-        });
-
-        verify(repository, times(1)).findById(isA(Long.class));
-        verify(repository, times(1)).save(isA(Post.class));
+        webClient.get().uri("/post/{id}", id)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange().expectStatus().isOk().expectBody()
+            .consumeWith(document("findById",
+                pathParameters(
+                    parameterWithName("id").description("ID: Post Id")
+                ),
+                responseFields(
+                    fieldWithPath("id").description("The post's id").type(JsonFieldType.NUMBER),
+                    fieldWithPath("views").description("The count of visits that have received the post").type(JsonFieldType.NUMBER),
+                    fieldWithPath("title").description("The post's id").type(JsonFieldType.STRING),
+                    fieldWithPath("content").description("The post's id").type(JsonFieldType.STRING),
+                    fieldWithPath("image").description("The post's id").type(JsonFieldType.STRING),
+                    fieldWithPath("createDate").description("The post's id").type(JsonFieldType.STRING),
+                    fieldWithPath("updateDate").description("The post's id").type(JsonFieldType.STRING),
+                    fieldWithPath("tags").description("The post's id").type(JsonFieldType.ARRAY),
+                    fieldWithPath("description").description("The post's id").type(JsonFieldType.STRING),
+                    fieldWithPath("link").description("The post's id").type(JsonFieldType.STRING)
+                )
+        ));
     }
 
     @Test

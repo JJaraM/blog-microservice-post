@@ -20,8 +20,9 @@ public class IndexRouter {
     @Value("${page.index.metadata.stack}") private String stack;
     @Value("${page.index.metadata.repository}") private String repository;
 
-    @Bean public RouterFunction<ServerResponse> htmlRouter() {
-        var content = getIndex(title, description, stack, repository, "swagger-ui.html");
+    @Bean
+    public RouterFunction<ServerResponse> htmlRouter() {
+        var content = getIndex(title, description, stack, repository, "webjars/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config");
         return route(GET("/"), request -> ok().contentType(MediaType.TEXT_HTML).bodyValue(content));
     }
 }
