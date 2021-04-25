@@ -17,6 +17,31 @@ public class PostBuilder {
     private String description;
     private String link;
 
+    private PostBuilder() {
+
+    }
+
+    private PostBuilder(Post post) {
+        this.id = post.getId();
+        this.views = post.getViews();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.image = post.getImage();
+        this.createDate = post.getCreateDate();
+        this.updateDate = post.getUpdateDate();
+        this.tags = post.getTags();
+        this.description = post.getDescription();
+        this.link = post.getLink();
+    }
+
+    public static PostBuilder newInstance() {
+        return new PostBuilder();
+    }
+
+    public static PostBuilder newInstance(Post post) {
+        return new PostBuilder(post);
+    }
+
     public PostBuilder setId(long id) {
         this.id = id;
         return this;

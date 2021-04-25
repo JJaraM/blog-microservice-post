@@ -28,7 +28,7 @@ public class ResponseHandlerTest {
 
     @Test
     public void when_mono_ok_with_validData() {
-        Mono<ServerResponse> serverResponseMono = ResponseHandler.ok(Mono.just(new PostBuilder().build()));
+        Mono<ServerResponse> serverResponseMono = ResponseHandler.ok(Mono.just(PostBuilder.newInstance().build()));
         StepVerifier.create(serverResponseMono)
                 .expectNextMatches(serverResponse -> HttpStatus.OK.equals(serverResponse.statusCode()))
                 .verifyComplete();
@@ -52,7 +52,7 @@ public class ResponseHandlerTest {
 
     @Test
     public void when_mono_flux_with_validData() {
-        Mono<ServerResponse> serverResponseMono = ResponseHandler.ok(Flux.just(new PostBuilder().build()));
+        Mono<ServerResponse> serverResponseMono = ResponseHandler.ok(Flux.just(PostBuilder.newInstance().build()));
         StepVerifier.create(serverResponseMono)
                 .expectNextMatches(serverResponse -> HttpStatus.OK.equals(serverResponse.statusCode()))
                 .verifyComplete();

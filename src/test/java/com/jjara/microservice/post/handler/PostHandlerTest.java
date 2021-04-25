@@ -84,7 +84,7 @@ public class PostHandlerTest {
         var id = 1L;
         var title = "title";
 
-        final Post mockInstance = new PostBuilder()
+        final Post mockInstance = PostBuilder.newInstance()
             .setId(id).setTitle(title)
             .setViews(10).setContent("Post Content")
             .setImage("http://jonathan.jara.morales/img/01")
@@ -121,9 +121,9 @@ public class PostHandlerTest {
 
     @Test
     public void findAll() {
-        final Post mockInstance = new PostBuilder().setId(3L).setTitle("Title 1L").build();
+        final Post mockInstance = PostBuilder.newInstance().setId(3L).setTitle("Title 1L").build();
 
-        final var mockInstance2 = new PostBuilder().setId(4L).setTitle("Title 2L").build();
+        final var mockInstance2 = PostBuilder.newInstance().setId(4L).setTitle("Title 2L").build();
 
         when(repository.findAll(isA(Pageable.class))).thenReturn(Flux.just(mockInstance, mockInstance2));
 
@@ -138,8 +138,8 @@ public class PostHandlerTest {
 
     @Test
     public void findByTitle() {
-        final var mockInstance = new PostBuilder().setId(3L).setTitle("Title 1L").build();
-        final var mockInstance2 = new PostBuilder().setId(4L).setTitle("Title 2L").build();
+        final var mockInstance = PostBuilder.newInstance().setId(3L).setTitle("Title 1L").build();
+        final var mockInstance2 = PostBuilder.newInstance().setId(4L).setTitle("Title 2L").build();
 
         when(repository.findByTitle(isA(Pageable.class), isA(String.class))).thenReturn(Flux.just(mockInstance, mockInstance2));
 
@@ -154,7 +154,7 @@ public class PostHandlerTest {
 
     @Test
     public void deleteById() {
-        final var post = new PostBuilder().setTitle("Title 2L").setId(1L).build();
+        final var post = PostBuilder.newInstance().setTitle("Title 2L").setId(1L).build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
         when(repository.deleteById(isA(Long.class))).thenReturn(Mono.empty());
@@ -175,7 +175,7 @@ public class PostHandlerTest {
 
     @Test
     public void updateById() {
-        final var mockInstance = new PostBuilder().setId(1L).setTitle("Title 2L").build();
+        final var mockInstance = PostBuilder.newInstance().setId(1L).setTitle("Title 2L").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(mockInstance));
         doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
@@ -200,8 +200,8 @@ public class PostHandlerTest {
     @Test
     public void updateTitleById() {
         final var id = 1L;
-        final var oldPost = new PostBuilder().setId(id).setTitle("Title 1L").build();
-        final var updatedPost = new PostBuilder()
+        final var oldPost = PostBuilder.newInstance().setId(id).setTitle("Title 1L").build();
+        final var updatedPost = PostBuilder.newInstance()
                 .setTitle("Title")
                 .setLink("Link")
                 .setViews(10)
@@ -247,7 +247,7 @@ public class PostHandlerTest {
 
     @Test
     public void updateContentById() {
-        final var post = new PostBuilder().setId(1L).setContent("Content").build();
+        final var post = PostBuilder.newInstance().setId(1L).setContent("Content").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
         doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
@@ -273,7 +273,7 @@ public class PostHandlerTest {
 
     @Test
     public void updateImageById() {
-        final var post = new PostBuilder().setId(1L).setImage("Image").build();
+        final var post = PostBuilder.newInstance().setId(1L).setImage("Image").build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(post));
         doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
@@ -299,8 +299,8 @@ public class PostHandlerTest {
 
     @Test
     public void create() {
-        final var existedPost = new PostBuilder().setId(1L).setTitle("Title").build();
-        final var newPost = new PostBuilder().setTitle("Title").build();
+        final var existedPost = PostBuilder.newInstance().setId(1L).setTitle("Title").build();
+        final var newPost = PostBuilder.newInstance().setTitle("Title").build();
 
         final Sequence sequence = new Sequence();
         sequence.setSeq(1L);
@@ -328,8 +328,8 @@ public class PostHandlerTest {
     public void addTag() {
         final Long postId = 1L;
 
-        final var existedPost  = new PostBuilder().setId(postId).setTitle("Title 2L").build();
-        final var changedPost = new PostBuilder().setId(postId).setTags(Collections.singletonList(1L)).build();
+        final var existedPost  = PostBuilder.newInstance().setId(postId).setTitle("Title 2L").build();
+        final var changedPost = PostBuilder.newInstance().setId(postId).setTags(Collections.singletonList(1L)).build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
         doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));
@@ -357,8 +357,8 @@ public class PostHandlerTest {
     public void removeTag() {
         final Long postId = 1L;
 
-        final var existedPost  = new PostBuilder().setId(postId).setTitle("Title 2L").build();
-        final var changedPost = new PostBuilder().setId(postId).setTags(Collections.singletonList(1L)).build();
+        final var existedPost  = PostBuilder.newInstance().setId(postId).setTitle("Title 2L").build();
+        final var changedPost = PostBuilder.newInstance().setId(postId).setTags(Collections.singletonList(1L)).build();
 
         when(repository.findById(isA(Long.class))).thenReturn(Mono.just(existedPost));
         doAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))).when(repository).save(isA(Post.class));

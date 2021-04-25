@@ -51,7 +51,7 @@ public class PostServiceTest {
         when(sequenceRepository.getNextSequenceId(isA(String.class))).thenReturn(sequenceMono);
         doAnswer(answer).when(repository).save(isA(Post.class));
 
-        final Post post = new PostBuilder()
+        final Post post = PostBuilder.newInstance()
                 .setTitle(title)
                 .setContent(content)
                 .setImage(image)

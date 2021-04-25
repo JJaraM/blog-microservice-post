@@ -2,6 +2,7 @@ package com.jjara.microservice.post.handler;
 
 import com.jjara.microservice.post.api.HandlerParameter;
 import com.jjara.microservice.post.pojos.Post;
+import com.jjara.microservice.post.pojos.PostBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.post.service.PostService;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -42,25 +44,25 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
-		return ok(
-			service.find(handlerParameter.id(serverRequest)).map(post -> {
-				post.setViews(post.getViews() + 1);
-				return post;
-			}).flatMap(service::update).map(post -> {
+
+		return ok(service.find(handlerParameter.id(serverRequest))
+			.map(post -> PostBuilder.newInstance(post).setViews(post.getViews() + 1).build())
+			.flatMap(service::update)
+			.filter(this::containsEmbeddedHttRequest)
+			.map(post -> {
 				var httpRequests = getRequests(post);
-				var postUpdated = post;
-				if (post.getContent().contains(EMBEDDED_KEY)) {
-					var mono = Mono.zip(httpRequests, (a) -> (ContentRequest) a[0]).map(
-						contentRequest -> contentRequest.getContent().map(content -> {
-							post.setContent(getNewContent(post, content));
-							return post;
-						})
-					).flatMap(a -> a.map(z -> z));
-					postUpdated = mono.block();
-				}
-				return postUpdated;
+				return Mono.zip(httpRequests, (a) -> (ContentRequest) a[0]).map(
+					contentRequest -> contentRequest.getContent().map(content -> {
+						post.setContent(getNewContent(post, content));
+						return post;
+					})
+				).flatMap(a -> a.map(z -> z)).block();
 			})
 		);
+	}
+
+	private boolean containsEmbeddedHttRequest(Post post) {
+		return post.getContent().contains(EMBEDDED_KEY);
 	}
 
 	private List<Mono<ContentRequest>> getRequests(Post post) {
@@ -72,16 +74,12 @@ public class PostHandler {
 				var httpRequest = replaceEmbeddedSection(postContentEvaluationLine, "");
 				if (isAllowedRequest(httpRequest)) {
 					httpRequests.add(
-						getWebClient()
-							.get()
-							.uri(httpRequest)
-							.exchange().map(ex -> {
-								var request = new ContentRequest();
-								request.setPreContent(postContentEvaluationLine);
-								request.setContent(ex.bodyToMono(String.class));
-								return request;
-							}
-						)
+						getWebClient().get().uri(httpRequest).exchange().map(ex -> {
+							var request = new ContentRequest();
+							request.setPreContent(postContentEvaluationLine);
+							request.setContent(ex.bodyToMono(String.class));
+							return request;
+						})
 					);
 				}
 			}

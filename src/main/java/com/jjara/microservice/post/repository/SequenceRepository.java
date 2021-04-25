@@ -1,6 +1,5 @@
 package com.jjara.microservice.post.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -10,25 +9,35 @@ import com.jjara.microservice.post.pojos.Sequence;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-//https://www.baeldung.com/spring-data-mongodb-reactive
-//https://github.com/eugenp/tutorials/blob/master/persistence-modules/spring-boot-persistence-mongodb/src/main/java/com/baeldung/mongodb/services/SequenceGeneratorService.java
-//https://www.baeldung.com/spring-data-mongodb-tutorial
+/**
+ * Implementation that generate the primary key for mongo db
+ *
+ * For more information please visit the following links:
+ *      https://www.baeldung.com/spring-data-mongodb-reactive
+ *      https://github.com/eugenp/tutorials/blob/master/persistence-modules/spring-boot-persistence-mongodb/src/main/java/com/baeldung/mongodb/services/SequenceGeneratorService.java
+ *      https://www.baeldung.com/spring-data-mongodb-tutorial
+ */
 @Service
 public class SequenceRepository {
 
-	@Autowired private ReactiveMongoTemplate reactiveMongoTemplate;
+	private final ReactiveMongoTemplate reactiveMongoTemplate;
+	private final String KEY = "seq";
+	private final String ID = "_id";
+
+	public SequenceRepository(ReactiveMongoTemplate reactiveMongoTemplate) {
+		this.reactiveMongoTemplate = reactiveMongoTemplate;
+	}
 
 	public Mono<Sequence> getNextSequenceId(final String key) {
-
 		// get sequence id
-		Query query = new Query(Criteria.where("_id").is(key));
+		var query = new Query(Criteria.where(ID).is(key));
 
 		// increase sequence id by 1
-		Update update = new Update();
-		update.inc("seq", 1);
+		var update = new Update();
+		update.inc(KEY, 1);
 
-		// return new increased id
-		FindAndModifyOptions options = new FindAndModifyOptions();
+
+		var options = new FindAndModifyOptions();
 		options.returnNew(true);
 
 		// this is the magic happened.

@@ -13,6 +13,10 @@ public class ResponseFilter implements WebFilter {
 
 	@Override
 	public Mono<Void> filter(final ServerWebExchange exchange, final WebFilterChain chain) {
+		exchange.getRequest().getHeaders().forEach((key, value) -> {
+			log.info("Header:{} Value:{} ", key, value);
+		});
+		
 		return Mono.just(exchange)
 				.filter(RequestUtils::filterRequest)
 				.switchIfEmpty(chain.filter(exchange).then(Mono.empty()))

@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Object that identifies a Post instance
  */
+@Data
 @Document
-@Getter @Setter @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Post {
 
 	@Id
