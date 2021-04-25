@@ -47,7 +47,7 @@ public class PostHandler {
 
 		return ok(service.find(handlerParameter.id(serverRequest))
 			.map(post -> PostBuilder.newInstance(post).setViews(post.getViews() + 1).build())
-			.flatMap(service::update)
+			.flatMap(service::update)/*
 			.filter(this::containsEmbeddedHttRequest)
 			.map(post -> {
 				var httpRequests = getRequests(post);
@@ -57,7 +57,7 @@ public class PostHandler {
 						return post;
 					})
 				).flatMap(a -> a.map(z -> z)).block();
-			})
+			})*/
 		);
 	}
 
