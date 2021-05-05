@@ -8,7 +8,7 @@ import org.springframework.web.server.adapter.ForwardedHeaderTransformer;
 
 @Configuration
 //@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL_FORMS)
-class HypermediaConfiguration {
+public class HypermediaConfiguration {
 
     @Bean
     public ForwardedHeaderTransformer forwardedHeaderTransformer() {
