@@ -8,7 +8,6 @@ import com.jjara.microservice.post.service.TestimonialService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import static com.jjara.microservice.post.handler.ResponseHandler.ok;
-
 /**
  * Handler used to process all requests related with a testimonial
  */
@@ -32,6 +31,5 @@ public class TestimonialHandler {
 			)
 		);
 	}
-
 
 }

@@ -10,7 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-@Getter @Setter @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Getter @Setter //@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Testimonial {
 
 	@Id
