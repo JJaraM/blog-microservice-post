@@ -35,7 +35,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>14</java.version>
 		<io.springfox.version>3.0.0-SNAPSHOT</io.springfox.version>
-		<start-class>com.jjara.microservice.post.PostApplication</start-class>
+		<start-class>com.jjara.microservice.PostApplication</start-class>
 		<lettuce-core.version>5.3.3.RELEASE</lettuce-core.version>
 		<byte-buddy.version>1.10.7</byte-buddy.version>
 
@@ -407,7 +407,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.jjara.microservice.post.com.jjara.webflux.Application</mainClass>
+							<mainClass>com.jjara.microservice.ws.post.com.jjara.webflux.Application</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
