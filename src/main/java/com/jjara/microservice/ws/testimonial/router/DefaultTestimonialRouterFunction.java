@@ -23,7 +23,7 @@ public class DefaultTestimonialRouterFunction implements TestimonialRouterFuncti
     @Bean("defaultTestimonialRouter")
     public RouterFunction<ServerResponse> testimonialRouter() {
         return RouterFunctions.route()
-            .path("/testimonial", builder -> builder
+            .path("/v1/testimonial", builder -> builder
                 .GET("/{page}/{size}", accept(MediaType.APPLICATION_JSON), defaultTestimonialHandler::findByPage)
             ).build();
     }

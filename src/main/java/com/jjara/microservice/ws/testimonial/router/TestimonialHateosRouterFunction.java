@@ -24,6 +24,4 @@ public class TestimonialHateosRouterFunction implements TestimonialRouterFunctio
                 ).build();
     }
 
-
-
 }

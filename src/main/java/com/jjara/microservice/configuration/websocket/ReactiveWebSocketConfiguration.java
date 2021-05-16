@@ -12,11 +12,13 @@ import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAd
 @Configuration
 public class ReactiveWebSocketConfiguration {
 
-    @Autowired
-    private WebSocketHandler webSocketHandler;
+    private final WebSocketHandler webSocketHandler;
 
-    @Bean
-    HandlerMapping webSocketHandlerMapping() {
+    public ReactiveWebSocketConfiguration(WebSocketHandler webSocketHandler) {
+        this.webSocketHandler = webSocketHandler;
+    }
+
+    @Bean HandlerMapping webSocketHandlerMapping() {
         var map = new HashMap<String, WebSocketHandler>();
         map.put("/ws/post", webSocketHandler);
 
@@ -26,8 +28,7 @@ public class ReactiveWebSocketConfiguration {
         return handlerMapping;
     }
 
-    @Bean
-    WebSocketHandlerAdapter handlerAdapter() {
+    @Bean WebSocketHandlerAdapter handlerAdapter() {
         return new WebSocketHandlerAdapter();
     }
 

@@ -1,4 +1,4 @@
-package com.jjara.microservice.ws.testimonial.router;
+package com.jjara.microservice.ws.testimonial.controller;
 
 import com.jjara.microservice.ws.post.pojos.Testimonial;
 import com.jjara.microservice.ws.testimonial.handler.DefaultTestimonialHandler;

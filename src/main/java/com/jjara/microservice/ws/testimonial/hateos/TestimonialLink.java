@@ -1,6 +1,6 @@
 package com.jjara.microservice.ws.testimonial.hateos;
 
-import com.jjara.microservice.hateos.LinkBuilder;
+import com.jjara.microservice.api.hateos.LinkBuilder;
 import com.jjara.microservice.api.DefaultHandlerParameter;
 import com.jjara.microservice.ws.post.pojos.Testimonial;
 import org.springframework.hateoas.Link;

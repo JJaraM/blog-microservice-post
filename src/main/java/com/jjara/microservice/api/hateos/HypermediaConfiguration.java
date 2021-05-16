@@ -1,4 +1,4 @@
-package com.jjara.microservice.hateos;
+package com.jjara.microservice.api.hateos;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.jjara.microservice.hateos;
+package com.jjara.microservice.api.hateos;
 
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.util.UriTemplate;
