@@ -14,8 +14,7 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 @Configuration
 public class ConnectionConfiguration {
 
-    @Bean
-    public ConnectionFactory connectionFactory() {
+    @Bean public ConnectionFactory connectionFactory() {
         return ConnectionFactories.get(builder()
                 .option(DRIVER, "postgresql")
                 .option(HOST, "tai.db.elephantsql.com")
@@ -27,8 +26,7 @@ public class ConnectionConfiguration {
 
     }
 
-    @Bean
-    public ConnectionPool connectionPool(@Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
+    @Bean public ConnectionPool connectionPool(@Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
         return new ConnectionPool(ConnectionPoolConfiguration.builder(connectionFactory)
                 .maxIdleTime(Duration.ofMillis(1000))
                 .maxSize(5)

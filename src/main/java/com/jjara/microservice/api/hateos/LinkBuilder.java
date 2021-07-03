@@ -6,6 +6,9 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Custom Link Builder to handler hateoas in spring webflux
+ */
 public class LinkBuilder {
 
     public static LinkBuilder.Link of(ServerRequest serverRequest) {
@@ -59,8 +62,6 @@ public class LinkBuilder {
             }
             return getLink(relation.resolve(serverRequest), href);
         }
-
-
     }
 
     public static class Relation {

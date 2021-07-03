@@ -17,8 +17,7 @@ public class OpenApiConfiguration {
     @Value("${openapi.info.description}") private String infoDescription;
     @Value("${openapi.info.title}") private String infoTitle;
 
-    @Bean
-    OpenAPI customOpenAPI() {
+    @Bean OpenAPI customOpenAPI() {
         var contact = new Contact();
         contact.setName(contactName);
         contact.setEmail(contactEmail);
