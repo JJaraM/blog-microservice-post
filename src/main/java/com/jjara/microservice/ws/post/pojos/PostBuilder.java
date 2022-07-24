@@ -31,6 +31,7 @@ public class PostBuilder {
         this.tags = post.getTags();
         this.description = post.getDescription();
         this.link = post.getLink();
+        this.ips = post.getIps();
     }
 
     public static PostBuilder newInstance() {
