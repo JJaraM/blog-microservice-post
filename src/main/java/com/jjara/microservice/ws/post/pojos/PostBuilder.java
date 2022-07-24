@@ -108,6 +108,7 @@ public class PostBuilder {
         post.setTags(tags);
         post.setDescription(description);
         post.setLink(link);
+        post.setIps(ips);
         return post;
     }
 

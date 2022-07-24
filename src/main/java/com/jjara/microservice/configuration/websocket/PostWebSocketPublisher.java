@@ -3,6 +3,7 @@ package com.jjara.microservice.configuration.websocket;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jjara.microservice.ws.post.pojos.Post;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class PostWebSocketPublisher {
         try {
             sink.next(objectMapper.writeValueAsString(post));
         } catch (JsonProcessingException e) {
-            log.error(e.getMessage());
+            log.info(e.getMessage());
         }
     }
 }
