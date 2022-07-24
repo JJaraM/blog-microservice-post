@@ -11,8 +11,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class UserRouterFunction {
 
-    @Bean
-    public RouterFunction<ServerResponse> userRouter(UserHandler userHandler) {
-        return route(GET("/user"), userHandler::findById);
+    @Bean public RouterFunction<ServerResponse> userRouter(UserHandler userHandler) {
+        return route(GET("/user"), serverRequest -> userHandler.findById());
     }
 }

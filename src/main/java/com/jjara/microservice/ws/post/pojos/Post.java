@@ -1,8 +1,6 @@
 package com.jjara.microservice.ws.post.pojos;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -25,6 +23,7 @@ public class Post {
 	private Date createDate;
 	private Date updateDate;
 	private List<Long> tags = new ArrayList();
+	private Set<String> ips = new HashSet<>();
 	private String description;
 	private String link;
 

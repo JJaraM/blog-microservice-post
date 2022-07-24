@@ -17,7 +17,7 @@ public class UserHandler {
         this.connectionPool = connectionPool;
     }
 
-    public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
+    public Mono<ServerResponse> findById() {
         return ok(connectionPool.create()
                 .flatMapMany(connection -> connection.createStatement("SELECT * FROM USER_DETAILS").execute())
                 .flatMap(result -> result.map((row, rowMetadata) -> new AuthenticatedUser(row)))

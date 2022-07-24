@@ -3,19 +3,13 @@ package com.jjara.microservice.ws.post.handler;
 import com.jjara.microservice.api.HandlerParameter;
 import com.jjara.microservice.ws.post.pojos.Post;
 import com.jjara.microservice.ws.post.pojos.PostBuilder;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.ws.post.service.PostService;
 import reactor.core.publisher.Mono;
-
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -26,13 +20,12 @@ import static com.jjara.microservice.api.ResponseHandler.ok;
  * Handler used to process all requests related with a post service.
  * @author Jonathan Jara Morales
  */
-@Component
 @Slf4j
+@Component
 public class PostHandler {
 
 	@Resource private PostService service;
 	@Resource private HandlerParameter<ServerRequest> handlerParameter;
-	private final String EMBEDDED_KEY = "[embedded:http-get-call]";
 
 	/**
 	 * Find a post by id
@@ -41,77 +34,13 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
-
 		return ok(service.find(handlerParameter.id(serverRequest))
-			.map(post -> PostBuilder.newInstance(post).setViews(post.getViews() + 1).build())
-			.flatMap(service::update)/*
-			.filter(this::containsEmbeddedHttRequest)
-			.map(post -> {
-				var httpRequests = getRequests(post);
-				return Mono.zip(httpRequests, (a) -> (ContentRequest) a[0]).map(
-					contentRequest -> contentRequest.getContent().map(content -> {
-						post.setContent(getNewContent(post, content));
-						return post;
-					})
-				).flatMap(a -> a.map(z -> z)).block();
-			})*/
+			.map(post -> PostBuilder.newInstance(post)
+				.addIp(serverRequest.exchange().getRequest().getHeaders().getFirst("X-Forwarded-For"))
+				.setViews(post.getIps().size())
+				.build())
+			.flatMap(service::update)
 		);
-	}
-
-	private boolean containsEmbeddedHttRequest(Post post) {
-		return post.getContent().contains(EMBEDDED_KEY);
-	}
-
-	private List<Mono<ContentRequest>> getRequests(Post post) {
-		var postContentLines = post.getContent().split(System.lineSeparator());
-		var httpRequests = new ArrayList<Mono<ContentRequest>>();
-
-		for (var postContentEvaluationLine : postContentLines) {
-			if (isEmbeddedCall(postContentEvaluationLine)) {
-				var httpRequest = replaceEmbeddedSection(postContentEvaluationLine, "");
-				if (isAllowedRequest(httpRequest)) {
-					httpRequests.add(
-						getWebClient().get().uri(httpRequest).exchange().map(ex -> {
-							var request = new ContentRequest();
-							request.setPreContent(postContentEvaluationLine);
-							request.setContent(ex.bodyToMono(String.class));
-							return request;
-						})
-					);
-				}
-			}
-		}
-
-		return httpRequests;
-	}
-
-	private String getNewContent(final Post post, String content) {
-		var lines = post.getContent().split("\n");
-		var newContent = new ArrayList<String>();
-		for (String line: lines) {
-			if (isEmbeddedCall(line)) {
-				newContent.add(content);
-			} else {
-				newContent.add(line);
-			}
-		}
-		return String.join("", newContent.toArray(String[]::new));
-	}
-
-	private boolean isEmbeddedCall(final String line) {
-		return line.startsWith(EMBEDDED_KEY) && line.endsWith(EMBEDDED_KEY);
-	}
-
-	private String replaceEmbeddedSection(final String line, final String content) {
-		return line.replaceAll("\\[embedded:http\\-get\\-call]", content);
-	}
-
-	private boolean isAllowedRequest(final String httpRequest) {
-		return httpRequest.contains("https://raw.githubusercontent.com/jjaram");
-	}
-
-	private WebClient getWebClient() {
-		return WebClient.builder().build();
 	}
 
 	/**
@@ -227,7 +156,7 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> addTag(final ServerRequest serverRequest) {
-		return response(serverRequest, (p) ->
+		return response(serverRequest, p ->
 			service.addTags(
 				handlerParameter.id(serverRequest),
 				p.getTags()
@@ -241,7 +170,7 @@ public class PostHandler {
 	 * @return a {@link Mono} with the result of the post if exists otherwise will return a no content response
 	 */
 	public Mono<ServerResponse> removeTag(final ServerRequest serverRequest) {
-		return response(serverRequest, (p) ->
+		return response(serverRequest, p ->
 			service.removeTags(
 				handlerParameter.id(serverRequest),
 				p.getTags()
@@ -266,12 +195,5 @@ public class PostHandler {
 	 */
 	private Mono<ServerResponse> responseCreated(final ServerRequest serverRequest, Function<Post, Mono<Post>> function) {
 		return created(serverRequest.bodyToMono(Post.class).flatMap(function));
-	}
-
-	@Getter
-	@Setter
-	private static class ContentRequest {
-		private Mono<String> content;
-		private String preContent;
 	}
 }

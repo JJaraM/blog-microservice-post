@@ -39,7 +39,7 @@ public class PostService {
 	 * @param sort number that indicates what is the sort criteria that you want to use
 	 * @return a list of posts
 	 */
-	public Flux<Post> findByTag(final int page, final int size, List<Integer> tags, int sort) {
+	public Flux<Post> findByTag(final int page, final int size, List<Integer> tags, final int sort) {
 		if (tags == null) tags = new ArrayList<>();
 
 	    final var pageable = getPageable(page, size, sort);

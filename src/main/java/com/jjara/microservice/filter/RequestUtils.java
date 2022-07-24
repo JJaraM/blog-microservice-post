@@ -22,21 +22,21 @@ public class RequestUtils {
     }
 
     public static void requestReceived(final ServerWebExchange ex) {
-        log.info("Request Received: request-id=[{}] method=[{}] path=[{}]",
+        log.info("Request Received: request-id={} method={} path={}",
             ex.getRequest().getId(),
             ex.getRequest().getMethod().name(),
             ex.getRequest().getPath());
     }
 
     public static void requestProcessing(final ServerWebExchange ex) {
-        log.info("Request Processing: request-id=[{}] method=[{}] path=[{}]",
+        log.info("Request Processing: request-id={} method={} path={}",
             ex.getRequest().getId(),
             ex.getRequest().getMethod().name(),
             ex.getRequest().getPath());
     }
 
     public static void requestComplete(final ServerWebExchange ex) {
-        log.info("Request Complete: request-id=[{}] method=[{}] path=[{}]",
+        log.info("Request Complete: request-id={} method={} path={}",
             ex.getRequest().getId(),
             ex.getRequest().getMethod().name(),
             ex.getRequest().getPath());

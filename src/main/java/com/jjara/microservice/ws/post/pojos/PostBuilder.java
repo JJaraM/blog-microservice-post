@@ -1,8 +1,6 @@
 package com.jjara.microservice.ws.post.pojos;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class PostBuilder {
 
@@ -14,6 +12,7 @@ public class PostBuilder {
     private Date createDate;
     private Date updateDate;
     private List<Long> tags = new ArrayList();
+    private Set<String> ips = new HashSet<>();
     private String description;
     private String link;
 
@@ -40,6 +39,11 @@ public class PostBuilder {
 
     public static PostBuilder newInstance(Post post) {
         return new PostBuilder(post);
+    }
+
+    public PostBuilder addIp(String ip) {
+        ips.add(ip);
+        return this;
     }
 
     public PostBuilder setId(long id) {
