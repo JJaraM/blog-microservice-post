@@ -40,6 +40,7 @@ public class PostHandler {
 			.map(post -> PostBuilder.newInstance(post)
 				.addIp(Arrays.stream(serverRequest.exchange().getRequest().getHeaders()
 					.getFirst("X-Forwarded-For").split(","))
+					.map(String::trim)
 					.collect(Collectors.toList()))
 				.setViews(post.getIps().size())
 				.build())
