@@ -41,8 +41,8 @@ public class PostBuilder {
         return new PostBuilder(post);
     }
 
-    public PostBuilder addIp(String ip) {
-        ips.add(ip);
+    public PostBuilder addIp(List<String> ip) {
+        ips.addAll(ip);
         return this;
     }
 

@@ -10,8 +10,10 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.jjara.microservice.ws.post.service.PostService;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.jjara.microservice.api.ResponseHandler.created;
 import static com.jjara.microservice.api.ResponseHandler.ok;
@@ -36,7 +38,9 @@ public class PostHandler {
 	public Mono<ServerResponse> findById(final ServerRequest serverRequest) {
 		return ok(service.find(handlerParameter.id(serverRequest))
 			.map(post -> PostBuilder.newInstance(post)
-				.addIp(serverRequest.exchange().getRequest().getHeaders().getFirst("X-Forwarded-For"))
+				.addIp(Arrays.stream(serverRequest.exchange().getRequest().getHeaders()
+					.getFirst("X-Forwarded-For").split(","))
+					.collect(Collectors.toList()))
 				.setViews(post.getIps().size())
 				.build())
 			.flatMap(service::update)
