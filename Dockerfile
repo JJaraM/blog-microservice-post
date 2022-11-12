@@ -5,13 +5,13 @@ FROM adoptopenjdk/openjdk14:alpine-jre
 ARG JAR_FILE=target/post-microservice.jar
 
 # Create the dir
-RUN mkdir -p /opt/app
+# RUN mkdir -p /opt/app
 
 # cd /opt/app
-WORKDIR /opt/app
+# WORKDIR /opt/app
 
 # cp target/spring-boot-web.jar /opt/app/app.jar
-COPY ${JAR_FILE} app.jar
+# COPY ${JAR_FILE} app.jar
 
 # java -jar /opt/app/app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
