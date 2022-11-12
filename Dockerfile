@@ -4,7 +4,8 @@ RUN echo "Copying maven settings file"
 COPY settings.xml /usr/share/maven/ref/
 COPY pom.xml /tmp/
 COPY src /tmp/src/
-COPY settings.xml /root/.m2
+# COPY settings.xml /root/.m2
+ADD settings.xml /root/.m2/settings.xml
 
 WORKDIR /tmp/
 
