@@ -5,10 +5,12 @@ RUN mkdir /root/.m2/repository
     
 COPY settings.xml /usr/share/maven/ref/
 COPY pom.xml /tmp/
+COPY settings.xml /tmp/
+
 COPY src /tmp/src/
 COPY settings.xml /root/.m2/
 COPY settings.xml /usr/share/maven/ref/
-# COPY settings.xml /root/.m2
+
 ADD settings.xml /root/.m2/settings.xml
 
 WORKDIR /tmp/
