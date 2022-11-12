@@ -1,18 +1,25 @@
 FROM maven:3.8.5-openjdk-11 AS maven_build
 RUN echo "Copying maven settings file"
-
+RUN mkdir -p /root/.m2 
+RUN mkdir /root/.m2/repository
+    
 COPY settings.xml /usr/share/maven/ref/
 COPY pom.xml /tmp/
 COPY src /tmp/src/
+COPY settings.xml /root/.m2/
+COPY settings.xml /usr/share/maven/ref/
 # COPY settings.xml /root/.m2
 ADD settings.xml /root/.m2/settings.xml
 
 WORKDIR /tmp/
 
+
+
 #RUN mvn --settings /usr/share/maven/ref/settings.xml clean install
 # RUN mvn clean install
 
-RUN mvn -s /usr/share/maven/ref/settings.xml clean install
+# RUN mvn -s /usr/share/maven/ref/settings.xml clean install
+RUN mvn clean install -Dmaven.test.skip -DskipTests -s settings.xml 
 
 #pull base image
 FROM openjdk
