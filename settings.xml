@@ -53,7 +53,7 @@
         <server>
             <id>github</id>
             <username>JJaraM</username>
-            <password>${GITHUB_TOKEN}</password>
+            <password>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</password>
         </server>
     </servers>
 
