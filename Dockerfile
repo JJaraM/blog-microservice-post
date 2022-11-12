@@ -1,34 +1,26 @@
 FROM maven:3.8.5-openjdk-11 AS maven_build
 RUN echo "Copying maven settings file"
-#COPY .travis.settings.xml /tmp/
-COPY settings.xml /root/.m2
+
+COPY settings.xml /usr/share/maven/ref/
 COPY pom.xml /tmp/
-
-
 COPY src /tmp/src/
 
 WORKDIR /tmp/
 
-RUN mvn package
+RUN mvn --settings /usr/share/maven/ref/settings.xml clean install 
 
 #pull base image
-
 FROM openjdk
 
 #maintainer 
 MAINTAINER jonathan.jara.morales@gmail.com
-#expose port 8080
 EXPOSE 8080
+
+#copy hello world to docker image from builder image
+COPY --from=maven_build /tmp/target/post-microservice.jar /data/post-microservice.jar
 
 #default command
 CMD java -jar /data/post-microservice.jar
-
-#copy hello world to docker image from builder image
-
-COPY --from=maven_build /tmp/target/post-microservice.jar /data/post-microservice.jar
-
-
-
 
 # For Java 11, try this
 # FROM adoptopenjdk/openjdk14:alpine-jre
