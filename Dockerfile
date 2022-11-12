@@ -20,8 +20,8 @@ WORKDIR /tmp/
 #RUN mvn --settings /usr/share/maven/ref/settings.xml clean install
 # RUN mvn clean install
 
-# RUN mvn -s /usr/share/maven/ref/settings.xml clean install
-# RUN mvn clean install -Dmaven.test.skip -DskipTests -s settings.xml 
+RUN echo "Getting current location"
+RUN echo "$(pwd)"
 RUN mvn -settings settings.xml clean install
 
 #pull base image
