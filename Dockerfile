@@ -1,6 +1,7 @@
 FROM maven:3.8.5-openjdk-11 AS maven_build
 RUN echo "Copying maven settings file"
-COPY .travis.settings.xml /tmp/
+#COPY .travis.settings.xml /tmp/
+COPY settings.xml /root/.m2
 COPY pom.xml /tmp/
 
 
