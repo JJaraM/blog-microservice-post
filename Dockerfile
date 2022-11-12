@@ -2,8 +2,11 @@ FROM maven:3.8.5-openjdk-11 AS maven_build
 RUN echo "Copying maven settings file"
 
 COPY pom.xml /tmp/
-COPY /etc/secrets/settings.xml /tmp/
 COPY src /tmp/src/
+
+RUN "ls /etc/secrets"
+
+COPY /etc/secrets/settings.xml /tmp/
 
 WORKDIR /tmp/
 
