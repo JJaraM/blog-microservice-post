@@ -1,10 +1,7 @@
+FROM maven:3.8.5-openjdk-11 AS maven_build
 RUN echo "Copying maven settings file"
 COPY .travis.settings.xml /tmp/
-
 COPY pom.xml /tmp/
-
-FROM maven:3.8.5-openjdk-11 AS maven_build
-
 
 
 COPY src /tmp/src/
