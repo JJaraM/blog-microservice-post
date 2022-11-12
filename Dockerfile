@@ -4,10 +4,12 @@ RUN echo "Copying maven settings file"
 COPY settings.xml /usr/share/maven/ref/
 COPY pom.xml /tmp/
 COPY src /tmp/src/
+COPY settings.xml /root/.m2
 
 WORKDIR /tmp/
 
-RUN mvn --settings /usr/share/maven/ref/settings.xml clean install 
+#RUN mvn --settings /usr/share/maven/ref/settings.xml clean install
+RUN mvn clean install
 
 #pull base image
 FROM openjdk
