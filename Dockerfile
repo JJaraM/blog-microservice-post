@@ -10,7 +10,9 @@ ADD settings.xml /root/.m2/settings.xml
 WORKDIR /tmp/
 
 #RUN mvn --settings /usr/share/maven/ref/settings.xml clean install
-RUN mvn clean install
+# RUN mvn clean install
+
+RUN mvn -s /usr/share/maven/ref/settings.xml clean install
 
 #pull base image
 FROM openjdk
