@@ -4,9 +4,7 @@ RUN echo "Copying maven settings file"
 COPY pom.xml /tmp/
 COPY src /tmp/src/
 
-RUN "ls /etc/secrets"
-
-COPY /etc/secrets/settings.xml /tmp/
+# COPY /etc/secrets/settings.xml /tmp/
 
 WORKDIR /tmp/
 
