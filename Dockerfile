@@ -1,4 +1,4 @@
-FROM maven:3.8.6-openjdk-18 AS maven_build
+FROM maven:3.6.3-openjdk-14 AS maven_build
 
 COPY pom.xml /tmp/
 COPY src /tmp/src/
