@@ -16,6 +16,7 @@ spring:
       - redis-${spring.profiles.active}
       - shell-${spring.profiles.active}
       - swagger-${spring.profiles.active}
+      - cloud
   cloud:
     services:
       registrationMethod: route
