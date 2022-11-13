@@ -22,6 +22,7 @@ spring:
     services:
       registrationMethod: route
     config:
+      use-legacy-processing: true
       import-check:
         enabled: false
       enabled: true
