@@ -7,13 +7,13 @@ WORKDIR /tmp/
 
 # File that contains the environment variables required to start the appplication
 RUN --mount=type=secret,id=_cloud,dst=/etc/secrets/.cloud \
-  cat /etc/secrets/.cloud > /tmp/src/main/resources/bootstrap.yml  
+  cat /etc/secrets/.cloud > /tmp/src/main/resources/bootstrap.properties  
 
 # File that contains the github maven repositories
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
   
-RUN cat /tmp/src/main/resources/bootstrap.yml
+RUN cat /tmp/src/main/resources/properties.yml
 
 FROM openjdk
 EXPOSE 8080
