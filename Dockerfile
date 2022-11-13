@@ -9,6 +9,8 @@ RUN --mount=type=secret,id=_cloud,dst=/etc/secrets/.cloud \
   cat /etc/secrets/.cloud > /tmp/src/main/resources/cloud.yml  
 RUN cat /tmp/src/main/resources/cloud.yml
 
+RUN ls -la /tmp/src/main/resources
+
 # Cloud Config Server: User
 RUN --mount=type=secret,id=_user,dst=/etc/secrets/.user \
   cat /etc/secrets/.user > /tmp/user.property
@@ -30,4 +32,4 @@ EXPOSE 8080
 COPY --from=maven_build /tmp/target/post-microservice.jar /data/post-microservice.jar
 
 # ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.profiles.active=prd", "--spring.cloud.config.username=${cloud_user_new}", "--spring.cloud.config.password=pass"]
-ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.profiles.active=prd", $cloud_user_new, "--spring.cloud.config.password=pass"]
+ENTRYPOINT ["java","-jar", "/data/post-microservice.jar","--spring.profiles.active=prd","--spring.config.location=classpath:file:/tmp/src/main/resources/cloud.yml"]
