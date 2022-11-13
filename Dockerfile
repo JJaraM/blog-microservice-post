@@ -18,7 +18,8 @@ RUN cloud_user=$(cat /tmp/user.property)
 RUN echo $cloud_user
 RUN cat /tmp/user.property
 
-RUN export cloud_user_new=$(cat /tmp/user.property);echo $cloud_user_new
+RUN export cloud_user_new=$(cat /tmp/user.property)
+RUN echo $cloud_user_new
 
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
@@ -28,4 +29,5 @@ EXPOSE 8080
 
 COPY --from=maven_build /tmp/target/post-microservice.jar /data/post-microservice.jar
 
-ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.profiles.active=prd", "--spring.cloud.config.username=${cloud_user_new}", "--spring.cloud.config.password=pass"]
+# ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.profiles.active=prd", "--spring.cloud.config.username=${cloud_user_new}", "--spring.cloud.config.password=pass"]
+ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.profiles.active=prd", $cloud_user_new, "--spring.cloud.config.password=pass"]
