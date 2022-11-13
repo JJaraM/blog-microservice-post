@@ -18,4 +18,4 @@ EXPOSE 8080
 
 COPY --from=maven_build /tmp/target/post-microservice.jar /data/post-microservice.jar
 
-ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.profiles.active=prd --spring.cloud.config.username=admin --spring.cloud.config.password=pass"]
+ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.profiles.active=prd", "--spring.cloud.config.username=admin", "--spring.cloud.config.password=pass"]
