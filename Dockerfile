@@ -8,7 +8,8 @@ COPY src /tmp/src/
 
 WORKDIR /tmp/
 
-RUN mvn -s settings.xml clean install
+# RUN mvn -s settings.xml clean install
+RUN mvn -s /etc/secrets/settings.xml clean install
 
 ##pull base image
 #FROM openjdk
