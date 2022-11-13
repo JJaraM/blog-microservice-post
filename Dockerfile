@@ -5,16 +5,11 @@ COPY src /tmp/src/
 
 WORKDIR /tmp/
 
-# RUN --mount=type=secret,id=cloud_properties,dst=/etc/secrets/cloud.properties \
-#   cat /etc/secrets/cloud.properties > /tmp/cloud.properties
+RUN --mount=type=secret,id=_cloud,dst=/etc/secrets/.cloud \
+  cat /etc/secrets/.cloud > /tmp/cloud.properties
   
-# RUN cat /tmp/cloud.properties
-
-RUN --mount=type=secret,id=cloud_properties,dst=/etc/secrets/cloud.properties \
-  cat /etc/secrets/cloud.properties | grep "spring.profiles.active" | cut -d "=" -f2 > /tmp/cloud_grep.properties
-  
-RUN cat /tmp/cloud_grep.properties
-  
+RUN cat /tmp/cloud.properties
+    
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
 
