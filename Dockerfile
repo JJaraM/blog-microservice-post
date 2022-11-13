@@ -6,7 +6,7 @@ COPY src /tmp/src/
 WORKDIR /tmp/
 
 RUN --mount=type=secret,id=cloud_properties,dst=/etc/secrets/cloud.properties \
-  cat /etc/secrets/cloud.properties >> /tmp/cloud.properties
+  cat /etc/secrets/cloud.properties > /tmp/cloud.properties
   
 RUN cat /tmp/cloud.properties
   
