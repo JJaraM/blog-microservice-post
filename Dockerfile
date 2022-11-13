@@ -18,4 +18,4 @@ EXPOSE 8080
 
 COPY --from=maven_build /tmp/target/post-microservice.jar /data/post-microservice.jar
 
-ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.config.additional-location=/tmp/cloud.properties"]
+ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.config.additional-location=file:/tmp/cloud.properties"]
