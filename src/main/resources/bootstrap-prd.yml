@@ -2,6 +2,8 @@ server:
   forward-headers-strategy: native
 
 spring:
+  config:
+    use-legacy-processing: true
   application:
     name: post-ws
   profiles:
@@ -22,7 +24,6 @@ spring:
     services:
       registrationMethod: route
     config:
-      use-legacy-processing: true
       import-check:
         enabled: false
       enabled: true
