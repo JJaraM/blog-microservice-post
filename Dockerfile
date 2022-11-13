@@ -13,7 +13,7 @@ RUN --mount=type=secret,id=_cloud,dst=/etc/secrets/.cloud \
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
   
-RUN cat /tmp/src/main/resources/properties.yml
+RUN cat /tmp/src/main/resources/properties.properties
 
 FROM openjdk
 EXPOSE 8080
