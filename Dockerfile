@@ -15,10 +15,5 @@ FROM openjdk
 EXPOSE 8080
 
 COPY --from=maven_build /tmp/target/post-microservice.jar /data/post-microservice.jar
-# CMD java -jar /data/post-microservice.jar
-
-ENV SPRING_PROFILE="prd"
-ENV CLOUD_CONFIG_USER="admin"
-ENV CLOUD_CONFIG_PASS="costa rica"
 
 ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.config.additional-location=/data/cloud.yml"]
