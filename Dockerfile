@@ -6,7 +6,9 @@ COPY src /tmp/src/
 WORKDIR /tmp/
 
 RUN --mount=type=secret,id=cloud_yml,dst=/etc/secrets/cloud.yml \
-  cp /etc/secrets/cloud.yml /data/cloud.yml
+  cat /etc/secrets/cloud.yml | grep "spring.profiles.active" | cut -d "=" -f2 >> /tmp/cloud.yml
+  
+RUN cat /tmp/cloud.yml
   
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
