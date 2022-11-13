@@ -9,6 +9,11 @@ RUN --mount=type=secret,id=cloud_properties,dst=/etc/secrets/cloud.properties \
   cat /etc/secrets/cloud.properties > /tmp/cloud.properties
   
 RUN cat /tmp/cloud.properties
+
+RUN --mount=type=secret,id=cloud_properties,dst=/etc/secrets/cloud.properties \
+  cat /etc/secrets/cloud.properties | grep "spring.profiles.active" | cut -d "=" -f2 >> /tmp/cloud_grep.properties
+  
+RUN cat /tmp/cloud_grep.properties
   
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
