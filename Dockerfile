@@ -1,4 +1,4 @@
-ARG GITHUB_TOKEN
+RUN --mount=type=secret,id=settings.xml,dst=/etc/secrets/settings.xml cat /etc/secrets/settings.xml
 
 FROM maven:3.8.5-openjdk-11 AS maven_build
 RUN echo "Copying maven settings file"
