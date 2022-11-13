@@ -6,6 +6,9 @@ COPY src /tmp/src/
 WORKDIR /tmp/
 
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
+  cp /etc/secrets/cloud.yml /data/cloud.yml
+  
+RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
 
 FROM openjdk
@@ -18,4 +21,4 @@ ENV SPRING_PROFILE="prd"
 ENV CLOUD_CONFIG_USER="admin"
 ENV CLOUD_CONFIG_PASS="costa rica"
 
-ENTRYPOINT ["java","-jar", "-Dspring.profiles.active=$SPRING_PROFILE -Dspring.cloud.config.username=$CLOUD_CONFIG_USER -Dspring.cloud.config.password=$CLOUD_CONFIG_PASSCLOUD_CONFIG_PASS","/data/post-microservice.jar"]
+ENTRYPOINT ["java","-jar", "/data/post-microservice.jar", "--spring.config.additional-location=/data/cloud.yml"]
