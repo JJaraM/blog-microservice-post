@@ -9,7 +9,7 @@ COPY src /tmp/src/
 
 WORKDIR /tmp/
 
-RUN mvn -DgithubRepoPass=${env.GITHUB_TOKEN} -s settings.xml clean install
+RUN mvn -DgithubRepoPass=${GITHUB_TOKEN} -s settings.xml clean install
 
 ##pull base image
 #FROM openjdk
