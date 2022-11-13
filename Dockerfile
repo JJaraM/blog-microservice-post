@@ -15,7 +15,7 @@ COPY --from=maven_build /tmp/target/post-microservice.jar /data/post-microservic
 # CMD java -jar /data/post-microservice.jar
 
 ENV SPRING_PROFILE="prd"
-ENV CLOUD_CONFIG_USR="admin"
+ENV CLOUD_CONFIG_USER="admin"
 ENV CLOUD_CONFIG_PASS="costa rica"
 
-ENTRYPOINT ["java","-jar", "-Dspring.profiles.active=$SPRING_PROFILE -Dspring.cloud.config.username=$CLOUD_CONFIG_USR -Dspring.cloud.config.password=$CLOUD_CONFIG_PASS","/data/post-microservice.jar"]
+ENTRYPOINT ["java","-jar", "-Dspring.profiles.active=$SPRING_PROFILE -Dspring.cloud.config.username=$CLOUD_CONFIG_USER -Dspring.cloud.config.password=$CLOUD_CONFIG_PASSCLOUD_CONFIG_PASS","/data/post-microservice.jar"]
