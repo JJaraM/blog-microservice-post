@@ -1,12 +1,9 @@
-FROM openjdk:18-jdk-oraclelinux8 AS maven_build
+FROM maven:3.8.6-openjdk-18 AS maven_build
 
 COPY pom.xml /tmp/
 COPY src /tmp/src/
 
-RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
- cp /etc/secrets/settings.xml /tmp/settings.xml
-
-RUN cat /tmp/settings.xml
-
 WORKDIR /tmp/
-RUN mvn -s /etc/secrets/settings.xml clean install
+
+RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
+  mvn -s /etc/secrets/settings.xml clean install
