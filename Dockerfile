@@ -7,6 +7,8 @@ COPY src /tmp/src/
 
 # COPY /etc/secrets/settings.xml /tmp/
 
+RUN echo "env1 ${env.GITHUB_TOKEN} env2 ${GITHUB_TOKEN}"
+
 WORKDIR /tmp/
 
 RUN mvn -DgithubRepoPass=${GITHUB_TOKEN} -s settings.xml clean install
