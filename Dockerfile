@@ -5,8 +5,8 @@ COPY src /tmp/src/
 
 WORKDIR /tmp/
 
-RUN --mount=type=secret,id=_cloud,dst=/etc/secrets/cloud.yml \
-  cat /etc/secrets/cloud.yml > /tmp/src/main/resources/cloud.yml
+RUN --mount=type=secret,id=_cloud,dst=/etc/secrets/.cloud \
+  cat /etc/secrets/.cloud > /tmp/src/main/resources/cloud.yml
   
 RUN cat /tmp/src/main/resources/cloud.yml
     
