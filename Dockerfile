@@ -1,4 +1,4 @@
-FROM maven:3.8.5-openjdk-11 AS maven_build
+FROM openjdk:18-jdk-oraclelinux8 AS maven_build
 
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml cat /etc/secrets/settings.xml
 
