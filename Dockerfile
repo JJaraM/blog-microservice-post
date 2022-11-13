@@ -10,12 +10,12 @@ RUN --mount=type=secret,id=_cloud,dst=/etc/secrets/.cloud \
 RUN cat /tmp/src/main/resources/cloud.yml
 
 # Cloud Config Server: User
-RUN --mount=type=secret,id=_user,dst=/etc/secrets/.user \
-  cat /etc/secrets/.user > /tmp/user.property
+# RUN --mount=type=secret,id=_user,dst=/etc/secrets/.user \
+#   cat /etc/secrets/.user > /tmp/user.property
   
-# ARG cloud_user
-# RUN cloud_user=$(echo admin) && echo $cloud_user
-ENV cloud_user=$(echo admin)
+ARG cloud_user
+RUN RUN --mount=type=secret,id=_user,dst=/etc/secrets/.user \ 
+  cloud_user=$(cat /etc/secrets/.user)
 
 RUN echo $cloud_user
 
