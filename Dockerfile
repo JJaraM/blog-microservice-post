@@ -6,9 +6,9 @@ COPY src /tmp/src/
 WORKDIR /tmp/
 
 RUN --mount=type=secret,id=_cloud,dst=/etc/secrets/.cloud \
-  cat /etc/secrets/.cloud > /src/main/resources/cloud.properties
+  cat /etc/secrets/.cloud > /tmp/src/main/resources/cloud.properties
   
-RUN cat /src/main/resources/cloud.properties
+RUN cat /tmp/src/main/resources/cloud.properties
     
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
