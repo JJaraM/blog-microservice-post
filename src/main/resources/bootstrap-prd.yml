@@ -9,17 +9,17 @@ spring:
   profiles:
     include:
       - blog-microservice-post
-      - blog-microservice-post-${spring.profiles.active}
-      - eureka-client-${spring.profiles.active}
+      - blog-microservice-post-prd
+      - eureka-client-prd
       - log
       - management
-      - mongo-${spring.profiles.active}
+      - mongo-prd
       - open-api
-      - redis-${spring.profiles.active}
-      - shell-${spring.profiles.active}
-      - swagger-${spring.profiles.active}
+      - redis-prd
+      - shell-prd
+      - swagger-prd
       - cloud
-      - redis-${spring.profiles.active}
+      - redis-prd
   cloud:
     services:
       registrationMethod: route
