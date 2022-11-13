@@ -16,6 +16,7 @@ RUN --mount=type=secret,id=_user,dst=/etc/secrets/.user \
 ARG cloud_user
 RUN cloud_user=$(cat /tmp/user.property)
 RUN echo $cloud_user
+RUN cat /tmp/user.property
 
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
   mvn -s /etc/secrets/settings.xml clean install
