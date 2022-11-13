@@ -13,8 +13,9 @@ RUN cat /tmp/src/main/resources/cloud.yml
 RUN --mount=type=secret,id=_user,dst=/etc/secrets/.user \
   cat /etc/secrets/.user > /tmp/user.property
   
-ENV cloud_user
-RUN cloud_user=$(echo admin) && echo $cloud_user
+# ARG cloud_user
+# RUN cloud_user=$(echo admin) && echo $cloud_user
+ENV cloud_user=$(echo admin)
 
 RUN echo $cloud_user
 
