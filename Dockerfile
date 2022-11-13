@@ -5,7 +5,7 @@ COPY src /tmp/src/
 
 WORKDIR /tmp/
 
-RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
+RUN --mount=type=secret,id=cloud_yml,dst=/etc/secrets/cloud.yml \
   cp /etc/secrets/cloud.yml /data/cloud.yml
   
 RUN --mount=type=secret,id=settings_xml,dst=/etc/secrets/settings.xml \
