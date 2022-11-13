@@ -1,6 +1,7 @@
 FROM maven:3.8.5-openjdk-11 AS maven_build
 RUN echo "Copying maven settings file"
 
+COPY settings.xml /tmp/
 COPY pom.xml /tmp/
 COPY src /tmp/src/
 
@@ -8,8 +9,7 @@ COPY src /tmp/src/
 
 WORKDIR /tmp/
 
-# RUN mvn -s settings.xml clean install
-RUN mvn -s /etc/secrets/settings.xml clean install
+RUN mvn -s settings.xml clean install
 
 ##pull base image
 #FROM openjdk
