@@ -13,8 +13,6 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @Configuration
 public class CorsWebFilterConfiguration {
 
-	@Value("${spring.cors.allowed-origin}") private List<String> allowedOrigins;
-
 	@Bean CorsWebFilter corsWebFilter() {
 	    var config = new CorsConfiguration();
 	    config.setAllowedOrigins("*");
