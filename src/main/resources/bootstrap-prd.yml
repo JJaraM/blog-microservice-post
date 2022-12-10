@@ -27,6 +27,6 @@ spring:
       import-check:
         enabled: false
       enabled: true
-      uri: https://pr-microservice-config-server.herokuapp.com
+      uri: https://prd-config-server.onrender.com
       label: master
       fail-fast: true
