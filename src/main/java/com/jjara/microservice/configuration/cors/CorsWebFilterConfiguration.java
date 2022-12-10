@@ -11,21 +11,20 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
  * https://www.baeldung.com/spring-webflux-cors
  */
 @Configuration
-@RefreshScope
 public class CorsWebFilterConfiguration {
 
 	@Value("${spring.cors.allowed-origin}") private List<String> allowedOrigins;
 
 	@Bean CorsWebFilter corsWebFilter() {
 	    var config = new CorsConfiguration();
-	    config.setAllowedOrigins(allowedOrigins);
+	    config.setAllowedOrigins("*");
+	    config.addAllowedHeader("*");
 	    config.setAllowedMethods(Arrays.asList(
 	        HttpMethod.GET.name(),
 		HttpMethod.PUT.name(),
 		HttpMethod.POST.name(),
 		HttpMethod.DELETE.name()
 	    ));
-	    config.addAllowedHeader("*");
 
 	    var source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("/**", config);
