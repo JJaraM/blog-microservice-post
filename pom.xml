@@ -275,7 +275,7 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>post-microservice</finalName>
+		<finalName>app</finalName>
 
 		<pluginManagement>
 			<plugins>
