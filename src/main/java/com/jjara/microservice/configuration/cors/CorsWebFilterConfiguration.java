@@ -4,14 +4,13 @@ package com.jjara.microservice.configuration.cors;
  * Allows to configure the cors for the web service, for more details please visit:
  * https://www.baeldung.com/spring-webflux-cors
  */
-/*@Configuration
+@Configuration
 @RefreshScope
 public class CorsWebFilterConfiguration {
 
 	@Value("${spring.cors.allowed-origin}") private List<String> allowedOrigins;
 
-	@Bean
-	CorsWebFilter corsWebFilter() {
+	@Bean CorsWebFilter corsWebFilter() {
 		var config = new CorsConfiguration();
 		config.setAllowedOrigins(allowedOrigins);
 		config.setAllowedMethods(Arrays.asList(
@@ -28,4 +27,3 @@ public class CorsWebFilterConfiguration {
 	    return new CorsWebFilter(source);
 	}
 }
-*/
