@@ -22,7 +22,7 @@ public class CorsWebFilterConfiguration {
     @Bean
     public CorsWebFilter corsFilter() {
         final CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
+        //config.setAllowCredentials(true);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addAllowedOrigin("*");
