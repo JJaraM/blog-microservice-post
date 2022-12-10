@@ -13,15 +13,23 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @Configuration
 public class CorsWebFilterConfiguration {
 
-	@Bean CorsWebFilter corsWebFilter() {
-	    var config = new CorsConfiguration();
-	    config.setAllowedOrigins("*");
-	    config.addAllowedHeader("*");
-	    config.addAllowedMethod("*");
+   /**
+     * CORS configuration that we need to access this microservice operations for
+     * external applications.
+     *
+     * @return an instance of cross configuration filter
+     */
+    @Bean
+    public CorsWebFilter corsFilter() {
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        config.addAllowedOrigin("*");
 
-	    var source = new UrlBasedCorsConfigurationSource();
-	    source.registerCorsConfiguration("/**", config);
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
 
-	    return new CorsWebFilter(source);
-	}
+        return new CorsWebFilter(source);
+    }
 }
