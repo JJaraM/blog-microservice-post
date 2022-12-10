@@ -17,12 +17,7 @@ public class CorsWebFilterConfiguration {
 	    var config = new CorsConfiguration();
 	    config.setAllowedOrigins("*");
 	    config.addAllowedHeader("*");
-	    config.setAllowedMethods(Arrays.asList(
-	        HttpMethod.GET.name(),
-		HttpMethod.PUT.name(),
-		HttpMethod.POST.name(),
-		HttpMethod.DELETE.name()
-	    ));
+	    config.addAllowedMethod("*");
 
 	    var source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("/**", config);
